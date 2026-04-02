@@ -2058,22 +2058,12 @@
             <div class="booking-form">
                 <div class="form-row">
                     <label class="form-label">Дата</label>
-                    <input type="date" class="form-input" id="bookingDate" value="2026-04-05" onchange="updatePrice()">
+                    <input type="date" class="form-input" id="bookingDate" value="2026-04-05" onchange="generateTimeSlots()">
                 </div>
 
                 <div class="form-row">
                     <label class="form-label">Время начала</label>
-                    <div class="time-slots">
-                        <div class="time-slot disabled">15:00</div>
-                        <div class="time-slot disabled">16:00</div>
-                        <div class="time-slot disabled">17:00</div>
-                        <div class="time-slot active">18:00</div>
-                        <div class="time-slot" onclick="selectTime(this)">19:00</div>
-                        <div class="time-slot" onclick="selectTime(this)">20:00</div>
-                        <div class="time-slot" onclick="selectTime(this)">21:00</div>
-                        <div class="time-slot" onclick="selectTime(this)">22:00</div>
-                        <div class="time-slot" onclick="selectTime(this)">23:00</div>
-                    </div>
+                    <div class="time-slots" id="timeSlotsContainer"></div>
                 </div>
 
                 <div class="form-row">
@@ -2567,7 +2557,7 @@
 
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        updatePrice();
+        generateTimeSlots();
     }
 
     function selectFloorTable(el) {
@@ -2593,7 +2583,7 @@
 
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        updatePrice();
+        generateTimeSlots();
     }
 
     function selectTable(el, num) {
@@ -2608,12 +2598,57 @@
         document.getElementById('selectedTableTitle').textContent = '\u0421\u0442\u043E\u043B \u21169' + num + ' \u2014 ' + type;
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        updatePrice();
+        generateTimeSlots();
     }
 
     function selectTime(el) {
-        document.querySelectorAll('.time-slot:not(.disabled)').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
+        updatePrice();
+    }
+
+    // Generate time slots based on selected date (day of week)
+    // Пн-Чт: 15:00 - 01:00, Пт: 15:00 - 03:00, Сб: 12:00 - 03:00, Вс: 12:00 - 01:00
+    function generateTimeSlots() {
+        const container = document.getElementById('timeSlotsContainer');
+        if (!container) return;
+        const dateStr = document.getElementById('bookingDate').value;
+        const date = new Date(dateStr + 'T00:00:00');
+        const dow = date.getDay(); // 0=Вс, 1=Пн...6=Сб
+
+        let startHour, endHour;
+        if (dow === 6) { // Сб
+            startHour = 12; endHour = 3;
+        } else if (dow === 5) { // Пт
+            startHour = 15; endHour = 3;
+        } else if (dow === 0) { // Вс
+            startHour = 12; endHour = 1;
+        } else { // Пн-Чт
+            startHour = 15; endHour = 1;
+        }
+
+        // Generate slots from startHour to midnight, then to endHour next day
+        const slots = [];
+        for (let h = startHour; h <= 23; h++) {
+            slots.push(h);
+        }
+        // After midnight slots (for display only in demo)
+        for (let h = 0; h <= endHour; h++) {
+            slots.push(h);
+        }
+
+        // Only show main hours (not after midnight for simplicity in demo)
+        const mainSlots = slots.filter(h => h >= startHour);
+
+        let html = '';
+        const defaultTime = (dow >= 5 || dow === 0) ? startHour : 15;
+        mainSlots.forEach(h => {
+            const timeStr = String(h).padStart(2, '0') + ':00';
+            const isDefault = (h === defaultTime);
+            html += '<div class="time-slot' + (isDefault ? ' active' : '') + '" onclick="selectTime(this)">' + timeStr + '</div>';
+        });
+
+        container.innerHTML = html;
         updatePrice();
     }
 
