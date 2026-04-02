@@ -1368,7 +1368,10 @@
         .scroll-content::-webkit-scrollbar { display: none; }
 
         .bottom-nav {
-            flex-shrink: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: rgba(10, 26, 28, 0.97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -1378,7 +1381,7 @@
             padding: 6px 0;
             padding-bottom: 28px;
             z-index: 150;
-            border-radius: 0 0 50px 50px;
+            border-radius: 0 0 48px 48px;
         }
 
         .nav-item {
@@ -2641,7 +2644,9 @@
 
     </div><!-- /scroll-content -->
 
-    <!-- Bottom Navigation -->
+            </div><!-- /phone-frame -->
+
+    <!-- Bottom Navigation — outside phone-frame, inside iphone-screen-bezel -->
     <div class="bottom-nav" id="bottomNav" style="display:none;">
         <button class="nav-item active" onclick="navigate('tables', this)">
             <span class="nav-icon">&#127921;</span>
@@ -2661,7 +2666,6 @@
         </button>
     </div>
 
-            </div><!-- /phone-frame -->
         </div><!-- /iphone-screen-bezel -->
     </div><!-- /iphone-body -->
 </div><!-- /iphone-outer -->
