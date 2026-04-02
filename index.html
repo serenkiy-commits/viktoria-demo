@@ -1558,15 +1558,14 @@
 
         .phone-frame::after {
             content: '';
-            position: fixed;
+            position: absolute;
             inset: 0;
             pointer-events: none;
-            z-index: 200;
-            opacity: 0.4;
+            z-index: 0;
+            opacity: 0.15;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 200px 200px;
-            border-radius: 50px;
         }
 
         .iphone-btn-power {
@@ -2977,6 +2976,17 @@
         document.getElementById('page-' + page).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+
+        // Zone tabs only on tables page
+        const zoneTabs = document.getElementById('zoneTabs');
+        if (zoneTabs) {
+            zoneTabs.style.display = (page === 'tables') ? 'flex' : 'none';
+        }
+        // Hide booking form when leaving tables
+        if (page !== 'tables') {
+            const bf = document.getElementById('bookingForm');
+            if (bf) bf.classList.remove('visible');
+        }
 
         // Animate progress bar when switching to loyalty
         if (page === 'loyalty') {
