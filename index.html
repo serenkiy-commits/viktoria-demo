@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Виктория — Бронирование</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-primary: #041314;
+            --bg-secondary: #0a2324;
+            --bg-card: #0d2e2f;
+            --bg-card-hover: #124142;
+            --accent: #44734b;
+            --accent-light: #5a9963;
+            --accent-glow: rgba(68, 115, 75, 0.3);
+            --text-primary: #eae5dc;
+            --text-secondary: #a09888;
+            --text-muted: #6b6055;
+            --gold: #c9a84c;
+            --gold-light: #e0c068;
+            --red: #b34444;
+            --red-light: #d45555;
+            --border: rgba(234, 229, 220, 0.08);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .header {
+            padding: 16px 20px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .loyalty-badge {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            padding: 12px 20px;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
+        .nav-tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+
+        .nav-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            padding: 0 20px 100px;
+            animation: fadeIn 0.3s ease;
+        }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 20px 0 12px;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+
+        /* Table Cards */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-card:hover, .table-card:active {
+            background: var(--bg-card-hover);
+        }
+
+        .table-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .table-card.occupied {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .table-number {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .table-type {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .table-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+
+        .table-price span {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .table-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-light);
+        }
+
+        .table-status.occupied {
+            background: var(--red);
+        }
+
+        .table-status.soon {
+            background: var(--gold);
+        }
+
+        /* Imperial Card */
+        .table-card.imperial {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--bg-card), #1a2f1c);
+            border: 1px solid rgba(201, 168, 76, 0.2);
+        }
+
+        .imperial-badge {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--bg-primary);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 12px;
+        }
+
+        .form-row {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+
+        .time-slots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .time-slot {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .time-slot.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .time-slot.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .duration-selector {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 8px 14px;
+        }
+
+        .duration-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .duration-btn:active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .duration-value {
+            font-size: 20px;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .duration-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Price Summary */
+        .price-summary {
+            background: linear-gradient(135deg, #0d2e1a, #0a2324);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid rgba(68, 115, 75, 0.2);
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .price-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .price-row .label { color: var(--text-secondary); }
+        .price-row .value { color: var(--text-primary); }
+
+        .deposit-notice {
+            background: rgba(179, 68, 68, 0.1);
+            border: 1px solid rgba(179, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--red-light);
+            line-height: 1.5;
+        }
+
+        .deposit-notice strong {
+            color: var(--red-light);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: var(--accent-light);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        /* My Bookings */
+        .booking-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .booking-card.past {
+            border-left-color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .booking-date {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .booking-details {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .booking-action {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .booking-action.cancel {
+            color: var(--red-light);
+            border-color: rgba(179, 68, 68, 0.3);
+        }
+
+        /* Loyalty Page */
+        .loyalty-card {
+            background: linear-gradient(135deg, #1a2f1c, #0d2e2f);
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 12px;
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loyalty-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.08), transparent);
+            border-radius: 50%;
+        }
+
+        .loyalty-level {
+            font-size: 11px;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .loyalty-balance {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .loyalty-balance span {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .loyalty-cashback {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .loyalty-progress {
+            margin-top: 16px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            border-radius: 2px;
+            width: 65%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Review Page */
+        .stars-row {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .star {
+            width: 40px;
+            height: 40px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            background: none;
+            border: none;
+        }
+
+        .star:active { transform: scale(1.2); }
+        .star.filled { filter: none; }
+        .star.empty { filter: grayscale(1) opacity(0.3); }
+
+        .review-textarea {
+            width: 100%;
+            min-height: 100px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+        }
+
+        .review-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .ai-suggestion {
+            background: rgba(68, 115, 75, 0.1);
+            border: 1px solid rgba(68, 115, 75, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-light);
+            margin-bottom: 8px;
+        }
+
+        .ai-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .ai-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ai-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+        }
+
+        .ai-btn.accept {
+            background: var(--accent);
+            color: white;
+        }
+
+        .ai-btn.reject {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Tips Page */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .staff-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .staff-card.selected {
+            border-color: var(--gold);
+        }
+
+        .staff-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .staff-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .staff-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .tip-amounts {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tip-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .tip-btn.active {
+            background: var(--gold);
+            color: var(--bg-primary);
+            border-color: var(--gold);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 4px 12px;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .nav-item.active {
+            color: var(--accent-light);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--accent);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            z-index: 200;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Demo Banner - removed, using title above phone */
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 3px;
+            margin: 12px 20px 0;
+            gap: 2px;
+        }
+
+        .view-toggle-btn {
+            flex: 1;
+            padding: 7px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .view-toggle-btn.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Floor Plan */
+        .floor-plan-container {
+            margin-top: 12px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floor-plan-legend {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.free { background: var(--accent-light); }
+        .legend-dot.busy { background: var(--red); }
+        .legend-dot.soon { background: var(--gold); }
+
+        .floor-plan-svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .fp-table {
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .fp-table:hover .fp-table-bg {
+            filter: brightness(1.2);
+        }
+
+        .fp-table.selected .fp-table-bg {
+            stroke: var(--accent-light);
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 8px rgba(90, 153, 99, 0.5));
+        }
+
+        .fp-table.occupied {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .fp-table-bg {
+            rx: 6;
+            ry: 6;
+        }
+
+        .fp-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            fill: var(--text-primary);
+            pointer-events: none;
+        }
+
+        .fp-sublabel {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            fill: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .fp-zone-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            fill: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            pointer-events: none;
+        }
+
+        .fp-wall {
+            fill: none;
+            stroke: rgba(234, 229, 220, 0.06);
+            stroke-width: 1.5;
+        }
+
+        .fp-status {
+            pointer-events: none;
+        }
+
+        /* Restaurant table cards */
+        .resto-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .resto-card:active { background: var(--bg-card-hover); }
+
+        .resto-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .resto-card.occupied { opacity: 0.4; pointer-events: none; }
+
+        .resto-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .resto-info { flex: 1; }
+
+        .resto-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .resto-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .resto-seats {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .resto-seats strong {
+            display: block;
+            color: var(--accent-light);
+            font-size: 13px;
+        }
+
+        /* AI Spinner */
+        .ai-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent-light);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* iPhone Frame */
+        .iphone-outer {
+            position: relative;
+            width: 393px;
+            height: 852px;
+            flex-shrink: 0;
+        }
+
+        /* Titanium body */
+        .iphone-body {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #2a2a2e, #1c1c1f, #2a2a2e);
+            border-radius: 55px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.06),
+                0 2px 4px rgba(0,0,0,0.4),
+                0 8px 24px rgba(0,0,0,0.5),
+                0 20px 60px rgba(0,0,0,0.6),
+                inset 0 1px 1px rgba(255,255,255,0.04);
+            padding: 6px;
+        }
+
+        /* Screen bezel */
+        .iphone-screen-bezel {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 22px;
+            z-index: 200;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .dynamic-island::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 26px;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #1a1a2e 30%, #0d0d15 60%, #000 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+        }
+
+        /* Status bar */
+        .status-bar {
+            position: absolute;
+            top: 14px;
+            left: 30px;
+            right: 30px;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 150;
+            padding: 0 2px;
+        }
+
+        .status-time {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.2px;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-icons svg {
+            fill: #fff;
+        }
+
+        /* Scrollable content area */
+        .phone-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            border-radius: 50px;
+            scrollbar-width: none;
+            padding-top: 54px;
+        }
+
+        .phone-frame::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Side buttons */
+        .iphone-btn-power {
+            position: absolute;
+            right: -3px;
+            top: 178px;
+            width: 4px;
+            height: 96px;
+            background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
+            border-radius: 0 3px 3px 0;
+            box-shadow: 1px 0 2px rgba(0,0,0,0.3);
+        }
+
+        .iphone-btn-volup {
+            position: absolute;
+            left: -3px;
+            top: 162px;
+            width: 4px;
+            height: 54px;
+            background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
+            border-radius: 3px 0 0 3px;
+            box-shadow: -1px 0 2px rgba(0,0,0,0.3);
+        }
+
+        .iphone-btn-voldn {
+            position: absolute;
+            left: -3px;
+            top: 228px;
+            width: 4px;
+            height: 54px;
+            background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
+            border-radius: 3px 0 0 3px;
+            box-shadow: -1px 0 2px rgba(0,0,0,0.3);
+        }
+
+        .iphone-btn-action {
+            position: absolute;
+            left: -3px;
+            top: 120px;
+            width: 4px;
+            height: 28px;
+            background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
+            border-radius: 3px 0 0 3px;
+            box-shadow: -1px 0 2px rgba(0,0,0,0.3);
+        }
+
+        /* Home indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            z-index: 200;
+        }
+
+        .bottom-nav {
+            position: sticky;
+            bottom: 0;
+            padding-bottom: 20px;
+        }
+
+        /* Header fix for notch area */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-primary);
+        }
+
+        /* Title above phone */
+        .demo-title {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #888;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .demo-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .demo-title p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (max-width: 440px) {
+            body {
+                padding: 0;
+                background: var(--bg-primary);
+            }
+            .iphone-outer {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            .iphone-body {
+                border-radius: 0;
+                padding: 0;
+                box-shadow: none;
+                background: var(--bg-primary);
+            }
+            .iphone-screen-bezel {
+                border-radius: 0;
+            }
+            .phone-frame {
+                border-radius: 0;
+                padding-top: 0;
+            }
+            .dynamic-island, .status-bar, .home-indicator,
+            .iphone-btn-power, .iphone-btn-volup, .iphone-btn-voldn, .iphone-btn-action {
+                display: none;
+            }
+            .demo-title { display: none; }
+            .bottom-nav { padding-bottom: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<div class="demo-title">
+    <h1>Виктория — Telegram Mini App</h1>
+    <p>Демо-прототип гостевого приложения</p>
+</div>
+
+<div class="iphone-outer">
+    <!-- Side buttons -->
+    <div class="iphone-btn-power"></div>
+    <div class="iphone-btn-volup"></div>
+    <div class="iphone-btn-voldn"></div>
+    <div class="iphone-btn-action"></div>
+
+    <div class="iphone-body">
+        <div class="iphone-screen-bezel">
+            <!-- Dynamic Island -->
+            <div class="dynamic-island"></div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">18:42</span>
+                <div class="status-icons">
+                    <!-- Signal -->
+                    <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5" width="3" height="7" rx="0.5"/><rect x="9" y="2" width="3" height="10" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+                    <!-- WiFi -->
+                    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 7c1.86 0 3.54.76 4.76 1.98l-1.42 1.42A4.98 4.98 0 008 9c-1.38 0-2.63.56-3.54 1.46L3.24 9.04A6.97 6.97 0 018 7zM8 3c3.04 0 5.78 1.23 7.78 3.22l-1.42 1.42A8.96 8.96 0 008 5a8.96 8.96 0 00-6.36 2.64L.22 6.22A10.96 10.96 0 018 3z" fill-rule="evenodd"/></svg>
+                    <!-- Battery -->
+                    <svg width="27" height="12" viewBox="0 0 27 12"><rect x="0" y="0" width="24" height="12" rx="3" stroke="rgba(255,255,255,0.35)" stroke-width="1" fill="none"/><rect x="25" y="3.5" width="2" height="5" rx="1" fill="rgba(255,255,255,0.35)"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="#4ade80"/></svg>
+                </div>
+            </div>
+
+            <!-- Home Indicator -->
+            <div class="home-indicator"></div>
+
+            <!-- Scrollable App Content -->
+            <div class="phone-frame">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">V</div>
+            <div>
+                <div class="header-title">ВИКТОРИЯ</div>
+                <div class="header-subtitle">бильярд и рестобар</div>
+            </div>
+        </div>
+        <div class="loyalty-badge">
+            <span>★</span> 1 850 ₽
+        </div>
+    </div>
+
+    <!-- Nav Tabs -->
+    <div class="nav-tabs" id="navTabs">
+        <div class="nav-tab active" onclick="switchZone('billiard', this)">Бильярд</div>
+        <div class="nav-tab" onclick="switchZone('restaurant', this)">Ресторан</div>
+    </div>
+
+    <!-- PAGE: Tables -->
+    <div class="page active" id="page-tables">
+
+        <!-- ====== BILLIARD ZONE ====== -->
+        <div id="zone-billiard">
+
+        <!-- View toggle: plan / list -->
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" onclick="switchView('plan', this)">📐 План зала</button>
+            <button class="view-toggle-btn" onclick="switchView('list', this)">📋 Список</button>
+        </div>
+
+        <!-- FLOOR PLAN VIEW -->
+        <div id="billiard-plan">
+            <div class="floor-plan-container">
+                <div class="floor-plan-legend">
+                    <div class="legend-item"><div class="legend-dot free"></div> Свободен</div>
+                    <div class="legend-item"><div class="legend-dot soon"></div> Скоро</div>
+                    <div class="legend-item"><div class="legend-dot busy"></div> Занят</div>
+                </div>
+
+                <svg class="floor-plan-svg" viewBox="0 0 353 520" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="353" height="520" fill="#071a1b" rx="12"/>
+
+                    <!-- Walls -->
+                    <rect x="8" y="8" width="337" height="504" class="fp-wall" rx="8"/>
+                    <line x1="8" y1="200" x2="345" y2="200" class="fp-wall"/>
+                    <line x1="176" y1="200" x2="176" y2="504" class="fp-wall" stroke-dasharray="4 4"/>
+
+                    <!-- Zone labels -->
+                    <text x="176" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">Американский пул</text>
+                    <text x="176" y="220" text-anchor="middle" font-size="9" class="fp-zone-label">Русская пирамида</text>
+
+                    <!-- === AMERICAN POOL TABLES === -->
+                    <!-- Table 1 - free -->
+                    <g class="fp-table" data-table="1" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="24" y="50" width="140" height="130" fill="#0f3a2a"/>
+                        <rect x="38" y="62" width="112" height="106" rx="4" fill="#1a6b3a" opacity="0.3"/>
+                        <rect x="48" y="72" width="92" height="86" rx="2" fill="#1f7a42" opacity="0.15"/>
+                        <!-- Pockets -->
+                        <circle cx="48" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="94" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="140" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="48" cy="148" r="4" fill="#0a2318"/>
+                        <circle cx="94" cy="148" r="4" fill="#0a2318"/>
+                        <circle cx="140" cy="148" r="4" fill="#0a2318"/>
+                        <text x="94" y="110" text-anchor="middle" font-size="16" class="fp-label">№ 1</text>
+                        <text x="94" y="128" text-anchor="middle" font-size="8" class="fp-sublabel">Пул</text>
+                        <circle class="fp-status" cx="148" cy="58" r="5" fill="#5a9963"/>
+                    </g>
+
+                    <!-- Table 2 - occupied -->
+                    <g class="fp-table occupied" data-table="2" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="188" y="50" width="140" height="130" fill="#0f3a2a"/>
+                        <rect x="202" y="62" width="112" height="106" rx="4" fill="#1a6b3a" opacity="0.3"/>
+                        <rect x="212" y="72" width="92" height="86" rx="2" fill="#1f7a42" opacity="0.15"/>
+                        <circle cx="212" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="258" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="304" cy="72" r="4" fill="#0a2318"/>
+                        <circle cx="212" cy="148" r="4" fill="#0a2318"/>
+                        <circle cx="258" cy="148" r="4" fill="#0a2318"/>
+                        <circle cx="304" cy="148" r="4" fill="#0a2318"/>
+                        <text x="258" y="110" text-anchor="middle" font-size="16" class="fp-label">№ 2</text>
+                        <text x="258" y="128" text-anchor="middle" font-size="8" class="fp-sublabel">Пул</text>
+                        <circle class="fp-status" cx="312" cy="58" r="5" fill="#b34444"/>
+                    </g>
+
+                    <!-- === RUSSIAN PYRAMID TABLES === -->
+                    <!-- Row 1: tables 3, 4 -->
+                    <g class="fp-table" data-table="3" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="20" y="240" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="28" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="36" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="68" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="36" cy="342" r="3" fill="#0a2318"/>
+                        <circle cx="68" cy="342" r="3" fill="#0a2318"/>
+                        <text x="56" y="296" text-anchor="middle" font-size="14" class="fp-label">№3</text>
+                        <text x="56" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="80" cy="248" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <g class="fp-table" data-table="4" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="100" y="240" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="108" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="116" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="148" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="116" cy="342" r="3" fill="#0a2318"/>
+                        <circle cx="148" cy="342" r="3" fill="#0a2318"/>
+                        <text x="136" y="296" text-anchor="middle" font-size="14" class="fp-label">№4</text>
+                        <text x="136" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="160" cy="248" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <g class="fp-table" data-table="5" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="180" y="240" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="188" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="196" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="228" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="196" cy="342" r="3" fill="#0a2318"/>
+                        <circle cx="228" cy="342" r="3" fill="#0a2318"/>
+                        <text x="216" y="296" text-anchor="middle" font-size="14" class="fp-label">№5</text>
+                        <text x="216" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="240" cy="248" r="4" fill="#c9a84c"/>
+                    </g>
+
+                    <g class="fp-table occupied" data-table="6" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="260" y="240" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="268" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="276" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="308" cy="258" r="3" fill="#0a2318"/>
+                        <circle cx="276" cy="342" r="3" fill="#0a2318"/>
+                        <circle cx="308" cy="342" r="3" fill="#0a2318"/>
+                        <text x="296" y="296" text-anchor="middle" font-size="14" class="fp-label">№6</text>
+                        <text x="296" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="320" cy="248" r="4" fill="#b34444"/>
+                    </g>
+
+                    <!-- Row 2: tables 7, 8, 9 -->
+                    <g class="fp-table" data-table="7" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="20" y="374" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="28" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="36" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="68" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="36" cy="476" r="3" fill="#0a2318"/>
+                        <circle cx="68" cy="476" r="3" fill="#0a2318"/>
+                        <text x="56" y="430" text-anchor="middle" font-size="14" class="fp-label">№7</text>
+                        <text x="56" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="80" cy="382" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <g class="fp-table" data-table="8" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="100" y="374" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="108" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="116" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="148" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="116" cy="476" r="3" fill="#0a2318"/>
+                        <circle cx="148" cy="476" r="3" fill="#0a2318"/>
+                        <text x="136" y="430" text-anchor="middle" font-size="14" class="fp-label">№8</text>
+                        <text x="136" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="160" cy="382" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <g class="fp-table occupied" data-table="9" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="180" y="374" width="72" height="120" fill="#0f3a2a"/>
+                        <rect x="188" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
+                        <circle cx="196" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="228" cy="392" r="3" fill="#0a2318"/>
+                        <circle cx="196" cy="476" r="3" fill="#0a2318"/>
+                        <circle cx="228" cy="476" r="3" fill="#0a2318"/>
+                        <text x="216" y="430" text-anchor="middle" font-size="14" class="fp-label">№9</text>
+                        <text x="216" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
+                        <circle class="fp-status" cx="240" cy="382" r="4" fill="#b34444"/>
+                    </g>
+
+                    <!-- Imperial Table 10 -->
+                    <g class="fp-table" data-table="10" data-type="Императорский стол" data-price="1800" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="260" y="374" width="72" height="120" fill="#1a2a14" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+                        <rect x="268" y="384" width="56" height="100" rx="3" fill="#2a5a1a" opacity="0.2"/>
+                        <circle cx="276" cy="392" r="3" fill="#1a3a10"/>
+                        <circle cx="308" cy="392" r="3" fill="#1a3a10"/>
+                        <circle cx="276" cy="476" r="3" fill="#1a3a10"/>
+                        <circle cx="308" cy="476" r="3" fill="#1a3a10"/>
+                        <text x="296" y="420" text-anchor="middle" font-size="8" fill="#c9a84c" font-weight="700" font-family="Montserrat" letter-spacing="0.5">ПРЕМИУМ</text>
+                        <text x="296" y="438" text-anchor="middle" font-size="14" class="fp-label">№10</text>
+                        <text x="296" y="454" text-anchor="middle" font-size="7" class="fp-sublabel">Императорский</text>
+                        <circle class="fp-status" cx="320" cy="382" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <!-- Decorations: bar area hint -->
+                    <text x="330" y="505" text-anchor="end" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">БАР →</text>
+                    <text x="24" y="505" text-anchor="start" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">← ВХОД</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- LIST VIEW (hidden by default) -->
+        <div id="billiard-list" style="display:none;">
+            <div class="section-title">Бильярдные столы</div>
+            <div class="section-subtitle">Свободные на сегодня, 18:00</div>
+            <div class="tables-grid" id="tablesGrid">
+                <div class="table-card" onclick="selectTable(this, 1)">
+                    <div class="table-status"></div>
+                    <div class="table-number">№ 1</div>
+                    <div class="table-type">Американский пул</div>
+                    <div class="table-price">900 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card occupied">
+                    <div class="table-status occupied"></div>
+                    <div class="table-number">№ 2</div>
+                    <div class="table-type">Американский пул</div>
+                    <div class="table-price">900 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card" onclick="selectTable(this, 3)">
+                    <div class="table-status"></div>
+                    <div class="table-number">№ 3</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card" onclick="selectTable(this, 4)">
+                    <div class="table-status"></div>
+                    <div class="table-number">№ 4</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card" onclick="selectTable(this, 5)">
+                    <div class="table-status soon"></div>
+                    <div class="table-number">№ 5</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card occupied">
+                    <div class="table-status occupied"></div>
+                    <div class="table-number">№ 6</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card" onclick="selectTable(this, 7)">
+                    <div class="table-status"></div>
+                    <div class="table-number">№ 7</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card" onclick="selectTable(this, 8)">
+                    <div class="table-status"></div>
+                    <div class="table-number">№ 8</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card occupied">
+                    <div class="table-status occupied"></div>
+                    <div class="table-number">№ 9</div>
+                    <div class="table-type">Русская пирамида</div>
+                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                </div>
+                <div class="table-card imperial" onclick="selectTable(this, 10)">
+                    <div>
+                        <div class="imperial-badge">Премиум</div>
+                        <div class="table-number">№ 10</div>
+                        <div class="table-type">Императорский стол</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div class="table-price">1 800 ₽ <span>/час</span></div>
+                        <div class="table-status" style="position:static;display:inline-block;margin-top:6px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /zone-billiard -->
+
+        <!-- ====== RESTAURANT ZONE ====== -->
+        <div id="zone-restaurant" style="display:none;">
+
+            <!-- View toggle: plan / list -->
+            <div class="view-toggle">
+                <button class="view-toggle-btn active" onclick="switchRestoView('plan', this)">📐 План зала</button>
+                <button class="view-toggle-btn" onclick="switchRestoView('list', this)">📋 Список</button>
+            </div>
+
+            <!-- PLAN VIEW -->
+            <div id="resto-plan">
+            <div class="floor-plan-container" style="margin-bottom:16px;">
+                <div class="floor-plan-legend">
+                    <div class="legend-item"><div class="legend-dot free"></div> Свободен</div>
+                    <div class="legend-item"><div class="legend-dot busy"></div> Занят</div>
+                </div>
+                <svg class="floor-plan-svg" viewBox="0 0 353 340" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="353" height="340" fill="#071a1b" rx="12"/>
+                    <rect x="8" y="8" width="337" height="324" class="fp-wall" rx="8"/>
+
+                    <!-- Zone labels -->
+                    <text x="90" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">У окна</text>
+                    <text x="270" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">Основной зал</text>
+                    <text x="176" y="225" text-anchor="middle" font-size="9" class="fp-zone-label">Лаунж-зона</text>
+
+                    <line x1="176" y1="8" x2="176" y2="210" class="fp-wall" stroke-dasharray="4 4"/>
+                    <line x1="8" y1="210" x2="345" y2="210" class="fp-wall"/>
+
+                    <!-- Window tables -->
+                    <g class="fp-table" data-table="R1" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="24" y="46" width="64" height="64" fill="#1a2a2b"/>
+                        <circle cx="56" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="56" y="74" text-anchor="middle" font-size="11" class="fp-label">R1</text>
+                        <text x="56" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">2 места</text>
+                        <circle class="fp-status" cx="78" cy="52" r="4" fill="#5a9963"/>
+                    </g>
+                    <g class="fp-table" data-table="R2" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="96" y="46" width="64" height="64" fill="#1a2a2b"/>
+                        <circle cx="128" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="128" y="74" text-anchor="middle" font-size="11" class="fp-label">R2</text>
+                        <text x="128" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">2 места</text>
+                        <circle class="fp-status" cx="150" cy="52" r="4" fill="#5a9963"/>
+                    </g>
+                    <g class="fp-table occupied" data-table="R3" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="24" y="120" width="136" height="72" fill="#1a2a2b"/>
+                        <rect x="44" y="134" width="96" height="44" rx="22" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="92" y="156" text-anchor="middle" font-size="11" class="fp-label">R3</text>
+                        <text x="92" y="170" text-anchor="middle" font-size="7" class="fp-sublabel">6 мест</text>
+                        <circle class="fp-status" cx="148" cy="128" r="4" fill="#b34444"/>
+                    </g>
+
+                    <!-- Main hall -->
+                    <g class="fp-table" data-table="R4" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="192" y="46" width="64" height="64" fill="#1a2a2b"/>
+                        <circle cx="224" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="224" y="74" text-anchor="middle" font-size="11" class="fp-label">R4</text>
+                        <text x="224" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">4 места</text>
+                        <circle class="fp-status" cx="246" cy="52" r="4" fill="#5a9963"/>
+                    </g>
+                    <g class="fp-table" data-table="R5" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="266" y="46" width="64" height="64" fill="#1a2a2b"/>
+                        <circle cx="298" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="298" y="74" text-anchor="middle" font-size="11" class="fp-label">R5</text>
+                        <text x="298" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">4 места</text>
+                        <circle class="fp-status" cx="320" cy="52" r="4" fill="#b34444"/>
+                    </g>
+                    <g class="fp-table" data-table="R6" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="192" y="120" width="138" height="72" fill="#1a2a2b"/>
+                        <rect x="212" y="134" width="98" height="44" rx="22" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="261" y="156" text-anchor="middle" font-size="11" class="fp-label">R6</text>
+                        <text x="261" y="170" text-anchor="middle" font-size="7" class="fp-sublabel">8 мест</text>
+                        <circle class="fp-status" cx="318" cy="128" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <!-- Lounge -->
+                    <g class="fp-table" data-table="R7" data-type="Ресторан, лаунж" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="24" y="240" width="96" height="76" fill="#1a2a2b"/>
+                        <rect x="36" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="72" y="278" text-anchor="middle" font-size="11" class="fp-label">R7</text>
+                        <text x="72" y="292" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 4 м.</text>
+                        <circle class="fp-status" cx="110" cy="248" r="4" fill="#5a9963"/>
+                    </g>
+                    <g class="fp-table occupied" data-table="R8" data-type="Ресторан, лаунж" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="130" y="240" width="96" height="76" fill="#1a2a2b"/>
+                        <rect x="142" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
+                        <text x="178" y="278" text-anchor="middle" font-size="11" class="fp-label">R8</text>
+                        <text x="178" y="292" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 4 м.</text>
+                        <circle class="fp-status" cx="216" cy="248" r="4" fill="#b34444"/>
+                    </g>
+                    <g class="fp-table" data-table="R9" data-type="Ресторан, лаунж VIP" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="236" y="240" width="96" height="76" fill="#1a2a2b" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+                        <rect x="248" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(201,168,76,0.1)" stroke-width="1"/>
+                        <text x="284" y="270" text-anchor="middle" font-size="7" fill="#c9a84c" font-weight="700" font-family="Montserrat">VIP</text>
+                        <text x="284" y="284" text-anchor="middle" font-size="11" class="fp-label">R9</text>
+                        <text x="284" y="298" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 6 м.</text>
+                        <circle class="fp-status" cx="322" cy="248" r="4" fill="#5a9963"/>
+                    </g>
+
+                    <text x="330" y="330" text-anchor="end" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">КАЛЬЯНЫ →</text>
+                    <text x="24" y="330" text-anchor="start" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">← БИЛЬЯРД</text>
+                </svg>
+            </div>
+            </div>
+
+            <!-- LIST VIEW -->
+            <div id="resto-list" style="display:none;">
+                <div class="section-title">У окна</div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R1', 'Ресторан, у окна', 2)">
+                    <div class="resto-icon">🪟</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R1</div>
+                        <div class="resto-desc">У окна, уютное место для двоих</div>
+                    </div>
+                    <div class="resto-seats"><strong>2</strong> места</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R2', 'Ресторан, у окна', 2)">
+                    <div class="resto-icon">🪟</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R2</div>
+                        <div class="resto-desc">У окна, вид на бульвар</div>
+                    </div>
+                    <div class="resto-seats"><strong>2</strong> места</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card occupied">
+                    <div class="resto-icon">🪟</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R3</div>
+                        <div class="resto-desc">Большой стол у окна</div>
+                    </div>
+                    <div class="resto-seats"><strong>6</strong> мест</div>
+                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
+                </div>
+
+                <div class="section-title">Основной зал</div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R4', 'Ресторан, основной зал', 4)">
+                    <div class="resto-icon">🍽</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R4</div>
+                        <div class="resto-desc">Центр зала</div>
+                    </div>
+                    <div class="resto-seats"><strong>4</strong> места</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card occupied">
+                    <div class="resto-icon">🍽</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R5</div>
+                        <div class="resto-desc">Центр зала</div>
+                    </div>
+                    <div class="resto-seats"><strong>4</strong> места</div>
+                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R6', 'Ресторан, основной зал', 8)">
+                    <div class="resto-icon">🍽</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R6</div>
+                        <div class="resto-desc">Большой стол для компании</div>
+                    </div>
+                    <div class="resto-seats"><strong>8</strong> мест</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+
+                <div class="section-title">Лаунж-зона</div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R7', 'Ресторан, лаунж', 4)">
+                    <div class="resto-icon">🛋</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R7</div>
+                        <div class="resto-desc">Мягкий диван, кальянная зона</div>
+                    </div>
+                    <div class="resto-seats"><strong>4</strong> места</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card occupied">
+                    <div class="resto-icon">🛋</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R8</div>
+                        <div class="resto-desc">Мягкий диван, кальянная зона</div>
+                    </div>
+                    <div class="resto-seats"><strong>4</strong> места</div>
+                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
+                </div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R9', 'Ресторан, лаунж VIP', 6)" style="border: 1px solid rgba(201,168,76,0.2);">
+                    <div class="resto-icon" style="background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));">👑</div>
+                    <div class="resto-info">
+                        <div class="resto-name">Стол R9 <span style="color:var(--gold);font-size:10px;font-weight:700;">VIP</span></div>
+                        <div class="resto-desc">Большой диван, приватная зона</div>
+                    </div>
+                    <div class="resto-seats"><strong>6</strong> мест</div>
+                    <div class="table-status" style="top:10px;right:10px;"></div>
+                </div>
+            </div>
+
+        </div><!-- /zone-restaurant -->
+
+        <!-- Booking Form (hidden by default) -->
+        <div id="bookingForm" style="display:none;">
+            <div class="section-title" id="selectedTableTitle">Стол №1 — Американский пул</div>
+
+            <div class="booking-form">
+                <div class="form-row">
+                    <label class="form-label">Дата</label>
+                    <input type="date" class="form-input" id="bookingDate" value="2026-04-05">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">Время начала</label>
+                    <div class="time-slots">
+                        <div class="time-slot disabled">15:00</div>
+                        <div class="time-slot disabled">16:00</div>
+                        <div class="time-slot disabled">17:00</div>
+                        <div class="time-slot active">18:00</div>
+                        <div class="time-slot" onclick="selectTime(this)">19:00</div>
+                        <div class="time-slot" onclick="selectTime(this)">20:00</div>
+                        <div class="time-slot" onclick="selectTime(this)">21:00</div>
+                        <div class="time-slot" onclick="selectTime(this)">22:00</div>
+                        <div class="time-slot" onclick="selectTime(this)">23:00</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">Длительность</label>
+                    <div class="duration-selector">
+                        <button class="duration-btn" onclick="changeDuration(-1)">−</button>
+                        <div>
+                            <div class="duration-value" id="durationValue">2</div>
+                            <div class="duration-label">часа</div>
+                        </div>
+                        <button class="duration-btn" onclick="changeDuration(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">Количество гостей</label>
+                    <div class="duration-selector">
+                        <button class="duration-btn" onclick="changeGuests(-1)">−</button>
+                        <div>
+                            <div class="duration-value" id="guestsValue">2</div>
+                            <div class="duration-label">гостя</div>
+                        </div>
+                        <button class="duration-btn" onclick="changeGuests(1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="price-summary">
+                <div class="price-row">
+                    <span class="label">Стол №1, 2 часа</span>
+                    <span class="value" id="priceTable">1 800 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span class="label">Депозит (2 гостя × 1 500 ₽)</span>
+                    <span class="value" id="priceDeposit">3 000 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span class="label">Бонусы (-20%)</span>
+                    <span class="value" style="color: var(--accent-light);" id="priceBonus">−360 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span class="label">К оплате</span>
+                    <span class="value" id="priceTotal">4 440 ₽</span>
+                </div>
+            </div>
+
+            <div class="deposit-notice">
+                <strong>Депозит Пт-Вс с 18:00:</strong> 1 500 ₽ на гостя. Используется в баре и кухне. При отмене менее чем за 24 часа депозит невозвратный.
+            </div>
+
+            <button class="btn-primary" onclick="showToast('Бронирование подтверждено!')">
+                Оплатить и забронировать
+            </button>
+            <button class="btn-secondary" onclick="showToast('Позвоним вам для подтверждения')">
+                Забронировать без предоплаты
+            </button>
+        </div>
+    </div>
+
+    <!-- PAGE: My Bookings -->
+    <div class="page" id="page-bookings">
+        <div class="section-title">Активные брони</div>
+
+        <div class="booking-card">
+            <div class="booking-date">Суббота, 5 апреля — 20:00</div>
+            <div class="booking-details">
+                Стол №8, Русская пирамида<br>
+                2 часа, 3 гостя<br>
+                Депозит: 4 500 ₽ (оплачен)
+            </div>
+            <div class="booking-actions">
+                <button class="booking-action" onclick="showToast('Выберите новое время')">Перенести</button>
+                <button class="booking-action" onclick="showToast('Продлено на 1 час')">Продлить</button>
+                <button class="booking-action cancel" onclick="showToast('Бронь отменена. Депозит невозвратный (менее 24ч)')">Отменить</button>
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top: 24px;">История</div>
+
+        <div class="booking-card past">
+            <div class="booking-date">Пятница, 28 марта — 19:00</div>
+            <div class="booking-details">
+                Стол №3, Русская пирамида<br>
+                3 часа, 4 гостя<br>
+                Итого: 7 800 ₽
+            </div>
+        </div>
+
+        <div class="booking-card past">
+            <div class="booking-date">Суббота, 22 марта — 18:00</div>
+            <div class="booking-details">
+                Стол №10, Императорский<br>
+                2 часа, 2 гостя<br>
+                Итого: 6 600 ₽
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: Loyalty -->
+    <div class="page" id="page-loyalty">
+        <div class="loyalty-card">
+            <div class="loyalty-level">Уровень 2 — 7% кешбэк</div>
+            <div class="loyalty-balance">1 850 <span>бонусов</span></div>
+            <div class="loyalty-cashback">Можно списать до 20% от счёта</div>
+            <div class="loyalty-progress">
+                <div class="progress-text">
+                    <span>32 400 ₽ потрачено</span>
+                    <span>50 000 ₽ до Уровня 3 (10%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">История бонусов</div>
+
+        <div class="booking-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div class="booking-date">28 марта</div>
+                    <div class="booking-details">Кешбэк за визит</div>
+                </div>
+                <div style="color: var(--accent-light); font-weight: 600; font-size: 15px;">+546 ₽</div>
+            </div>
+        </div>
+        <div class="booking-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div class="booking-date">22 марта</div>
+                    <div class="booking-details">Списание бонусов</div>
+                </div>
+                <div style="color: var(--red-light); font-weight: 600; font-size: 15px;">−400 ₽</div>
+            </div>
+        </div>
+        <div class="booking-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div class="booking-date">22 марта</div>
+                    <div class="booking-details">Кешбэк за визит</div>
+                </div>
+                <div style="color: var(--accent-light); font-weight: 600; font-size: 15px;">+462 ₽</div>
+            </div>
+        </div>
+        <div class="booking-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div class="booking-date">1 марта</div>
+                    <div class="booking-details">Стартовый бонус</div>
+                </div>
+                <div style="color: var(--gold); font-weight: 600; font-size: 15px;">+500 ₽</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: Review -->
+    <div class="page" id="page-review">
+
+        <!-- ===== WRITE REVIEW ===== -->
+        <div id="review-write">
+
+            <div class="section-title">Оцените визит</div>
+            <div class="section-subtitle">28 марта, стол №3</div>
+
+            <div class="stars-row">
+                <button class="star filled" onclick="setRating(1)">⭐</button>
+                <button class="star filled" onclick="setRating(2)">⭐</button>
+                <button class="star filled" onclick="setRating(3)">⭐</button>
+                <button class="star filled" onclick="setRating(4)">⭐</button>
+                <button class="star empty" onclick="setRating(5)">⭐</button>
+            </div>
+
+            <!-- Step 1: Write -->
+            <div id="review-step1">
+                <div class="form-row">
+                    <label class="form-label">Ваш отзыв</label>
+                    <textarea class="review-textarea" placeholder="Расскажите о вашем визите..." id="reviewText"></textarea>
+                </div>
+                <button class="btn-primary" onclick="analyzeReview()">
+                    Отправить отзыв
+                </button>
+            </div>
+
+            <!-- Step 2: AI Processing (hidden) -->
+            <div id="review-step2" style="display:none;">
+                <div style="background:var(--bg-card); border-radius:14px; padding:20px; margin-top:12px; text-align:center;">
+                    <div class="ai-spinner"></div>
+                    <div style="color:var(--accent-light); font-size:13px; font-weight:600; margin-top:12px;">ИИ анализирует отзыв...</div>
+                    <div style="color:var(--text-muted); font-size:11px; margin-top:4px;" id="aiStepText">Проверка модерации</div>
+                </div>
+            </div>
+
+            <!-- Step 3: AI Result (hidden) -->
+            <div id="review-step3" style="display:none;">
+
+                <!-- Moderation result -->
+                <div id="moderation-result" style="background:rgba(68,115,75,0.1); border:1px solid rgba(68,115,75,0.2); border-radius:12px; padding:14px; margin-top:12px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="font-size:18px;">✅</span>
+                        <span style="font-size:13px; font-weight:600; color:var(--accent-light);">Модерация пройдена</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Отзыв не содержит запрещённого контента. Спам не обнаружен.</div>
+                </div>
+
+                <!-- Category tags -->
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;" id="reviewTags"></div>
+
+                <!-- Sentiment -->
+                <div style="background:var(--bg-card); border-radius:12px; padding:14px; margin-top:12px;" id="sentimentBlock">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:12px; color:var(--text-secondary);">Тональность</span>
+                        <span id="sentimentBadge" style="font-size:12px; font-weight:600; padding:4px 10px; border-radius:8px;"></span>
+                    </div>
+                </div>
+
+                <!-- Original text -->
+                <div style="background:var(--bg-card); border-radius:12px; padding:14px; margin-top:12px;">
+                    <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Ваш текст:</div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;" id="originalText"></div>
+                </div>
+
+                <!-- AI improved version -->
+                <div class="ai-suggestion" id="aiSuggestionBlock">
+                    <div class="ai-badge">✨ Улучшенная версия от ИИ</div>
+                    <div class="ai-text" id="aiImprovedText"></div>
+                    <div class="ai-actions">
+                        <button class="ai-btn accept" onclick="acceptAI()">Опубликовать эту</button>
+                        <button class="ai-btn reject" onclick="rejectAI()">Оставить мой текст</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Published (hidden) -->
+            <div id="review-step4" style="display:none;">
+                <div style="background:var(--bg-card); border-radius:14px; padding:24px; margin-top:12px; text-align:center;">
+                    <div style="font-size:40px; margin-bottom:8px;">🎉</div>
+                    <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Отзыв опубликован</div>
+                    <div style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Спасибо! Ваш отзыв помогает нам становиться лучше</div>
+                    <div style="background:rgba(68,115,75,0.1); border-radius:10px; padding:12px; text-align:left;">
+                        <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Опубликованный текст:</div>
+                        <div style="font-size:13px; color:var(--text-primary); line-height:1.6;" id="publishedText"></div>
+                    </div>
+                </div>
+
+                <!-- Auto-response from venue -->
+                <div id="venueResponse" style="display:none; background:var(--bg-card); border-radius:14px; padding:16px; margin-top:10px; border-left:3px solid var(--accent);">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">V</div>
+                        <div>
+                            <div style="font-size:12px; font-weight:600;">Виктория</div>
+                            <div style="font-size:10px; color:var(--text-muted);">только что</div>
+                        </div>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;" id="venueResponseText"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="resetReview()" style="margin-top:16px;">Написать ещё один отзыв</button>
+            </div>
+
+            <!-- Tips section -->
+            <div id="tips-section">
+                <div class="section-title" style="margin-top: 32px;">Чаевые</div>
+                <div class="section-subtitle">Поблагодарите сотрудника</div>
+
+                <div class="staff-grid">
+                    <div class="staff-card selected" onclick="selectStaff(this)">
+                        <div class="staff-avatar">👨‍🍳</div>
+                        <div class="staff-name">Алексей</div>
+                        <div class="staff-role">Бармен</div>
+                    </div>
+                    <div class="staff-card" onclick="selectStaff(this)">
+                        <div class="staff-avatar">👨</div>
+                        <div class="staff-name">Дмитрий</div>
+                        <div class="staff-role">Официант</div>
+                    </div>
+                    <div class="staff-card" onclick="selectStaff(this)">
+                        <div class="staff-avatar">🎱</div>
+                        <div class="staff-name">Сергей</div>
+                        <div class="staff-role">Маркер зала</div>
+                    </div>
+                    <div class="staff-card" onclick="selectStaff(this)">
+                        <div class="staff-avatar">💨</div>
+                        <div class="staff-name">Артём</div>
+                        <div class="staff-role">Кальянщик</div>
+                    </div>
+                </div>
+
+                <div class="tip-amounts">
+                    <button class="tip-btn" onclick="selectTip(this)">100 ₽</button>
+                    <button class="tip-btn active" onclick="selectTip(this)">200 ₽</button>
+                    <button class="tip-btn" onclick="selectTip(this)">500 ₽</button>
+                    <button class="tip-btn" onclick="selectTip(this)">Своя</button>
+                </div>
+
+                <button class="btn-primary" onclick="showToast('Чаевые отправлены! Алексей благодарит вас')">
+                    Оставить чаевые 200 ₽
+                </button>
+            </div>
+        </div><!-- /review-write -->
+
+        <!-- Мои прошлые отзывы -->
+        <div id="my-reviews-section">
+            <div class="section-title" style="margin-top:24px;">Мои отзывы</div>
+
+            <div style="background:var(--bg-card); border-radius:14px; padding:14px; margin-bottom:8px; border-left:3px solid var(--accent);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div style="font-size:12px; color:var(--text-muted);">22 марта, стол №10</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:8px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
+                <div style="background:var(--bg-secondary); border-radius:10px; padding:10px; border-left:2px solid var(--accent);">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                        <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;">V</div>
+                        <span style="font-size:10px; color:var(--accent-light); font-weight:600;">Виктория</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
+                </div>
+            </div>
+
+            <div style="background:var(--bg-card); border-radius:14px; padding:14px; margin-bottom:8px; border-left:3px solid var(--gold);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div style="font-size:12px; color:var(--text-muted);">8 марта, стол №5</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">⭐⭐⭐⭐</div>
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
+                <div style="background:var(--bg-secondary); border-radius:10px; padding:10px; border-left:2px solid var(--gold); margin-top:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                        <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;">V</div>
+                        <span style="font-size:10px; color:var(--gold); font-weight:600;">Виктория</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="navigate('tables', this)">
+            <span class="nav-icon">🎱</span>
+            <span class="nav-label">Столы</span>
+        </button>
+        <button class="nav-item" onclick="navigate('bookings', this)">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Мои брони</span>
+        </button>
+        <button class="nav-item" onclick="navigate('loyalty', this)">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-label">Бонусы</span>
+        </button>
+        <button class="nav-item" onclick="navigate('review', this)">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Отзыв</span>
+        </button>
+    </div>
+
+            </div><!-- /phone-frame -->
+        </div><!-- /iphone-screen-bezel -->
+    </div><!-- /iphone-body -->
+</div><!-- /iphone-outer -->
+</div><!-- /page-wrapper -->
+
+<script>
+    let selectedTableEl = null;
+    let selectedFloorEl = null;
+    let duration = 2;
+    let guests = 2;
+    let currentZone = 'billiard';
+
+    function switchZone(zone, el) {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        currentZone = zone;
+        document.getElementById('zone-billiard').style.display = zone === 'billiard' ? 'block' : 'none';
+        document.getElementById('zone-restaurant').style.display = zone === 'restaurant' ? 'block' : 'none';
+        document.getElementById('bookingForm').style.display = 'none';
+        // Clear selections
+        document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
+        document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
+    }
+
+    function switchView(view, el) {
+        el.parentElement.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('billiard-plan').style.display = view === 'plan' ? 'block' : 'none';
+        document.getElementById('billiard-list').style.display = view === 'list' ? 'block' : 'none';
+    }
+
+    function switchRestoView(view, el) {
+        el.parentElement.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('resto-plan').style.display = view === 'plan' ? 'block' : 'none';
+        document.getElementById('resto-list').style.display = view === 'list' ? 'block' : 'none';
+    }
+
+    function selectRestoCard(el, num, type, seats) {
+        if (el.classList.contains('occupied')) return;
+        document.querySelectorAll('.resto-card').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
+        el.classList.add('selected');
+
+        document.getElementById('selectedTableTitle').textContent = `Стол ${num} — ${type}`;
+        selectedTableEl = {
+            querySelector: function(sel) {
+                if (sel === '.table-price') return { textContent: '0 ₽ /час' };
+                if (sel === '.table-type') return { textContent: type };
+                return null;
+            }
+        };
+
+        document.getElementById('priceTable').textContent = 'Без почасовой оплаты';
+        document.getElementById('priceDeposit').textContent = formatPrice(guests * 1500);
+        document.getElementById('priceBonus').textContent = '−0 ₽';
+        document.getElementById('priceTotal').textContent = formatPrice(guests * 1500);
+
+        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function selectFloorTable(el) {
+        if (el.classList.contains('occupied')) return;
+        document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
+        document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedFloorEl = el;
+
+        const num = el.dataset.table;
+        const type = el.dataset.type;
+        const price = parseInt(el.dataset.price);
+
+        document.getElementById('selectedTableTitle').textContent = `Стол ${num} — ${type}`;
+
+        // For restaurant tables without hourly price
+        if (price === 0) {
+            document.getElementById('priceTable').textContent = 'Без почасовой оплаты';
+            document.getElementById('priceDeposit').textContent = formatPrice(guests * 1500);
+            document.getElementById('priceBonus').textContent = '−0 ₽';
+            document.getElementById('priceTotal').textContent = formatPrice(guests * 1500);
+        }
+
+        // Create a virtual element for updatePrice
+        selectedTableEl = {
+            querySelector: function(sel) {
+                if (sel === '.table-price') return { textContent: price + ' ₽ /час' };
+                if (sel === '.table-type') return { textContent: type };
+                return null;
+            }
+        };
+
+        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (price > 0) updatePrice();
+    }
+
+    function selectTable(el, num) {
+        if (el.classList.contains('occupied')) return;
+        document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedTableEl = el;
+
+        const type = el.querySelector('.table-type').textContent;
+        document.getElementById('selectedTableTitle').textContent = `Стол №${num} — ${type}`;
+        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updatePrice();
+    }
+
+    function selectTime(el) {
+        document.querySelectorAll('.time-slot:not(.disabled)').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function changeDuration(delta) {
+        duration = Math.max(1, Math.min(8, duration + delta));
+        document.getElementById('durationValue').textContent = duration;
+        const labels = ['час', 'часа', 'часа', 'часа', 'часов', 'часов', 'часов', 'часов'];
+        document.querySelector('.duration-label').textContent = labels[duration - 1];
+        updatePrice();
+    }
+
+    function changeGuests(delta) {
+        guests = Math.max(1, Math.min(10, guests + delta));
+        document.getElementById('guestsValue').textContent = guests;
+        updatePrice();
+    }
+
+    function updatePrice() {
+        if (!selectedTableEl) return;
+        const priceText = selectedTableEl.querySelector('.table-price').textContent;
+        const pricePerHour = parseInt(priceText.replace(/\s/g, ''));
+        const tableTotal = pricePerHour * duration;
+        const deposit = guests * 1500;
+        const bonus = Math.round(tableTotal * 0.2);
+        const total = tableTotal + deposit - bonus;
+
+        document.getElementById('priceTable').textContent = formatPrice(tableTotal);
+        document.getElementById('priceDeposit').textContent = formatPrice(deposit);
+        document.getElementById('priceBonus').textContent = `−${formatPrice(bonus)}`;
+        document.getElementById('priceTotal').textContent = formatPrice(total);
+    }
+
+    function formatPrice(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+    }
+
+    function navigate(page, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`page-${page}`).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function setRating(n) {
+        document.querySelectorAll('.star').forEach((s, i) => {
+            s.classList.toggle('filled', i < n);
+            s.classList.toggle('empty', i >= n);
+        });
+    }
+
+    function selectStaff(el) {
+        document.querySelectorAll('.staff-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function selectTip(el) {
+        document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    // Review history tab removed — analytics goes to owner's Telegram bot
+
+    // Demo AI review scenarios
+    const reviewScenarios = {
+        fallback: {
+            improved: 'Хорошее заведение. Приятная атмосфера и дружелюбный персонал. Рекомендую для отдыха с друзьями.',
+            tags: ['Атмосфера', 'Сервис'],
+            sentiment: 'positive',
+            venueResponse: 'Спасибо за отзыв! Рады, что вам у нас понравилось. Ждём снова!'
+        },
+        negative: {
+            improved: null,
+            tags: ['Сервис'],
+            sentiment: 'negative',
+            venueResponse: 'Приносим извинения за доставленные неудобства. Мы обязательно разберёмся в ситуации. Будем рады предложить комплимент при следующем визите.'
+        }
+    };
+
+    const aiImprovements = [
+        { keywords: ['кухн', 'еда', 'блюд', 'вкусн', 'стейк', 'меню', 'готов'],
+          improved: 'Заведение с отличной кухней. Блюда приготовлены качественно, порции достойные. Рекомендую попробовать.',
+          tags: ['Кухня'], sentiment: 'positive',
+          venueResponse: 'Спасибо! Передадим вашу похвалу шеф-повару. Рекомендуем попробовать наши сезонные новинки при следующем визите!' },
+        { keywords: ['бильярд', 'стол', 'кий', 'игр', 'шар'],
+          improved: 'Хороший бильярдный клуб. Столы в достойном состоянии, выбор большой. Приятно провели время за игрой.',
+          tags: ['Бильярд'], sentiment: 'positive',
+          venueResponse: 'Рады, что вам понравилась игра! У нас 10 столов на любой вкус, включая Императорский. Ждём вас снова!' },
+        { keywords: ['гряз', 'грязн', 'убор', 'чист'],
+          improved: 'В целом хорошее заведение, но хотелось бы обратить внимание на чистоту. При следующем визите надеюсь увидеть улучшения в этом направлении.',
+          tags: ['Сервис', 'Чистота'], sentiment: 'mixed',
+          venueResponse: 'Благодарим за обратную связь. Чистота для нас приоритет, усилим контроль. Приносим извинения за неудобства.' },
+        { keywords: ['долго', 'ждал', 'ожидан', 'медлен', 'задерж'],
+          improved: 'Заведение нравится, но в этот раз пришлось подождать дольше обычного. Надеюсь, в следующий раз обслуживание будет быстрее.',
+          tags: ['Сервис', 'Ожидание'], sentiment: 'mixed',
+          venueResponse: 'Приносим извинения за ожидание. Мы работаем над ускорением обслуживания, особенно в часы пик. Спасибо за терпение!' },
+        { keywords: ['кальян', 'дым', 'лаунж'],
+          improved: 'Отличная лаунж-зона. Кальян приготовлен профессионально, хороший выбор вкусов. Атмосфера располагает к отдыху.',
+          tags: ['Кальян', 'Атмосфера'], sentiment: 'positive',
+          venueResponse: 'Спасибо! Наш мастер Артём рад стараться. Попробуйте авторские миксы при следующем визите!' },
+        { keywords: ['коктейл', 'бар', 'напит', 'пив'],
+          improved: 'Бар на высоте. Коктейли приготовлены с душой, подача красивая. Бармен знает своё дело.',
+          tags: ['Бар', 'Коктейли'], sentiment: 'positive',
+          venueResponse: 'Передадим комплимент нашему бармену Алексею! Каждый месяц обновляем коктейльную карту, заходите пробовать.' },
+    ];
+
+    // Moderation filter (demo version — in production this is OpenAI API)
+    const badWords = [
+        'хер','херн','хуй','хуё','хуе','хуи','хуя','блять','бляд','блят','сука','сук','пизд','пизж',
+        'ебал','ебан','ебат','ебну','ебло','ёбан','наху','нахуй','нахер','жоп','заеб','заёб',
+        'мудак','мудач','мудил','долбо','гавн','гавно','гнида','тварь','дерьм','шлюх','шалав',
+        'идиот','дебил','урод','падл','козёл','козел','чмо','лох','отстой','фигн','фигня',
+        'говн','дрян','хрен','хренов','чёрт','черт','задниц','срань','сран','засран',
+        'пошёл','пошел нах','иди нах','иди в','катись','вали отсюда'
+    ];
+
+    function containsBadWords(text) {
+        const lower = text.toLowerCase().replace(/[ё]/g, 'е');
+        return badWords.some(w => lower.includes(w.replace(/[ё]/g, 'е')));
+    }
+
+    function isTooShort(text) {
+        return text.replace(/\s/g, '').length < 5;
+    }
+
+    function isSpammy(text) {
+        const lower = text.toLowerCase();
+        // All caps
+        if (text.length > 5 && text === text.toUpperCase() && /[A-ZА-Я]/.test(text)) return true;
+        // Repeated chars
+        if (/(.)\1{4,}/.test(text)) return true;
+        // Links
+        if (/https?:\/\/|www\.|\.ru|\.com|t\.me/i.test(text)) return true;
+        // Phone numbers
+        if (/\+?[78]\d{10}/.test(text.replace(/[\s\-()]/g, ''))) return true;
+        return false;
+    }
+
+    function analyzeReview() {
+        const text = document.getElementById('reviewText').value.trim();
+        if (!text) { showToast('Напишите отзыв'); return; }
+
+        // Show step 2: processing
+        document.getElementById('review-step1').style.display = 'none';
+        document.getElementById('review-step2').style.display = 'block';
+        document.getElementById('tips-section').style.display = 'none';
+
+        const stepText = document.getElementById('aiStepText');
+        const steps = ['Проверка модерации...', 'Анализ тональности...', 'Категоризация...', 'Генерация улучшенной версии...'];
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            if (i < steps.length) stepText.textContent = steps[i];
+        }, 500);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            document.getElementById('review-step2').style.display = 'none';
+
+            // --- MODERATION CHECK ---
+            const hasBadWords = containsBadWords(text);
+            const tooShort = isTooShort(text);
+            const spammy = isSpammy(text);
+
+            if (hasBadWords || tooShort || spammy) {
+                // Show blocked state
+                document.getElementById('review-step3').style.display = 'block';
+                document.getElementById('tips-section').style.display = 'block';
+
+                let reason = '';
+                if (hasBadWords) reason = 'Обнаружена нецензурная лексика. Пожалуйста, перефразируйте отзыв.';
+                else if (tooShort) reason = 'Отзыв слишком короткий. Напишите хотя бы одно предложение.';
+                else if (spammy) reason = 'Обнаружены признаки спама (ссылки, номера телефонов или повторяющиеся символы).';
+
+                document.getElementById('moderation-result').style.background = 'rgba(179,68,68,0.1)';
+                document.getElementById('moderation-result').style.borderColor = 'rgba(179,68,68,0.2)';
+                document.getElementById('moderation-result').innerHTML = `
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="font-size:18px;">🚫</span>
+                        <span style="font-size:13px; font-weight:600; color:var(--red-light);">Модерация не пройдена</span>
+                    </div>
+                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">${reason}</div>
+                    <button class="btn-secondary" onclick="resetReview()" style="margin-top:12px; padding:10px;">Редактировать отзыв</button>
+                `;
+                document.getElementById('reviewTags').innerHTML = '';
+                document.getElementById('sentimentBlock').style.display = 'none';
+                document.getElementById('originalText').textContent = '';
+                document.getElementById('aiSuggestionBlock').style.display = 'none';
+                document.querySelector('#review-step3 > div:nth-child(4)').style.display = 'none'; // original text block
+                return;
+            }
+
+            // --- PASSED MODERATION ---
+            document.getElementById('review-step3').style.display = 'block';
+            document.getElementById('tips-section').style.display = 'block';
+
+            // Reset moderation block to green
+            document.getElementById('moderation-result').style.background = 'rgba(68,115,75,0.1)';
+            document.getElementById('moderation-result').style.borderColor = 'rgba(68,115,75,0.2)';
+            document.getElementById('moderation-result').innerHTML = `
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                    <span style="font-size:18px;">✅</span>
+                    <span style="font-size:13px; font-weight:600; color:var(--accent-light);">Модерация пройдена</span>
+                </div>
+                <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Отзыв не содержит запрещённого контента. Спам не обнаружен.</div>
+            `;
+            document.getElementById('sentimentBlock').style.display = 'block';
+            document.getElementById('aiSuggestionBlock').style.display = 'block';
+            document.querySelector('#review-step3 > div:nth-child(4)').style.display = 'block';
+
+            // Find matching scenario
+            const lower = text.toLowerCase();
+            let match = null;
+            for (const sc of aiImprovements) {
+                if (sc.keywords.some(k => lower.includes(k))) { match = sc; break; }
+            }
+            if (!match) match = reviewScenarios.fallback;
+
+            // Original text
+            document.getElementById('originalText').textContent = text;
+
+            // Tags
+            const tagsHtml = match.tags.map(t => {
+                const color = match.sentiment === 'negative' ? 'var(--red-light)' : match.sentiment === 'mixed' ? 'var(--gold)' : 'var(--accent-light)';
+                const bg = match.sentiment === 'negative' ? 'rgba(179,68,68,0.15)' : match.sentiment === 'mixed' ? 'rgba(201,168,76,0.15)' : 'rgba(68,115,75,0.15)';
+                return `<span style="font-size:10px; padding:4px 10px; background:${bg}; color:${color}; border-radius:8px; font-weight:500;">${t}</span>`;
+            }).join('');
+            document.getElementById('reviewTags').innerHTML = tagsHtml;
+
+            // Sentiment
+            const badge = document.getElementById('sentimentBadge');
+            if (match.sentiment === 'positive') {
+                badge.textContent = 'Позитивный';
+                badge.style.background = 'rgba(68,115,75,0.15)';
+                badge.style.color = 'var(--accent-light)';
+            } else if (match.sentiment === 'mixed') {
+                badge.textContent = 'Смешанный';
+                badge.style.background = 'rgba(201,168,76,0.15)';
+                badge.style.color = 'var(--gold)';
+            } else {
+                badge.textContent = 'Негативный';
+                badge.style.background = 'rgba(179,68,68,0.15)';
+                badge.style.color = 'var(--red-light)';
+            }
+
+            // AI improved text
+            const improved = match.improved || ('Улучшенная версия: ' + text);
+            document.getElementById('aiImprovedText').textContent = improved;
+
+            // Store venue response for later
+            document.getElementById('review-step3').dataset.venueResponse = match.venueResponse;
+            document.getElementById('review-step3').dataset.improved = improved;
+
+        }, 2200);
+    }
+
+    function acceptAI() {
+        publishReview(document.getElementById('review-step3').dataset.improved);
+    }
+
+    function rejectAI() {
+        publishReview(document.getElementById('reviewText').value);
+    }
+
+    function publishReview(text) {
+        document.getElementById('review-step3').style.display = 'none';
+        document.getElementById('review-step4').style.display = 'block';
+        document.getElementById('publishedText').textContent = text;
+
+        // Show venue auto-response after 1.5s
+        setTimeout(() => {
+            const resp = document.getElementById('review-step3').dataset.venueResponse;
+            document.getElementById('venueResponseText').textContent = resp;
+            document.getElementById('venueResponse').style.display = 'block';
+        }, 1500);
+    }
+
+    function resetReview() {
+        document.getElementById('review-step1').style.display = 'block';
+        document.getElementById('review-step2').style.display = 'none';
+        document.getElementById('review-step3').style.display = 'none';
+        document.getElementById('review-step4').style.display = 'none';
+        document.getElementById('venueResponse').style.display = 'none';
+        document.getElementById('tips-section').style.display = 'block';
+        document.getElementById('reviewText').value = '';
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+</script>
+
+</body>
+</html>
