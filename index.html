@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Виктория — Бронирование</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
         * {
             margin: 0;
@@ -15,27 +15,39 @@
         }
 
         :root {
-            --bg-primary: #041314;
-            --bg-secondary: #0a2324;
-            --bg-card: #0d2e2f;
-            --bg-card-hover: #124142;
-            --accent: #44734b;
-            --accent-light: #5a9963;
-            --accent-glow: rgba(68, 115, 75, 0.3);
-            --text-primary: #eae5dc;
-            --text-secondary: #a09888;
-            --text-muted: #6b6055;
-            --gold: #c9a84c;
-            --gold-light: #e0c068;
-            --red: #b34444;
-            --red-light: #d45555;
-            --border: rgba(234, 229, 220, 0.08);
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --bg-primary: #0a1a1c;
+            --bg-deep: #061210;
+            --bg-card: rgba(16, 42, 44, 0.6);
+            --bg-card-solid: #102a2c;
+            --bg-card-hover: rgba(20, 56, 58, 0.7);
+            --bg-input: rgba(10, 30, 32, 0.8);
+            --accent: #10b981;
+            --accent-light: #2dd4a0;
+            --accent-dark: #059669;
+            --accent-glow: rgba(45, 212, 160, 0.25);
+            --accent-glow-strong: rgba(45, 212, 160, 0.4);
+            --text-primary: #f0ede8;
+            --text-secondary: #94a3b0;
+            --text-muted: #5a6872;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --gold-glow: rgba(245, 158, 11, 0.2);
+            --red: #ef4444;
+            --red-light: #f87171;
+            --red-glow: rgba(239, 68, 68, 0.15);
+            --border: rgba(45, 212, 160, 0.08);
+            --border-light: rgba(240, 237, 232, 0.06);
+            --glass-bg: rgba(16, 42, 44, 0.45);
+            --glass-border: rgba(45, 212, 160, 0.12);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --radius: 18px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
         }
 
         body {
             font-family: 'Montserrat', -apple-system, sans-serif;
-            background: #0a0a0a;
+            background: #08080a;
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
@@ -45,14 +57,126 @@
             padding: 30px 20px;
         }
 
-        /* Header */
+        /* ============ WELCOME SCREEN ============ */
+        .welcome-screen {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #0a1a1c 0%, #061210 40%, #0d2a1a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            overflow: hidden;
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .welcome-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: orbFloat 8s ease-in-out infinite alternate;
+        }
+
+        .welcome-bg-orb.orb1 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(45,212,160,0.4), transparent);
+            top: -80px; left: -60px;
+        }
+
+        .welcome-bg-orb.orb2 {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(245,158,11,0.3), transparent);
+            bottom: -40px; right: -40px;
+            animation-delay: -3s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        .welcome-logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 48px;
+            color: white;
+            box-shadow: 0 0 60px rgba(45,212,160,0.3), 0 0 120px rgba(45,212,160,0.1);
+            margin-bottom: 24px;
+            animation: logoPulse 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 0 60px rgba(45,212,160,0.3), 0 0 120px rgba(45,212,160,0.1); }
+            50% { box-shadow: 0 0 80px rgba(45,212,160,0.4), 0 0 160px rgba(45,212,160,0.15); }
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            letter-spacing: 3px;
+            text-transform: lowercase;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-btn {
+            padding: 18px 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(45,212,160,0.3), 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 0 40px rgba(45,212,160,0.4), 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        /* ============ HEADER ============ */
         .header {
-            padding: 16px 20px 12px;
+            padding: 16px 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            background: rgba(10, 26, 28, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -65,100 +189,226 @@
         }
 
         .logo {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 800;
+            font-size: 17px;
             color: white;
+            box-shadow: 0 0 20px rgba(45,212,160,0.2);
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 2px;
         }
 
         .header-subtitle {
-            font-size: 11px;
-            color: var(--text-secondary);
+            font-size: 10px;
+            color: var(--text-muted);
             margin-top: 1px;
+            letter-spacing: 0.5px;
         }
 
         .loyalty-badge {
             background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--bg-primary);
-            padding: 6px 12px;
-            border-radius: 20px;
+            color: #1a1000;
+            padding: 7px 14px;
+            border-radius: 24px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+            box-shadow: 0 0 16px var(--gold-glow);
         }
 
-        /* Navigation Tabs */
-        .nav-tabs {
+        /* ============ ZONE TABS ============ */
+        .zone-tabs {
             display: flex;
-            padding: 12px 20px;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
+            padding: 14px 20px 0;
+            gap: 0;
         }
-        .nav-tabs::-webkit-scrollbar { display: none; }
 
-        .nav-tab {
-            padding: 8px 18px;
-            border-radius: 20px;
+        .zone-tab {
+            flex: 1;
+            padding: 11px 0;
+            text-align: center;
             font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .zone-tab.active {
+            color: var(--accent-light);
+            border-bottom-color: var(--accent);
+        }
+
+        /* ============ VIEW TOGGLE ============ */
+        .view-toggle {
+            display: flex;
+            background: rgba(10, 26, 28, 0.6);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            margin: 14px 20px 0;
+            gap: 3px;
+        }
+
+        .view-toggle-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
             background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
-        .nav-tab.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
+        .view-toggle-btn.active {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
         }
 
-        /* Page Container */
+        /* ============ PAGES ============ */
         .page {
             display: none;
-            padding: 0 20px 100px;
-            animation: fadeIn 0.3s ease;
+            padding: 0 20px 110px;
+            animation: pageIn 0.4s ease;
         }
         .page.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Section Title */
+        /* ============ SECTION TITLES ============ */
         .section-title {
             font-size: 15px;
-            font-weight: 600;
-            margin: 20px 0 12px;
+            font-weight: 700;
+            margin: 22px 0 12px;
             color: var(--text-primary);
         }
 
         .section-subtitle {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             margin-top: -8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
-        /* Table Cards */
+        /* ============ FLOOR PLAN ============ */
+        .floor-plan-container {
+            margin-top: 14px;
+            margin-left: -20px;
+            margin-right: -20px;
+            background: linear-gradient(180deg, rgba(10,26,28,0.8), rgba(6,18,16,0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            padding: 14px 10px;
+            position: relative;
+        }
+
+        .floor-plan-legend {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 12px;
+            padding: 0 6px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.free { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+        .legend-dot.busy { background: var(--red); box-shadow: 0 0 6px var(--red-glow); }
+
+        .floor-plan-svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .fp-table {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fp-table:hover .fp-table-bg,
+        .fp-table:active .fp-table-bg {
+            filter: brightness(1.3);
+        }
+
+        .fp-table.selected .fp-table-bg {
+            stroke: var(--accent-light);
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 12px rgba(45, 212, 160, 0.5));
+            animation: tableGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes tableGlow {
+            0% { filter: drop-shadow(0 0 8px rgba(45,212,160,0.4)); }
+            100% { filter: drop-shadow(0 0 16px rgba(45,212,160,0.6)); }
+        }
+
+        .fp-table.occupied {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .fp-table-bg { rx: 6; ry: 6; }
+
+        .fp-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            fill: var(--text-primary);
+            pointer-events: none;
+        }
+
+        .fp-sublabel {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            fill: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        /* ============ TABLE CARDS (LIST VIEW) ============ */
         .tables-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -166,27 +416,44 @@
         }
 
         .table-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .table-card:hover, .table-card:active {
+        .table-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45,212,160,0.2), transparent);
+        }
+
+        .table-card:active {
             background: var(--bg-card-hover);
+            transform: scale(0.98);
         }
 
         .table-card.selected {
             border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 24px var(--accent-glow), inset 0 0 20px rgba(45,212,160,0.05);
+            animation: cardPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes cardPulse {
+            0% { box-shadow: 0 0 20px var(--accent-glow); }
+            100% { box-shadow: 0 0 32px var(--accent-glow-strong); }
         }
 
         .table-card.occupied {
-            opacity: 0.4;
+            opacity: 0.35;
             pointer-events: none;
         }
 
@@ -199,12 +466,12 @@
         .table-type {
             font-size: 11px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .table-price {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: var(--accent-light);
         }
 
@@ -216,20 +483,23 @@
 
         .table-status {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
+            top: 12px;
+            right: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: var(--accent-light);
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
         }
 
         .table-status.occupied {
             background: var(--red);
+            box-shadow: 0 0 8px var(--red-glow);
         }
 
         .table-status.soon {
             background: var(--gold);
+            box-shadow: 0 0 8px var(--gold-glow);
         }
 
         /* Imperial Card */
@@ -238,57 +508,131 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, var(--bg-card), #1a2f1c);
-            border: 1px solid rgba(201, 168, 76, 0.2);
+            background: linear-gradient(135deg, rgba(16,42,44,0.6), rgba(30,50,30,0.4));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .table-card.imperial::before {
+            background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent);
         }
 
         .imperial-badge {
             background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--bg-primary);
-            padding: 3px 8px;
-            border-radius: 6px;
+            color: #1a1000;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             display: inline-block;
             margin-bottom: 6px;
+            box-shadow: 0 0 12px var(--gold-glow);
         }
 
-        /* Booking Form */
+        /* ============ RESTAURANT CARDS ============ */
+        .resto-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .resto-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45,212,160,0.15), transparent);
+        }
+
+        .resto-card:active { background: var(--bg-card-hover); transform: scale(0.98); }
+        .resto-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+        .resto-card.occupied { opacity: 0.35; pointer-events: none; }
+
+        .resto-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(10, 26, 28, 0.6);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .resto-info { flex: 1; }
+        .resto-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+        .resto-desc { font-size: 11px; color: var(--text-secondary); }
+        .resto-seats { font-size: 12px; color: var(--text-muted); text-align: right; }
+        .resto-seats strong { display: block; color: var(--accent-light); font-size: 14px; }
+
+        /* ============ BOOKING FORM ============ */
+        .booking-overlay {
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+
+        .booking-overlay.visible {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .booking-form {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 22px;
+            margin-top: 14px;
         }
 
-        .form-row {
-            margin-bottom: 16px;
-        }
+        .form-row { margin-bottom: 18px; }
 
         .form-label {
             font-size: 12px;
             color: var(--text-secondary);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             display: block;
+            font-weight: 500;
         }
 
         .form-input {
             width: 100%;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 13px 16px;
             color: var(--text-primary);
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
         }
 
         .form-input:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(45,212,160,0.1);
         }
 
         .time-slots {
@@ -299,61 +643,78 @@
 
         .time-slot {
             padding: 10px 16px;
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
             color: var(--text-secondary);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .time-slot.active {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
             border-color: var(--accent);
+            box-shadow: 0 0 16px var(--accent-glow);
+            transform: scale(1.02);
         }
 
         .time-slot.disabled {
-            opacity: 0.3;
+            opacity: 0.25;
             pointer-events: none;
         }
 
         .duration-selector {
             display: flex;
             align-items: center;
-            gap: 16px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 8px 14px;
+            gap: 18px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 10px 18px;
         }
 
         .duration-btn {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             color: var(--text-primary);
             font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .duration-btn:active {
             background: var(--accent);
             border-color: var(--accent);
+            transform: scale(0.92);
         }
 
         .duration-value {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             min-width: 60px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .duration-value.bump {
+            animation: numBump 0.3s ease;
+        }
+
+        @keyframes numBump {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.2); color: var(--accent-light); }
+            100% { transform: scale(1); }
         }
 
         .duration-label {
@@ -361,141 +722,167 @@
             color: var(--text-muted);
         }
 
-        /* Price Summary */
+        /* ============ PRICE SUMMARY ============ */
         .price-summary {
-            background: linear-gradient(135deg, #0d2e1a, #0a2324);
-            border-radius: 14px;
-            padding: 16px;
+            background: linear-gradient(135deg, rgba(16,42,30,0.6), rgba(10,26,28,0.6));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(45,212,160,0.12);
+            border-radius: var(--radius);
+            padding: 18px;
             margin-top: 16px;
-            border: 1px solid rgba(68, 115, 75, 0.2);
         }
 
         .price-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 13px;
         }
 
         .price-row:last-child {
             margin-bottom: 0;
-            padding-top: 8px;
-            border-top: 1px solid var(--border);
-            font-weight: 600;
-            font-size: 16px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            font-weight: 700;
+            font-size: 17px;
         }
 
         .price-row .label { color: var(--text-secondary); }
-        .price-row .value { color: var(--text-primary); }
+        .price-row .value { color: var(--text-primary); font-weight: 600; }
 
         .deposit-notice {
-            background: rgba(179, 68, 68, 0.1);
-            border: 1px solid rgba(179, 68, 68, 0.2);
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 12px;
+            background: var(--red-glow);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            margin-top: 14px;
             font-size: 12px;
             color: var(--red-light);
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .deposit-notice strong {
-            color: var(--red-light);
-        }
-
-        /* Buttons */
+        /* ============ BUTTONS ============ */
         .btn-primary {
             width: 100%;
-            padding: 16px;
-            background: var(--accent);
+            padding: 17px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             font-family: 'Montserrat', sans-serif;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             margin-top: 16px;
+            box-shadow: 0 0 24px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.2);
+            min-height: 54px;
         }
 
         .btn-primary:active {
-            transform: scale(0.98);
-            background: var(--accent-light);
+            transform: scale(0.97);
+            box-shadow: 0 0 32px var(--accent-glow-strong), 0 4px 16px rgba(0,0,0,0.2);
         }
 
         .btn-secondary {
             width: 100%;
-            padding: 14px;
-            background: transparent;
+            padding: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
             color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 8px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            min-height: 50px;
         }
 
-        /* My Bookings */
+        .btn-secondary:active {
+            transform: scale(0.97);
+            background: var(--bg-card-hover);
+        }
+
+        /* ============ BOOKING CARDS ============ */
         .booking-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 18px;
             margin-bottom: 10px;
             border-left: 3px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45,212,160,0.15), transparent);
         }
 
         .booking-card.past {
             border-left-color: var(--text-muted);
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .booking-date {
             font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
         .booking-details {
             font-size: 12px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .booking-actions {
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 14px;
         }
 
         .booking-action {
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 9px 16px;
+            border-radius: var(--radius-xs);
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            border: 1px solid var(--border);
-            background: transparent;
+            border: 1px solid var(--border-light);
+            background: var(--glass-bg);
             color: var(--text-secondary);
             font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s ease;
+            min-height: 36px;
         }
+
+        .booking-action:active { transform: scale(0.95); }
 
         .booking-action.cancel {
             color: var(--red-light);
-            border-color: rgba(179, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.25);
         }
 
-        /* Loyalty Page */
+        /* ============ LOYALTY ============ */
         .loyalty-card {
-            background: linear-gradient(135deg, #1a2f1c, #0d2e2f);
-            border-radius: 18px;
-            padding: 24px;
-            margin-top: 12px;
-            border: 1px solid rgba(201, 168, 76, 0.15);
+            background: linear-gradient(135deg, rgba(20,50,30,0.7), rgba(16,42,44,0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            border-radius: 22px;
+            padding: 28px;
+            margin-top: 14px;
             position: relative;
             overflow: hidden;
         }
@@ -503,27 +890,42 @@
         .loyalty-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(201, 168, 76, 0.08), transparent);
+            top: -60%;
+            right: -25%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent);
+            border-radius: 50%;
+        }
+
+        .loyalty-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -20%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(45, 212, 160, 0.06), transparent);
             border-radius: 50%;
         }
 
         .loyalty-level {
             font-size: 11px;
             color: var(--gold);
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .loyalty-balance {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 40px;
+            font-weight: 800;
             margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
         }
 
         .loyalty-balance span {
@@ -535,24 +937,34 @@
         .loyalty-cashback {
             font-size: 13px;
             color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
         }
 
         .loyalty-progress {
-            margin-top: 16px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-bar {
-            height: 4px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
+            height: 6px;
+            background: rgba(10, 26, 28, 0.6);
+            border-radius: 3px;
             overflow: hidden;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--accent), var(--gold));
-            border-radius: 2px;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(45,212,160,0.3);
+        }
+
+        .progress-fill.animate {
             width: 65%;
         }
 
@@ -563,97 +975,151 @@
             color: var(--text-muted);
         }
 
-        /* Review Page */
+        /* ============ REVIEW ============ */
         .stars-row {
             display: flex;
-            gap: 8px;
-            margin: 12px 0;
+            gap: 10px;
+            margin: 14px 0;
         }
 
         .star {
-            width: 40px;
-            height: 40px;
-            font-size: 28px;
+            width: 44px;
+            height: 44px;
+            font-size: 30px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.25s ease;
             background: none;
             border: none;
+            min-width: 44px;
+            min-height: 44px;
         }
 
-        .star:active { transform: scale(1.2); }
+        .star:active { transform: scale(1.3); }
         .star.filled { filter: none; }
-        .star.empty { filter: grayscale(1) opacity(0.3); }
+        .star.empty { filter: grayscale(1) opacity(0.25); }
 
         .review-textarea {
             width: 100%;
-            min-height: 100px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            min-height: 110px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
             padding: 14px;
             color: var(--text-primary);
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             resize: vertical;
             outline: none;
+            transition: border-color 0.3s ease;
         }
 
         .review-textarea:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(45,212,160,0.08);
         }
 
         .ai-suggestion {
-            background: rgba(68, 115, 75, 0.1);
-            border: 1px solid rgba(68, 115, 75, 0.2);
-            border-radius: 12px;
-            padding: 14px;
+            background: rgba(45,212,160,0.06);
+            border: 1px solid rgba(45,212,160,0.15);
+            border-radius: var(--radius-sm);
+            padding: 16px;
             margin-top: 12px;
         }
 
         .ai-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             font-size: 11px;
             font-weight: 600;
             color: var(--accent-light);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .ai-text {
             font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .ai-actions {
             display: flex;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .ai-btn {
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: var(--radius-xs);
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             border: none;
+            transition: all 0.2s ease;
+            min-height: 36px;
         }
 
         .ai-btn.accept {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
+            box-shadow: 0 0 12px var(--accent-glow);
         }
 
         .ai-btn.reject {
-            background: transparent;
-            border: 1px solid var(--border);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             color: var(--text-secondary);
         }
 
-        /* Tips Page */
+        .ai-btn:active { transform: scale(0.95); }
+
+        /* AI Spinner */
+        .ai-spinner-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px 20px;
+        }
+
+        .ai-spinner {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: transparent;
+            position: relative;
+        }
+
+        .ai-spinner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent-light);
+            border-right-color: var(--accent);
+            animation: spinPulse 1s linear infinite;
+        }
+
+        .ai-spinner::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(45,212,160,0.15), transparent);
+            animation: pulseGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes spinPulse {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* ============ TIPS ============ */
         .staff-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -661,41 +1127,40 @@
         }
 
         .staff-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 18px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            min-height: 44px;
         }
 
         .staff-card.selected {
             border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
         }
 
+        .staff-card:active { transform: scale(0.97); }
+
         .staff-avatar {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            background: var(--bg-secondary);
-            margin: 0 auto 8px;
+            background: rgba(10, 26, 28, 0.6);
+            border: 1px solid var(--border-light);
+            margin: 0 auto 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
         }
 
-        .staff-name {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .staff-role {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+        .staff-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+        .staff-role { font-size: 11px; color: var(--text-muted); }
 
         .tip-amounts {
             display: flex;
@@ -705,36 +1170,42 @@
 
         .tip-btn {
             flex: 1;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 13px;
+            border-radius: var(--radius-sm);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             color: var(--text-primary);
             font-family: 'Montserrat', sans-serif;
+            min-height: 48px;
         }
 
         .tip-btn.active {
-            background: var(--gold);
-            color: var(--bg-primary);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: #1a1000;
             border-color: var(--gold);
+            box-shadow: 0 0 16px var(--gold-glow);
         }
 
-        /* Bottom Nav */
+        .tip-btn:active { transform: scale(0.95); }
+
+        /* ============ BOTTOM NAV ============ */
         .bottom-nav {
-            position: fixed;
+            position: sticky;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border);
+            background: rgba(10, 26, 28, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-light);
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
-            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            padding: 6px 0;
+            padding-bottom: 20px;
             z-index: 100;
         }
 
@@ -744,261 +1215,61 @@
             align-items: center;
             gap: 3px;
             cursor: pointer;
-            padding: 4px 12px;
+            padding: 6px 14px;
             color: var(--text-muted);
-            transition: color 0.2s;
+            transition: all 0.3s ease;
             background: none;
             border: none;
             font-family: 'Montserrat', sans-serif;
+            position: relative;
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .nav-item.active {
             color: var(--accent-light);
         }
 
-        .nav-icon {
-            font-size: 20px;
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--accent-glow);
         }
 
-        .nav-label {
-            font-size: 10px;
-            font-weight: 500;
-        }
+        .nav-icon { font-size: 20px; }
+        .nav-label { font-size: 10px; font-weight: 500; }
 
-        /* Toast */
+        /* ============ TOAST ============ */
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(-100px);
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
-            padding: 14px 24px;
-            border-radius: 12px;
+            padding: 15px 28px;
+            border-radius: 16px;
             font-size: 14px;
-            font-weight: 500;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-            z-index: 200;
+            font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 24px var(--accent-glow);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 500;
+            max-width: 340px;
+            text-align: center;
         }
 
         .toast.show {
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Demo Banner - removed, using title above phone */
-
-        /* View Toggle */
-        .view-toggle {
-            display: flex;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 3px;
-            margin: 12px 20px 0;
-            gap: 2px;
-        }
-
-        .view-toggle-btn {
-            flex: 1;
-            padding: 7px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: transparent;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .view-toggle-btn.active {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-        }
-
-        /* Floor Plan */
-        .floor-plan-container {
-            margin-top: 12px;
-            margin-left: -20px;
-            margin-right: -20px;
-            background: var(--bg-card);
-            border-radius: 0;
-            padding: 14px 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .floor-plan-legend {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-
-        .legend-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .legend-dot.free { background: var(--accent-light); }
-        .legend-dot.busy { background: var(--red); }
-        .legend-dot.soon { background: var(--gold); }
-
-        .floor-plan-svg {
-            width: 100%;
-            height: auto;
-        }
-
-        .fp-table {
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .fp-table:hover .fp-table-bg {
-            filter: brightness(1.2);
-        }
-
-        .fp-table.selected .fp-table-bg {
-            stroke: var(--accent-light);
-            stroke-width: 2.5;
-            filter: drop-shadow(0 0 8px rgba(90, 153, 99, 0.5));
-        }
-
-        .fp-table.occupied {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
-
-        .fp-table-bg {
-            rx: 6;
-            ry: 6;
-        }
-
-        .fp-label {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            fill: var(--text-primary);
-            pointer-events: none;
-        }
-
-        .fp-sublabel {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 400;
-            fill: var(--text-secondary);
-            pointer-events: none;
-        }
-
-        .fp-zone-label {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            fill: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            pointer-events: none;
-        }
-
-        .fp-wall {
-            fill: none;
-            stroke: rgba(234, 229, 220, 0.06);
-            stroke-width: 1.5;
-        }
-
-        .fp-status {
-            pointer-events: none;
-        }
-
-        /* Restaurant table cards */
-        .resto-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-            position: relative;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .resto-card:active { background: var(--bg-card-hover); }
-
-        .resto-card.selected {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .resto-card.occupied { opacity: 0.4; pointer-events: none; }
-
-        .resto-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
-        }
-
-        .resto-info { flex: 1; }
-
-        .resto-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .resto-desc {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .resto-seats {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-align: right;
-        }
-
-        .resto-seats strong {
-            display: block;
-            color: var(--accent-light);
-            font-size: 13px;
-        }
-
-        /* AI Spinner */
-        .ai-spinner {
-            width: 36px;
-            height: 36px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--accent-light);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* iPhone Frame */
+        /* ============ iPHONE FRAME ============ */
         .iphone-outer {
             position: relative;
             width: 393px;
@@ -1006,7 +1277,6 @@
             flex-shrink: 0;
         }
 
-        /* Titanium body */
         .iphone-body {
             position: absolute;
             inset: 0;
@@ -1021,7 +1291,6 @@
             padding: 6px;
         }
 
-        /* Screen bezel */
         .iphone-screen-bezel {
             width: 100%;
             height: 100%;
@@ -1031,7 +1300,6 @@
             position: relative;
         }
 
-        /* Dynamic Island */
         .dynamic-island {
             position: absolute;
             top: 12px;
@@ -1058,7 +1326,6 @@
             box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
         }
 
-        /* Status bar */
         .status-bar {
             position: absolute;
             top: 14px;
@@ -1085,11 +1352,8 @@
             gap: 5px;
         }
 
-        .status-icons svg {
-            fill: #fff;
-        }
+        .status-icons svg { fill: #fff; }
 
-        /* Scrollable content area */
         .phone-frame {
             position: absolute;
             top: 0;
@@ -1098,23 +1362,18 @@
             bottom: 0;
             overflow-y: auto;
             overflow-x: hidden;
-            background: var(--bg-primary);
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
             border-radius: 50px;
             scrollbar-width: none;
             padding-top: 54px;
         }
 
-        .phone-frame::-webkit-scrollbar {
-            display: none;
-        }
+        .phone-frame::-webkit-scrollbar { display: none; }
 
-        /* Side buttons */
         .iphone-btn-power {
             position: absolute;
-            right: -3px;
-            top: 178px;
-            width: 4px;
-            height: 96px;
+            right: -3px; top: 178px;
+            width: 4px; height: 96px;
             background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
             border-radius: 0 3px 3px 0;
             box-shadow: 1px 0 2px rgba(0,0,0,0.3);
@@ -1122,10 +1381,8 @@
 
         .iphone-btn-volup {
             position: absolute;
-            left: -3px;
-            top: 162px;
-            width: 4px;
-            height: 54px;
+            left: -3px; top: 162px;
+            width: 4px; height: 54px;
             background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
             border-radius: 3px 0 0 3px;
             box-shadow: -1px 0 2px rgba(0,0,0,0.3);
@@ -1133,10 +1390,8 @@
 
         .iphone-btn-voldn {
             position: absolute;
-            left: -3px;
-            top: 228px;
-            width: 4px;
-            height: 54px;
+            left: -3px; top: 228px;
+            width: 4px; height: 54px;
             background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
             border-radius: 3px 0 0 3px;
             box-shadow: -1px 0 2px rgba(0,0,0,0.3);
@@ -1144,16 +1399,13 @@
 
         .iphone-btn-action {
             position: absolute;
-            left: -3px;
-            top: 120px;
-            width: 4px;
-            height: 28px;
+            left: -3px; top: 120px;
+            width: 4px; height: 28px;
             background: linear-gradient(180deg, #3a3a3e, #2a2a2e, #3a3a3e);
             border-radius: 3px 0 0 3px;
             box-shadow: -1px 0 2px rgba(0,0,0,0.3);
         }
 
-        /* Home indicator */
         .home-indicator {
             position: absolute;
             bottom: 8px;
@@ -1166,21 +1418,6 @@
             z-index: 200;
         }
 
-        .bottom-nav {
-            position: sticky;
-            bottom: 0;
-            padding-bottom: 20px;
-        }
-
-        /* Header fix for notch area */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: var(--bg-primary);
-        }
-
-        /* Title above phone */
         .demo-title {
             text-align: center;
             margin-bottom: 24px;
@@ -1206,26 +1443,44 @@
             align-items: center;
         }
 
+        /* ============ GLASS CARD GENERIC ============ */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45,212,160,0.15), transparent);
+        }
+
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 440px) {
             body {
                 padding: 0;
-                background: var(--bg-primary);
+                background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
                 display: block;
             }
-            .page-wrapper {
-                display: block;
-            }
+            .page-wrapper { display: block; }
             .iphone-outer {
                 width: 100%;
                 height: auto;
                 min-height: 100vh;
-                position: relative;
             }
             .iphone-body {
                 border-radius: 0;
                 padding: 0;
                 box-shadow: none;
-                background: var(--bg-primary);
+                background: transparent;
                 position: relative;
                 height: auto;
             }
@@ -1237,19 +1492,17 @@
                 border-radius: 0;
                 padding-top: 0;
                 position: relative;
-                top: auto;
-                left: auto;
-                right: auto;
-                bottom: auto;
+                top: auto; left: auto; right: auto; bottom: auto;
                 overflow: visible;
                 min-height: 100vh;
+                background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
             }
             .dynamic-island, .status-bar, .home-indicator,
             .iphone-btn-power, .iphone-btn-volup, .iphone-btn-voldn, .iphone-btn-action {
                 display: none;
             }
             .demo-title { display: none; }
-            .bottom-nav { padding-bottom: 8px; }
+            .bottom-nav { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
         }
     </style>
 </head>
@@ -1263,7 +1516,6 @@
 </div>
 
 <div class="iphone-outer">
-    <!-- Side buttons -->
     <div class="iphone-btn-power"></div>
     <div class="iphone-btn-volup"></div>
     <div class="iphone-btn-voldn"></div>
@@ -1271,30 +1523,33 @@
 
     <div class="iphone-body">
         <div class="iphone-screen-bezel">
-            <!-- Dynamic Island -->
             <div class="dynamic-island"></div>
 
-            <!-- Status Bar -->
             <div class="status-bar">
                 <span class="status-time">18:42</span>
                 <div class="status-icons">
-                    <!-- Signal -->
                     <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="4.5" y="5" width="3" height="7" rx="0.5"/><rect x="9" y="2" width="3" height="10" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
-                    <!-- WiFi -->
                     <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 7c1.86 0 3.54.76 4.76 1.98l-1.42 1.42A4.98 4.98 0 008 9c-1.38 0-2.63.56-3.54 1.46L3.24 9.04A6.97 6.97 0 018 7zM8 3c3.04 0 5.78 1.23 7.78 3.22l-1.42 1.42A8.96 8.96 0 008 5a8.96 8.96 0 00-6.36 2.64L.22 6.22A10.96 10.96 0 018 3z" fill-rule="evenodd"/></svg>
-                    <!-- Battery -->
                     <svg width="27" height="12" viewBox="0 0 27 12"><rect x="0" y="0" width="24" height="12" rx="3" stroke="rgba(255,255,255,0.35)" stroke-width="1" fill="none"/><rect x="25" y="3.5" width="2" height="5" rx="1" fill="rgba(255,255,255,0.35)"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="#4ade80"/></svg>
                 </div>
             </div>
 
-            <!-- Home Indicator -->
             <div class="home-indicator"></div>
 
-            <!-- Scrollable App Content -->
             <div class="phone-frame">
 
-    <!-- Header -->
-    <div class="header">
+    <!-- ========== WELCOME SCREEN ========== -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-bg-orb orb1"></div>
+        <div class="welcome-bg-orb orb2"></div>
+        <div class="welcome-logo">V</div>
+        <div class="welcome-title">ВИКТОРИЯ</div>
+        <div class="welcome-subtitle">бильярд и рестобар</div>
+        <button class="welcome-btn" onclick="dismissWelcome()">Забронировать стол</button>
+    </div>
+
+    <!-- ========== HEADER ========== -->
+    <div class="header" id="appHeader" style="display:none;">
         <div class="header-left">
             <div class="logo">V</div>
             <div>
@@ -1303,26 +1558,25 @@
             </div>
         </div>
         <div class="loyalty-badge">
-            <span>★</span> 1 850 ₽
+            <span>&#9733;</span> 1 850 &#8381;
         </div>
     </div>
 
-    <!-- Nav Tabs -->
-    <div class="nav-tabs" id="navTabs">
-        <div class="nav-tab active" onclick="switchZone('billiard', this)">Бильярд</div>
-        <div class="nav-tab" onclick="switchZone('restaurant', this)">Ресторан</div>
+    <!-- ========== ZONE TABS ========== -->
+    <div class="zone-tabs" id="zoneTabs" style="display:none;">
+        <button class="zone-tab active" onclick="switchZone('billiard', this)">Бильярд</button>
+        <button class="zone-tab" onclick="switchZone('restaurant', this)">Ресторан</button>
     </div>
 
-    <!-- PAGE: Tables -->
+    <!-- ========== PAGE: TABLES ========== -->
     <div class="page active" id="page-tables">
 
-        <!-- ====== BILLIARD ZONE ====== -->
+        <!-- BILLIARD ZONE -->
         <div id="zone-billiard">
 
-        <!-- View toggle: plan / list -->
-        <div class="view-toggle">
-            <button class="view-toggle-btn active" onclick="switchView('plan', this)">📐 План зала</button>
-            <button class="view-toggle-btn" onclick="switchView('list', this)">📋 Список</button>
+        <div class="view-toggle" id="billiardViewToggle" style="margin-left:0;margin-right:0;">
+            <button class="view-toggle-btn active" onclick="switchView('plan', this)">&#128208; План зала</button>
+            <button class="view-toggle-btn" onclick="switchView('list', this)">&#128203; Список</button>
         </div>
 
         <!-- FLOOR PLAN VIEW -->
@@ -1334,46 +1588,52 @@
                 </div>
 
                 <svg class="floor-plan-svg" viewBox="0 0 380 520" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="380" height="520" fill="#0c1c1d" rx="10"/>
+                    <!-- BG -->
+                    <defs>
+                        <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+                            <stop offset="0%" stop-color="#0e2224"/>
+                            <stop offset="100%" stop-color="#091518"/>
+                        </radialGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <rect width="380" height="520" fill="url(#bgGrad)" rx="10"/>
+                    <rect x="8" y="8" width="364" height="504" rx="6" fill="none" stroke="rgba(45,212,160,0.06)" stroke-width="1.5"/>
+                    <line x1="270" y1="8" x2="270" y2="230" stroke="rgba(45,212,160,0.04)" stroke-width="1.5"/>
 
-                    <!-- Walls -->
-                    <rect x="8" y="8" width="364" height="504" rx="6" fill="none" stroke="rgba(234,229,220,0.08)" stroke-width="1.5"/>
-                    <!-- Vertical wall separating VIP -->
-                    <line x1="270" y1="8" x2="270" y2="230" stroke="rgba(234,229,220,0.06)" stroke-width="1.5"/>
-
-                    <!-- ВХОД -->
-                    <text x="190" y="505" text-anchor="middle" font-size="13" fill="rgba(234,229,220,0.25)" font-family="Montserrat" font-weight="700" letter-spacing="4">ВХОД</text>
-                    <line x1="160" y1="488" x2="220" y2="488" stroke="rgba(234,229,220,0.15)" stroke-width="1"/>
-                    <polygon points="190,480 185,488 195,488" fill="rgba(234,229,220,0.15)"/>
+                    <!-- ENTRANCE -->
+                    <text x="190" y="505" text-anchor="middle" font-size="13" fill="rgba(45,212,160,0.2)" font-family="Montserrat" font-weight="700" letter-spacing="4">ВХОД</text>
+                    <line x1="160" y1="488" x2="220" y2="488" stroke="rgba(45,212,160,0.12)" stroke-width="1"/>
+                    <polygon points="190,480 185,488 195,488" fill="rgba(45,212,160,0.12)"/>
 
                     <!-- VIP label -->
-                    <text x="330" y="30" text-anchor="middle" font-size="8" fill="rgba(201,168,76,0.5)" font-family="Montserrat" font-weight="700" letter-spacing="2">VIP ИМПЕРАТОР</text>
-                    <text x="330" y="42" text-anchor="middle" font-size="7" fill="rgba(201,168,76,0.3)" font-family="Montserrat">ПЕТР I</text>
+                    <text x="330" y="30" text-anchor="middle" font-size="8" fill="rgba(245,158,11,0.5)" font-family="Montserrat" font-weight="700" letter-spacing="2">VIP ИМПЕРАТОР</text>
+                    <text x="330" y="42" text-anchor="middle" font-size="7" fill="rgba(245,158,11,0.3)" font-family="Montserrat">ПЕТР I</text>
 
-                    <!-- === ROW 3 (bottom, near entrance): Tables 1, 2 === -->
-                    <!-- Table 1 - free - Пул -->
+                    <!-- Table 1 - free -->
                     <g class="fp-table" data-table="1" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="20" y="410" width="110" height="62" fill="#1a5c32" rx="4"/>
-                        <rect x="28" y="416" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="20" y="410" width="110" height="62" fill="#145c38" rx="6"/>
+                        <rect x="28" y="416" width="94" height="50" rx="4" fill="#2a9a50" opacity="0.2"/>
                         <circle cx="32" cy="420" r="3" fill="#0a2318"/><circle cx="75" cy="420" r="3" fill="#0a2318"/><circle cx="118" cy="420" r="3" fill="#0a2318"/>
                         <circle cx="32" cy="462" r="3" fill="#0a2318"/><circle cx="75" cy="462" r="3" fill="#0a2318"/><circle cx="118" cy="462" r="3" fill="#0a2318"/>
                         <text x="75" y="446" text-anchor="middle" font-size="16" class="fp-label">1</text>
                     </g>
 
-                    <!-- Table 2 - free - Пул -->
+                    <!-- Table 2 - free -->
                     <g class="fp-table" data-table="2" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="145" y="410" width="110" height="62" fill="#1a5c32" rx="4"/>
-                        <rect x="153" y="416" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="145" y="410" width="110" height="62" fill="#145c38" rx="6"/>
+                        <rect x="153" y="416" width="94" height="50" rx="4" fill="#2a9a50" opacity="0.2"/>
                         <circle cx="157" cy="420" r="3" fill="#0a2318"/><circle cx="200" cy="420" r="3" fill="#0a2318"/><circle cx="243" cy="420" r="3" fill="#0a2318"/>
                         <circle cx="157" cy="462" r="3" fill="#0a2318"/><circle cx="200" cy="462" r="3" fill="#0a2318"/><circle cx="243" cy="462" r="3" fill="#0a2318"/>
                         <text x="200" y="446" text-anchor="middle" font-size="16" class="fp-label">2</text>
                     </g>
 
-                    <!-- === ROW 2 (middle): Tables 3, 4 + 5, 6 === -->
                     <!-- Table 3 - free -->
                     <g class="fp-table" data-table="3" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="20" y="290" width="110" height="62" fill="#1a5c32" rx="4"/>
-                        <rect x="28" y="296" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="20" y="290" width="110" height="62" fill="#145c38" rx="6"/>
+                        <rect x="28" y="296" width="94" height="50" rx="4" fill="#2a9a50" opacity="0.2"/>
                         <circle cx="32" cy="300" r="3" fill="#0a2318"/><circle cx="75" cy="300" r="3" fill="#0a2318"/><circle cx="118" cy="300" r="3" fill="#0a2318"/>
                         <circle cx="32" cy="342" r="3" fill="#0a2318"/><circle cx="75" cy="342" r="3" fill="#0a2318"/><circle cx="118" cy="342" r="3" fill="#0a2318"/>
                         <text x="75" y="326" text-anchor="middle" font-size="16" class="fp-label">3</text>
@@ -1381,30 +1641,29 @@
 
                     <!-- Table 4 - occupied -->
                     <g class="fp-table occupied" data-table="4" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="145" y="290" width="110" height="62" fill="#5c1a2a" rx="4"/>
-                        <rect x="153" y="296" width="94" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="145" y="290" width="110" height="62" fill="#5c1a2a" rx="6"/>
+                        <rect x="153" y="296" width="94" height="50" rx="4" fill="#8a2a3a" opacity="0.2"/>
                         <text x="200" y="326" text-anchor="middle" font-size="16" class="fp-label">4</text>
                     </g>
 
-                    <!-- Table 5 - free (smaller, pool) -->
+                    <!-- Table 5 - free -->
                     <g class="fp-table" data-table="5" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="275" y="290" width="46" height="62" fill="#1a5c32" rx="4"/>
-                        <rect x="280" y="296" width="36" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="275" y="290" width="46" height="62" fill="#145c38" rx="5"/>
+                        <rect x="280" y="296" width="36" height="50" rx="3" fill="#2a9a50" opacity="0.2"/>
                         <text x="298" y="326" text-anchor="middle" font-size="14" class="fp-label">5</text>
                     </g>
 
-                    <!-- Table 6 - occupied (smaller, pool) -->
+                    <!-- Table 6 - occupied -->
                     <g class="fp-table occupied" data-table="6" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="328" y="290" width="46" height="62" fill="#5c1a2a" rx="4"/>
-                        <rect x="333" y="296" width="36" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="328" y="290" width="46" height="62" fill="#5c1a2a" rx="5"/>
+                        <rect x="333" y="296" width="36" height="50" rx="3" fill="#8a2a3a" opacity="0.2"/>
                         <text x="351" y="326" text-anchor="middle" font-size="14" class="fp-label">6</text>
                     </g>
 
-                    <!-- === ROW 1 (top): Tables 7, 8 === -->
                     <!-- Table 7 - free -->
                     <g class="fp-table" data-table="7" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="20" y="175" width="110" height="62" fill="#1a5c32" rx="4"/>
-                        <rect x="28" y="181" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="20" y="175" width="110" height="62" fill="#145c38" rx="6"/>
+                        <rect x="28" y="181" width="94" height="50" rx="4" fill="#2a9a50" opacity="0.2"/>
                         <circle cx="32" cy="185" r="3" fill="#0a2318"/><circle cx="75" cy="185" r="3" fill="#0a2318"/><circle cx="118" cy="185" r="3" fill="#0a2318"/>
                         <circle cx="32" cy="227" r="3" fill="#0a2318"/><circle cx="75" cy="227" r="3" fill="#0a2318"/><circle cx="118" cy="227" r="3" fill="#0a2318"/>
                         <text x="75" y="211" text-anchor="middle" font-size="16" class="fp-label">7</text>
@@ -1412,89 +1671,89 @@
 
                     <!-- Table 8 - occupied -->
                     <g class="fp-table occupied" data-table="8" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="145" y="175" width="110" height="62" fill="#5c1a2a" rx="4"/>
-                        <rect x="153" y="181" width="94" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <rect class="fp-table-bg" x="145" y="175" width="110" height="62" fill="#5c1a2a" rx="6"/>
+                        <rect x="153" y="181" width="94" height="50" rx="4" fill="#8a2a3a" opacity="0.2"/>
                         <text x="200" y="211" text-anchor="middle" font-size="16" class="fp-label">8</text>
                     </g>
 
-                    <!-- === VIP: Table 9 - Император Петр I === -->
-                    <g class="fp-table occupied" data-table="9" data-type="Императорский стол" data-price="1800" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="295" y="60" width="70" height="110" fill="#5c1a2a" rx="4" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
-                        <rect x="302" y="68" width="56" height="94" rx="3" fill="#8a2a3a" opacity="0.2"/>
+                    <!-- Table 9 - VIP -->
+                    <g class="fp-table" data-table="9" data-type="Императорский стол" data-price="1800" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="295" y="60" width="70" height="110" fill="#145c38" rx="6" stroke="rgba(245,158,11,0.35)" stroke-width="1.5"/>
+                        <rect x="302" y="68" width="56" height="94" rx="4" fill="#2a9a50" opacity="0.15"/>
                         <text x="330" y="115" text-anchor="middle" font-size="18" class="fp-label">9</text>
-                        <text x="330" y="135" text-anchor="middle" font-size="7" fill="rgba(201,168,76,0.6)" font-family="Montserrat" font-weight="600">VIP</text>
+                        <text x="330" y="135" text-anchor="middle" font-size="7" fill="rgba(245,158,11,0.7)" font-family="Montserrat" font-weight="700">VIP</text>
                     </g>
                 </svg>
             </div>
         </div>
 
-        <!-- LIST VIEW (hidden by default) -->
+        <!-- LIST VIEW -->
         <div id="billiard-list" style="display:none;">
             <div class="section-title">Бильярдные столы</div>
             <div class="section-subtitle">Свободные на сегодня, 18:00</div>
             <div class="tables-grid" id="tablesGrid">
                 <div class="table-card" onclick="selectTable(this, 1)">
                     <div class="table-status"></div>
-                    <div class="table-number">№ 1</div>
+                    <div class="table-number">&#8470; 1</div>
                     <div class="table-type">Американский пул</div>
-                    <div class="table-price">900 ₽ <span>/час</span></div>
+                    <div class="table-price">900 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card occupied">
                     <div class="table-status occupied"></div>
-                    <div class="table-number">№ 2</div>
+                    <div class="table-number">&#8470; 2</div>
                     <div class="table-type">Американский пул</div>
-                    <div class="table-price">900 ₽ <span>/час</span></div>
+                    <div class="table-price">900 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card" onclick="selectTable(this, 3)">
                     <div class="table-status"></div>
-                    <div class="table-number">№ 3</div>
+                    <div class="table-number">&#8470; 3</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card" onclick="selectTable(this, 4)">
                     <div class="table-status"></div>
-                    <div class="table-number">№ 4</div>
+                    <div class="table-number">&#8470; 4</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card" onclick="selectTable(this, 5)">
                     <div class="table-status soon"></div>
-                    <div class="table-number">№ 5</div>
+                    <div class="table-number">&#8470; 5</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card occupied">
                     <div class="table-status occupied"></div>
-                    <div class="table-number">№ 6</div>
+                    <div class="table-number">&#8470; 6</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card" onclick="selectTable(this, 7)">
                     <div class="table-status"></div>
-                    <div class="table-number">№ 7</div>
+                    <div class="table-number">&#8470; 7</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card" onclick="selectTable(this, 8)">
                     <div class="table-status"></div>
-                    <div class="table-number">№ 8</div>
+                    <div class="table-number">&#8470; 8</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card occupied">
                     <div class="table-status occupied"></div>
-                    <div class="table-number">№ 9</div>
+                    <div class="table-number">&#8470; 9</div>
                     <div class="table-type">Русская пирамида</div>
-                    <div class="table-price">1 100 ₽ <span>/час</span></div>
+                    <div class="table-price">1 100 &#8381; <span>/час</span></div>
                 </div>
                 <div class="table-card imperial" onclick="selectTable(this, 10)">
                     <div>
                         <div class="imperial-badge">Премиум</div>
-                        <div class="table-number">№ 10</div>
+                        <div class="table-number">&#8470; 10</div>
                         <div class="table-type">Императорский стол</div>
                     </div>
                     <div style="text-align:right;">
-                        <div class="table-price">1 800 ₽ <span>/час</span></div>
+                        <div class="table-price">1 800 &#8381; <span>/час</span></div>
                         <div class="table-status" style="position:static;display:inline-block;margin-top:6px;"></div>
                     </div>
                 </div>
@@ -1503,13 +1762,12 @@
 
         </div><!-- /zone-billiard -->
 
-        <!-- ====== RESTAURANT ZONE ====== -->
+        <!-- RESTAURANT ZONE -->
         <div id="zone-restaurant" style="display:none;">
 
-            <!-- View toggle: plan / list -->
-            <div class="view-toggle">
-                <button class="view-toggle-btn active" onclick="switchRestoView('plan', this)">📐 План зала</button>
-                <button class="view-toggle-btn" onclick="switchRestoView('list', this)">📋 Список</button>
+            <div class="view-toggle" style="margin-left:0;margin-right:0;">
+                <button class="view-toggle-btn active" onclick="switchRestoView('plan', this)">&#128208; План зала</button>
+                <button class="view-toggle-btn" onclick="switchRestoView('list', this)">&#128203; Список</button>
             </div>
 
             <!-- PLAN VIEW -->
@@ -1520,234 +1778,231 @@
                     <div class="legend-item"><div class="legend-dot busy"></div> Занят</div>
                 </div>
                 <svg class="floor-plan-svg" viewBox="0 0 380 620" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="380" height="620" fill="#0c1c1d" rx="10"/>
-                    <rect x="8" y="8" width="364" height="604" rx="6" fill="none" stroke="rgba(234,229,220,0.08)" stroke-width="1.5"/>
+                    <defs>
+                        <radialGradient id="bgGrad2" cx="50%" cy="50%" r="70%">
+                            <stop offset="0%" stop-color="#0e2224"/>
+                            <stop offset="100%" stop-color="#091518"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="380" height="620" fill="url(#bgGrad2)" rx="10"/>
+                    <rect x="8" y="8" width="364" height="604" rx="6" fill="none" stroke="rgba(45,212,160,0.06)" stroke-width="1.5"/>
 
-                    <!-- ВХОД -->
-                    <text x="20" y="140" font-size="11" fill="rgba(234,229,220,0.25)" font-family="Montserrat" font-weight="700" letter-spacing="2">ВХОД</text>
-                    <line x1="65" y1="135" x2="100" y2="135" stroke="rgba(234,229,220,0.15)" stroke-width="1"/>
-                    <polygon points="100,135 93,130 93,140" fill="rgba(234,229,220,0.15)"/>
+                    <!-- ENTRANCE -->
+                    <text x="20" y="140" font-size="11" fill="rgba(45,212,160,0.2)" font-family="Montserrat" font-weight="700" letter-spacing="2">ВХОД</text>
+                    <line x1="65" y1="135" x2="100" y2="135" stroke="rgba(45,212,160,0.12)" stroke-width="1"/>
+                    <polygon points="100,135 93,130 93,140" fill="rgba(45,212,160,0.12)"/>
 
-                    <!-- БАР -->
-                    <rect x="30" y="175" width="90" height="180" rx="6" fill="rgba(234,229,220,0.03)" stroke="rgba(234,229,220,0.06)" stroke-width="1"/>
-                    <text x="75" y="275" text-anchor="middle" font-size="14" fill="rgba(234,229,220,0.15)" font-family="Montserrat" font-weight="700" letter-spacing="3" transform="rotate(-90, 75, 275)">БАР</text>
+                    <!-- BAR -->
+                    <rect x="30" y="175" width="90" height="180" rx="6" fill="rgba(45,212,160,0.02)" stroke="rgba(45,212,160,0.06)" stroke-width="1"/>
+                    <text x="75" y="275" text-anchor="middle" font-size="14" fill="rgba(45,212,160,0.12)" font-family="Montserrat" font-weight="700" letter-spacing="3" transform="rotate(-90, 75, 275)">БАР</text>
 
                     <!-- Arrow to billiard -->
-                    <text x="330" y="140" text-anchor="middle" font-size="8" fill="rgba(234,229,220,0.2)" font-family="Montserrat" font-weight="600" letter-spacing="1">БИЛЬЯРДНЫЙ</text>
-                    <text x="330" y="152" text-anchor="middle" font-size="8" fill="rgba(234,229,220,0.2)" font-family="Montserrat" font-weight="600" letter-spacing="1">ЗАЛ</text>
-                    <line x1="290" y1="145" x2="360" y2="145" stroke="rgba(234,229,220,0.1)" stroke-width="1"/>
-                    <polygon points="360,145 353,140 353,150" fill="rgba(234,229,220,0.1)"/>
+                    <text x="330" y="140" text-anchor="middle" font-size="8" fill="rgba(45,212,160,0.15)" font-family="Montserrat" font-weight="600" letter-spacing="1">БИЛЬЯРДНЫЙ</text>
+                    <text x="330" y="152" text-anchor="middle" font-size="8" fill="rgba(45,212,160,0.15)" font-family="Montserrat" font-weight="600" letter-spacing="1">ЗАЛ</text>
+                    <line x1="290" y1="145" x2="360" y2="145" stroke="rgba(45,212,160,0.08)" stroke-width="1"/>
+                    <polygon points="360,145 353,140 353,150" fill="rgba(45,212,160,0.08)"/>
 
-                    <!-- === TOP ROW: 201, 202, 203, 204 === -->
+                    <!-- TOP ROW: 201-204 -->
                     <g class="fp-table" data-table="201" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="30" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="30" y="30" width="72" height="52" fill="#145c38" rx="5"/>
                         <text x="66" y="62" text-anchor="middle" font-size="14" class="fp-label">201</text>
                     </g>
                     <g class="fp-table" data-table="202" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="110" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="110" y="30" width="72" height="52" fill="#145c38" rx="5"/>
                         <text x="146" y="62" text-anchor="middle" font-size="14" class="fp-label">202</text>
                     </g>
                     <g class="fp-table" data-table="203" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="190" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="190" y="30" width="72" height="52" fill="#145c38" rx="5"/>
                         <text x="226" y="62" text-anchor="middle" font-size="14" class="fp-label">203</text>
                     </g>
                     <g class="fp-table occupied" data-table="204" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="270" y="30" width="72" height="52" fill="#5c1a2a" rx="4"/>
+                        <rect class="fp-table-bg" x="270" y="30" width="72" height="52" fill="#5c1a2a" rx="5"/>
                         <text x="306" y="62" text-anchor="middle" font-size="14" class="fp-label">204</text>
                     </g>
 
-                    <!-- === RIGHT COLUMN: 205-209 === -->
+                    <!-- RIGHT COLUMN: 205-209 -->
                     <g class="fp-table" data-table="205" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="220" y="175" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="220" y="175" width="72" height="42" fill="#145c38" rx="5"/>
                         <text x="256" y="202" text-anchor="middle" font-size="13" class="fp-label">205</text>
                     </g>
                     <g class="fp-table" data-table="206" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="220" y="224" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="220" y="224" width="72" height="42" fill="#145c38" rx="5"/>
                         <text x="256" y="251" text-anchor="middle" font-size="13" class="fp-label">206</text>
                     </g>
                     <g class="fp-table" data-table="207" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="220" y="273" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="220" y="273" width="72" height="42" fill="#145c38" rx="5"/>
                         <text x="256" y="300" text-anchor="middle" font-size="13" class="fp-label">207</text>
                     </g>
                     <g class="fp-table" data-table="208" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="220" y="322" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="220" y="322" width="72" height="42" fill="#145c38" rx="5"/>
                         <text x="256" y="349" text-anchor="middle" font-size="13" class="fp-label">208</text>
                     </g>
                     <g class="fp-table" data-table="209" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="220" y="371" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="220" y="371" width="72" height="42" fill="#145c38" rx="5"/>
                         <text x="256" y="398" text-anchor="middle" font-size="13" class="fp-label">209</text>
                     </g>
 
-                    <!-- === LEFT SMALL TABLES: 35-38 === -->
+                    <!-- BAR TABLES: 35-38 -->
                     <g class="fp-table" data-table="35" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="140" y="250" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="140" y="250" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="159" y="270" text-anchor="middle" font-size="11" class="fp-label">35</text>
                     </g>
                     <g class="fp-table" data-table="36" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="140" y="286" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="140" y="286" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="159" y="306" text-anchor="middle" font-size="11" class="fp-label">36</text>
                     </g>
                     <g class="fp-table" data-table="37" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="140" y="322" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="140" y="322" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="159" y="342" text-anchor="middle" font-size="11" class="fp-label">37</text>
                     </g>
                     <g class="fp-table occupied" data-table="38" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="140" y="358" width="38" height="30" fill="#5c1a2a" rx="3"/>
+                        <rect class="fp-table-bg" x="140" y="358" width="38" height="30" fill="#5c1a2a" rx="4"/>
                         <text x="159" y="378" text-anchor="middle" font-size="11" class="fp-label">38</text>
                     </g>
 
-                    <!-- === BOTTOM LEFT: 39, 40, 41 === -->
+                    <!-- 39-41 -->
                     <g class="fp-table" data-table="39" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="118" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="118" y="420" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="137" y="440" text-anchor="middle" font-size="11" class="fp-label">39</text>
                     </g>
                     <g class="fp-table" data-table="40" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="75" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="75" y="420" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="94" y="440" text-anchor="middle" font-size="11" class="fp-label">40</text>
                     </g>
                     <g class="fp-table" data-table="41" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="32" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="32" y="420" width="38" height="30" fill="#145c38" rx="4"/>
                         <text x="51" y="440" text-anchor="middle" font-size="11" class="fp-label">41</text>
                     </g>
 
-                    <!-- === MIDDLE: 217 (round, occupied) === -->
+                    <!-- 217 round, occupied -->
                     <g class="fp-table occupied" data-table="217" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
                         <circle cx="130" cy="495" r="26" fill="#5c1a2a" class="fp-table-bg"/>
                         <text x="130" y="500" text-anchor="middle" font-size="13" class="fp-label">217</text>
                     </g>
 
-                    <!-- === CENTER: 215, 216 === -->
+                    <!-- 215, 216 -->
                     <g class="fp-table" data-table="216" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="200" y="480" width="50" height="36" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="200" y="480" width="50" height="36" fill="#145c38" rx="4"/>
                         <text x="225" y="504" text-anchor="middle" font-size="12" class="fp-label">216</text>
                     </g>
                     <g class="fp-table" data-table="215" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="258" y="480" width="50" height="36" fill="#1a5c32" rx="3"/>
+                        <rect class="fp-table-bg" x="258" y="480" width="50" height="36" fill="#145c38" rx="4"/>
                         <text x="283" y="504" text-anchor="middle" font-size="12" class="fp-label">215</text>
                     </g>
 
-                    <!-- === RIGHT: 210 (occupied, large) === -->
+                    <!-- 210 occupied -->
                     <g class="fp-table occupied" data-table="210" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="316" y="470" width="50" height="56" fill="#5c1a2a" rx="4"/>
+                        <rect class="fp-table-bg" x="316" y="470" width="50" height="56" fill="#5c1a2a" rx="5"/>
                         <text x="341" y="504" text-anchor="middle" font-size="13" class="fp-label">210</text>
                     </g>
 
-                    <!-- === BOTTOM ROW: 214, 213, 212, 211 === -->
+                    <!-- BOTTOM ROW: 214-211 -->
                     <g class="fp-table" data-table="214" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="80" y="555" width="60" height="42" fill="#1a5c32" rx="4"/>
+                        <rect class="fp-table-bg" x="80" y="555" width="60" height="42" fill="#145c38" rx="5"/>
                         <text x="110" y="582" text-anchor="middle" font-size="13" class="fp-label">214</text>
                     </g>
                     <g class="fp-table occupied" data-table="213" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="148" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <rect class="fp-table-bg" x="148" y="555" width="60" height="42" fill="#5c1a2a" rx="5"/>
                         <text x="178" y="582" text-anchor="middle" font-size="13" class="fp-label">213</text>
                     </g>
                     <g class="fp-table occupied" data-table="212" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="216" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <rect class="fp-table-bg" x="216" y="555" width="60" height="42" fill="#5c1a2a" rx="5"/>
                         <text x="246" y="582" text-anchor="middle" font-size="13" class="fp-label">212</text>
                     </g>
                     <g class="fp-table occupied" data-table="211" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="284" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <rect class="fp-table-bg" x="284" y="555" width="60" height="42" fill="#5c1a2a" rx="5"/>
                         <text x="314" y="582" text-anchor="middle" font-size="13" class="fp-label">211</text>
                     </g>
                 </svg>
             </div>
             </div>
 
-            <!-- LIST VIEW -->
+            <!-- RESTO LIST VIEW -->
             <div id="resto-list" style="display:none;">
                 <div class="section-title">У окна</div>
                 <div class="resto-card" onclick="selectRestoCard(this, 'R1', 'Ресторан, у окна', 2)">
-                    <div class="resto-icon">🪟</div>
+                    <div class="resto-icon">&#127959;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R1</div>
                         <div class="resto-desc">У окна, уютное место для двоих</div>
                     </div>
                     <div class="resto-seats"><strong>2</strong> места</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
                 <div class="resto-card" onclick="selectRestoCard(this, 'R2', 'Ресторан, у окна', 2)">
-                    <div class="resto-icon">🪟</div>
+                    <div class="resto-icon">&#127959;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R2</div>
                         <div class="resto-desc">У окна, вид на бульвар</div>
                     </div>
                     <div class="resto-seats"><strong>2</strong> места</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
                 <div class="resto-card occupied">
-                    <div class="resto-icon">🪟</div>
+                    <div class="resto-icon">&#127959;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R3</div>
                         <div class="resto-desc">Большой стол у окна</div>
                     </div>
                     <div class="resto-seats"><strong>6</strong> мест</div>
-                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
                 </div>
 
                 <div class="section-title">Основной зал</div>
                 <div class="resto-card" onclick="selectRestoCard(this, 'R4', 'Ресторан, основной зал', 4)">
-                    <div class="resto-icon">🍽</div>
+                    <div class="resto-icon">&#127869;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R4</div>
                         <div class="resto-desc">Центр зала</div>
                     </div>
                     <div class="resto-seats"><strong>4</strong> места</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
                 <div class="resto-card occupied">
-                    <div class="resto-icon">🍽</div>
+                    <div class="resto-icon">&#127869;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R5</div>
                         <div class="resto-desc">Центр зала</div>
                     </div>
                     <div class="resto-seats"><strong>4</strong> места</div>
-                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
                 </div>
                 <div class="resto-card" onclick="selectRestoCard(this, 'R6', 'Ресторан, основной зал', 8)">
-                    <div class="resto-icon">🍽</div>
+                    <div class="resto-icon">&#127869;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R6</div>
                         <div class="resto-desc">Большой стол для компании</div>
                     </div>
                     <div class="resto-seats"><strong>8</strong> мест</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
 
                 <div class="section-title">Лаунж-зона</div>
                 <div class="resto-card" onclick="selectRestoCard(this, 'R7', 'Ресторан, лаунж', 4)">
-                    <div class="resto-icon">🛋</div>
+                    <div class="resto-icon">&#128715;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R7</div>
                         <div class="resto-desc">Мягкий диван, кальянная зона</div>
                     </div>
                     <div class="resto-seats"><strong>4</strong> места</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
                 <div class="resto-card occupied">
-                    <div class="resto-icon">🛋</div>
+                    <div class="resto-icon">&#128715;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R8</div>
                         <div class="resto-desc">Мягкий диван, кальянная зона</div>
                     </div>
                     <div class="resto-seats"><strong>4</strong> места</div>
-                    <div class="table-status occupied" style="top:10px;right:10px;"></div>
                 </div>
-                <div class="resto-card" onclick="selectRestoCard(this, 'R9', 'Ресторан, лаунж VIP', 6)" style="border: 1px solid rgba(201,168,76,0.2);">
-                    <div class="resto-icon" style="background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));">👑</div>
+                <div class="resto-card" onclick="selectRestoCard(this, 'R9', 'Ресторан, лаунж VIP', 6)" style="border-color: rgba(245,158,11,0.25);">
+                    <div class="resto-icon" style="background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04)); border-color: rgba(245,158,11,0.15);">&#128081;</div>
                     <div class="resto-info">
                         <div class="resto-name">Стол R9 <span style="color:var(--gold);font-size:10px;font-weight:700;">VIP</span></div>
                         <div class="resto-desc">Большой диван, приватная зона</div>
                     </div>
                     <div class="resto-seats"><strong>6</strong> мест</div>
-                    <div class="table-status" style="top:10px;right:10px;"></div>
                 </div>
             </div>
 
         </div><!-- /zone-restaurant -->
 
-        <!-- Booking Form (hidden by default) -->
-        <div id="bookingForm" style="display:none;">
-            <div class="section-title" id="selectedTableTitle">Стол №1 — Американский пул</div>
+        <!-- Booking Form -->
+        <div id="bookingForm" class="booking-overlay">
+            <div class="section-title" id="selectedTableTitle">Стол &#8470;1 — Американский пул</div>
 
             <div class="booking-form">
                 <div class="form-row">
@@ -1773,7 +2028,7 @@
                 <div class="form-row">
                     <label class="form-label">Длительность</label>
                     <div class="duration-selector">
-                        <button class="duration-btn" onclick="changeDuration(-1)">−</button>
+                        <button class="duration-btn" onclick="changeDuration(-1)">&#8722;</button>
                         <div>
                             <div class="duration-value" id="durationValue">2</div>
                             <div class="duration-label">часа</div>
@@ -1785,7 +2040,7 @@
                 <div class="form-row">
                     <label class="form-label">Количество гостей</label>
                     <div class="duration-selector">
-                        <button class="duration-btn" onclick="changeGuests(-1)">−</button>
+                        <button class="duration-btn" onclick="changeGuests(-1)">&#8722;</button>
                         <div>
                             <div class="duration-value" id="guestsValue">2</div>
                             <div class="duration-label">гостя</div>
@@ -1797,25 +2052,25 @@
 
             <div class="price-summary">
                 <div class="price-row">
-                    <span class="label">Стол №1, 2 часа</span>
-                    <span class="value" id="priceTable">1 800 ₽</span>
+                    <span class="label">Стол &#8470;1, 2 часа</span>
+                    <span class="value" id="priceTable">1 800 &#8381;</span>
                 </div>
                 <div class="price-row">
-                    <span class="label">Депозит (2 гостя × 1 500 ₽)</span>
-                    <span class="value" id="priceDeposit">3 000 ₽</span>
+                    <span class="label">Депозит (2 гостя x 1 500 &#8381;)</span>
+                    <span class="value" id="priceDeposit">3 000 &#8381;</span>
                 </div>
                 <div class="price-row">
                     <span class="label">Бонусы (-20%)</span>
-                    <span class="value" style="color: var(--accent-light);" id="priceBonus">−360 ₽</span>
+                    <span class="value" style="color: var(--accent-light);" id="priceBonus">&#8722;360 &#8381;</span>
                 </div>
                 <div class="price-row">
                     <span class="label">К оплате</span>
-                    <span class="value" id="priceTotal">4 440 ₽</span>
+                    <span class="value" id="priceTotal">4 440 &#8381;</span>
                 </div>
             </div>
 
             <div class="deposit-notice">
-                <strong>Депозит Пт-Вс с 18:00:</strong> 1 500 ₽ на гостя. Используется в баре и кухне. При отмене менее чем за 24 часа депозит невозвратный.
+                <strong>Депозит Пт-Вс с 18:00:</strong> 1 500 &#8381; на гостя. Используется в баре и кухне. При отмене менее чем за 24 часа депозит невозвратный.
             </div>
 
             <button class="btn-primary" onclick="showToast('Бронирование подтверждено!')">
@@ -1827,16 +2082,16 @@
         </div>
     </div>
 
-    <!-- PAGE: My Bookings -->
+    <!-- ========== PAGE: MY BOOKINGS ========== -->
     <div class="page" id="page-bookings">
         <div class="section-title">Активные брони</div>
 
         <div class="booking-card">
             <div class="booking-date">Суббота, 5 апреля — 20:00</div>
             <div class="booking-details">
-                Стол №8, Русская пирамида<br>
+                Стол &#8470;8, Русская пирамида<br>
                 2 часа, 3 гостя<br>
-                Депозит: 4 500 ₽ (оплачен)
+                Депозит: 4 500 &#8381; (оплачен)
             </div>
             <div class="booking-actions">
                 <button class="booking-action" onclick="showToast('Выберите новое время')">Перенести</button>
@@ -1845,28 +2100,28 @@
             </div>
         </div>
 
-        <div class="section-title" style="margin-top: 24px;">История</div>
+        <div class="section-title" style="margin-top: 28px;">История</div>
 
         <div class="booking-card past">
             <div class="booking-date">Пятница, 28 марта — 19:00</div>
             <div class="booking-details">
-                Стол №3, Русская пирамида<br>
+                Стол &#8470;3, Русская пирамида<br>
                 3 часа, 4 гостя<br>
-                Итого: 7 800 ₽
+                Итого: 7 800 &#8381;
             </div>
         </div>
 
         <div class="booking-card past">
             <div class="booking-date">Суббота, 22 марта — 18:00</div>
             <div class="booking-details">
-                Стол №10, Императорский<br>
+                Стол &#8470;10, Императорский<br>
                 2 часа, 2 гостя<br>
-                Итого: 6 600 ₽
+                Итого: 6 600 &#8381;
             </div>
         </div>
     </div>
 
-    <!-- PAGE: Loyalty -->
+    <!-- ========== PAGE: LOYALTY ========== -->
     <div class="page" id="page-loyalty">
         <div class="loyalty-card">
             <div class="loyalty-level">Уровень 2 — 7% кешбэк</div>
@@ -1874,11 +2129,11 @@
             <div class="loyalty-cashback">Можно списать до 20% от счёта</div>
             <div class="loyalty-progress">
                 <div class="progress-text">
-                    <span>32 400 ₽ потрачено</span>
-                    <span>50 000 ₽ до Уровня 3 (10%)</span>
+                    <span>32 400 &#8381; потрачено</span>
+                    <span>50 000 &#8381; до Уровня 3 (10%)</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill"></div>
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
         </div>
@@ -1891,7 +2146,7 @@
                     <div class="booking-date">28 марта</div>
                     <div class="booking-details">Кешбэк за визит</div>
                 </div>
-                <div style="color: var(--accent-light); font-weight: 600; font-size: 15px;">+546 ₽</div>
+                <div style="color: var(--accent-light); font-weight: 700; font-size: 15px;">+546 &#8381;</div>
             </div>
         </div>
         <div class="booking-card">
@@ -1900,7 +2155,7 @@
                     <div class="booking-date">22 марта</div>
                     <div class="booking-details">Списание бонусов</div>
                 </div>
-                <div style="color: var(--red-light); font-weight: 600; font-size: 15px;">−400 ₽</div>
+                <div style="color: var(--red-light); font-weight: 700; font-size: 15px;">&#8722;400 &#8381;</div>
             </div>
         </div>
         <div class="booking-card">
@@ -1909,7 +2164,7 @@
                     <div class="booking-date">22 марта</div>
                     <div class="booking-details">Кешбэк за визит</div>
                 </div>
-                <div style="color: var(--accent-light); font-weight: 600; font-size: 15px;">+462 ₽</div>
+                <div style="color: var(--accent-light); font-weight: 700; font-size: 15px;">+462 &#8381;</div>
             </div>
         </div>
         <div class="booking-card">
@@ -1918,26 +2173,25 @@
                     <div class="booking-date">1 марта</div>
                     <div class="booking-details">Стартовый бонус</div>
                 </div>
-                <div style="color: var(--gold); font-weight: 600; font-size: 15px;">+500 ₽</div>
+                <div style="color: var(--gold); font-weight: 700; font-size: 15px;">+500 &#8381;</div>
             </div>
         </div>
     </div>
 
-    <!-- PAGE: Review -->
+    <!-- ========== PAGE: REVIEW ========== -->
     <div class="page" id="page-review">
 
-        <!-- ===== WRITE REVIEW ===== -->
         <div id="review-write">
 
             <div class="section-title">Оцените визит</div>
-            <div class="section-subtitle">28 марта, стол №3</div>
+            <div class="section-subtitle">28 марта, стол &#8470;3</div>
 
             <div class="stars-row">
-                <button class="star filled" onclick="setRating(1)">⭐</button>
-                <button class="star filled" onclick="setRating(2)">⭐</button>
-                <button class="star filled" onclick="setRating(3)">⭐</button>
-                <button class="star filled" onclick="setRating(4)">⭐</button>
-                <button class="star empty" onclick="setRating(5)">⭐</button>
+                <button class="star filled" onclick="setRating(1)">&#11088;</button>
+                <button class="star filled" onclick="setRating(2)">&#11088;</button>
+                <button class="star filled" onclick="setRating(3)">&#11088;</button>
+                <button class="star filled" onclick="setRating(4)">&#11088;</button>
+                <button class="star empty" onclick="setRating(5)">&#11088;</button>
             </div>
 
             <!-- Step 1: Write -->
@@ -1951,47 +2205,44 @@
                 </button>
             </div>
 
-            <!-- Step 2: AI Processing (hidden) -->
+            <!-- Step 2: AI Processing -->
             <div id="review-step2" style="display:none;">
-                <div style="background:var(--bg-card); border-radius:14px; padding:20px; margin-top:12px; text-align:center;">
-                    <div class="ai-spinner"></div>
-                    <div style="color:var(--accent-light); font-size:13px; font-weight:600; margin-top:12px;">ИИ анализирует отзыв...</div>
-                    <div style="color:var(--text-muted); font-size:11px; margin-top:4px;" id="aiStepText">Проверка модерации</div>
+                <div class="glass-card" style="margin-top:14px; text-align:center; padding:28px;">
+                    <div class="ai-spinner-wrap">
+                        <div class="ai-spinner"></div>
+                        <div style="color:var(--accent-light); font-size:13px; font-weight:600; margin-top:16px;">ИИ анализирует отзыв...</div>
+                        <div style="color:var(--text-muted); font-size:11px; margin-top:6px;" id="aiStepText">Проверка модерации</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Step 3: AI Result (hidden) -->
+            <!-- Step 3: AI Result -->
             <div id="review-step3" style="display:none;">
 
-                <!-- Moderation result -->
-                <div id="moderation-result" style="background:rgba(68,115,75,0.1); border:1px solid rgba(68,115,75,0.2); border-radius:12px; padding:14px; margin-top:12px;">
+                <div id="moderation-result" class="glass-card" style="margin-top:14px; background:rgba(16,185,129,0.06); border-color:rgba(16,185,129,0.15);">
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                        <span style="font-size:18px;">✅</span>
-                        <span style="font-size:13px; font-weight:600; color:var(--accent-light);">Модерация пройдена</span>
+                        <span style="font-size:18px;">&#9989;</span>
+                        <span style="font-size:13px; font-weight:700; color:var(--accent-light);">Модерация пройдена</span>
                     </div>
-                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Отзыв не содержит запрещённого контента. Спам не обнаружен.</div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Отзыв не содержит запрещённого контента. Спам не обнаружен.</div>
                 </div>
 
-                <!-- Category tags -->
                 <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;" id="reviewTags"></div>
 
-                <!-- Sentiment -->
-                <div style="background:var(--bg-card); border-radius:12px; padding:14px; margin-top:12px;" id="sentimentBlock">
+                <div class="glass-card" style="margin-top:12px;" id="sentimentBlock">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:12px; color:var(--text-secondary);">Тональность</span>
-                        <span id="sentimentBadge" style="font-size:12px; font-weight:600; padding:4px 10px; border-radius:8px;"></span>
+                        <span id="sentimentBadge" style="font-size:12px; font-weight:600; padding:5px 12px; border-radius:10px;"></span>
                     </div>
                 </div>
 
-                <!-- Original text -->
-                <div style="background:var(--bg-card); border-radius:12px; padding:14px; margin-top:12px;">
+                <div class="glass-card" style="margin-top:12px;">
                     <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Ваш текст:</div>
-                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;" id="originalText"></div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.7;" id="originalText"></div>
                 </div>
 
-                <!-- AI improved version -->
                 <div class="ai-suggestion" id="aiSuggestionBlock">
-                    <div class="ai-badge">✨ Улучшенная версия от ИИ</div>
+                    <div class="ai-badge">&#10024; Улучшенная версия от ИИ</div>
                     <div class="ai-text" id="aiImprovedText"></div>
                     <div class="ai-actions">
                         <button class="ai-btn accept" onclick="acceptAI()">Опубликовать эту</button>
@@ -2000,28 +2251,29 @@
                 </div>
             </div>
 
-            <!-- Step 4: Published (hidden) -->
+            <!-- Step 4: Published -->
             <div id="review-step4" style="display:none;">
-                <div style="background:var(--bg-card); border-radius:14px; padding:24px; margin-top:12px; text-align:center;">
-                    <div style="font-size:40px; margin-bottom:8px;">🎉</div>
-                    <div style="font-size:16px; font-weight:600; margin-bottom:4px;">Отзыв опубликован</div>
-                    <div style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Спасибо! Ваш отзыв помогает нам становиться лучше</div>
-                    <div style="background:rgba(68,115,75,0.1); border-radius:10px; padding:12px; text-align:left;">
-                        <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Опубликованный текст:</div>
-                        <div style="font-size:13px; color:var(--text-primary); line-height:1.6;" id="publishedText"></div>
+                <div class="glass-card" style="margin-top:14px; text-align:center; padding:28px;">
+                    <div style="font-size:44px; margin-bottom:10px;">&#127881;</div>
+                    <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Отзыв опубликован</div>
+                    <div style="font-size:12px; color:var(--text-secondary); margin-bottom:18px;">Спасибо! Ваш отзыв помогает нам становиться лучше</div>
+                    <div style="background:rgba(45,212,160,0.06); border:1px solid rgba(45,212,160,0.1); border-radius:12px; padding:14px; text-align:left;">
+                        <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Опубликованный текст:</div>
+                        <div style="font-size:13px; color:var(--text-primary); line-height:1.7;" id="publishedText"></div>
                     </div>
                 </div>
 
-                <!-- Auto-response from venue -->
-                <div id="venueResponse" style="display:none; background:var(--bg-card); border-radius:14px; padding:16px; margin-top:10px; border-left:3px solid var(--accent);">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                        <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">V</div>
-                        <div>
-                            <div style="font-size:12px; font-weight:600;">Виктория</div>
-                            <div style="font-size:10px; color:var(--text-muted);">только что</div>
+                <div id="venueResponse" style="display:none; margin-top:12px;" class="glass-card">
+                    <div style="border-left:3px solid var(--accent); padding-left:12px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;">V</div>
+                            <div>
+                                <div style="font-size:12px; font-weight:700;">Виктория</div>
+                                <div style="font-size:10px; color:var(--text-muted);">только что</div>
+                            </div>
                         </div>
+                        <div style="font-size:13px; color:var(--text-secondary); line-height:1.7;" id="venueResponseText"></div>
                     </div>
-                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;" id="venueResponseText"></div>
                 </div>
 
                 <button class="btn-secondary" onclick="resetReview()" style="margin-top:16px;">Написать ещё один отзыв</button>
@@ -2029,76 +2281,76 @@
 
             <!-- Tips section -->
             <div id="tips-section">
-                <div class="section-title" style="margin-top: 32px;">Чаевые</div>
+                <div class="section-title" style="margin-top: 36px;">Чаевые</div>
                 <div class="section-subtitle">Поблагодарите сотрудника</div>
 
                 <div class="staff-grid">
                     <div class="staff-card selected" onclick="selectStaff(this)">
-                        <div class="staff-avatar">👨‍🍳</div>
+                        <div class="staff-avatar">&#128104;&#8205;&#127859;</div>
                         <div class="staff-name">Алексей</div>
                         <div class="staff-role">Бармен</div>
                     </div>
                     <div class="staff-card" onclick="selectStaff(this)">
-                        <div class="staff-avatar">👨</div>
+                        <div class="staff-avatar">&#128104;</div>
                         <div class="staff-name">Дмитрий</div>
                         <div class="staff-role">Официант</div>
                     </div>
                     <div class="staff-card" onclick="selectStaff(this)">
-                        <div class="staff-avatar">🎱</div>
+                        <div class="staff-avatar">&#127921;</div>
                         <div class="staff-name">Сергей</div>
                         <div class="staff-role">Маркер зала</div>
                     </div>
                     <div class="staff-card" onclick="selectStaff(this)">
-                        <div class="staff-avatar">💨</div>
+                        <div class="staff-avatar">&#128168;</div>
                         <div class="staff-name">Артём</div>
                         <div class="staff-role">Кальянщик</div>
                     </div>
                 </div>
 
                 <div class="tip-amounts">
-                    <button class="tip-btn" onclick="selectTip(this)">100 ₽</button>
-                    <button class="tip-btn active" onclick="selectTip(this)">200 ₽</button>
-                    <button class="tip-btn" onclick="selectTip(this)">500 ₽</button>
+                    <button class="tip-btn" onclick="selectTip(this)">100 &#8381;</button>
+                    <button class="tip-btn active" onclick="selectTip(this)">200 &#8381;</button>
+                    <button class="tip-btn" onclick="selectTip(this)">500 &#8381;</button>
                     <button class="tip-btn" onclick="selectTip(this)">Своя</button>
                 </div>
 
                 <button class="btn-primary" onclick="showToast('Чаевые отправлены! Алексей благодарит вас')">
-                    Оставить чаевые 200 ₽
+                    Оставить чаевые 200 &#8381;
                 </button>
             </div>
-        </div><!-- /review-write -->
+        </div>
 
-        <!-- Мои прошлые отзывы -->
+        <!-- My reviews history -->
         <div id="my-reviews-section">
-            <div class="section-title" style="margin-top:24px;">Мои отзывы</div>
+            <div class="section-title" style="margin-top:28px;">Мои отзывы</div>
 
-            <div style="background:var(--bg-card); border-radius:14px; padding:14px; margin-bottom:8px; border-left:3px solid var(--accent);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div style="font-size:12px; color:var(--text-muted);">22 марта, стол №10</div>
-                    <div style="display:flex; gap:2px; font-size:12px;">⭐⭐⭐⭐⭐</div>
+            <div class="glass-card" style="margin-bottom:10px; border-left:3px solid var(--accent); padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="font-size:12px; color:var(--text-muted);">22 марта, стол &#8470;10</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
                 </div>
-                <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:8px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
-                <div style="background:var(--bg-secondary); border-radius:10px; padding:10px; border-left:2px solid var(--accent);">
-                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                        <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;">V</div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
+                <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--accent);">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+                        <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;">V</div>
                         <span style="font-size:10px; color:var(--accent-light); font-weight:600;">Виктория</span>
                     </div>
-                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
                 </div>
             </div>
 
-            <div style="background:var(--bg-card); border-radius:14px; padding:14px; margin-bottom:8px; border-left:3px solid var(--gold);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div style="font-size:12px; color:var(--text-muted);">8 марта, стол №5</div>
-                    <div style="display:flex; gap:2px; font-size:12px;">⭐⭐⭐⭐</div>
+            <div class="glass-card" style="margin-bottom:10px; border-left:3px solid var(--gold); padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="font-size:12px; color:var(--text-muted);">8 марта, стол &#8470;5</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">&#11088;&#11088;&#11088;&#11088;</div>
                 </div>
-                <div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
-                <div style="background:var(--bg-secondary); border-radius:10px; padding:10px; border-left:2px solid var(--gold); margin-top:8px;">
-                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                        <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;">V</div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
+                <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--gold); margin-top:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+                        <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;">V</div>
                         <span style="font-size:10px; color:var(--gold); font-weight:600;">Виктория</span>
                     </div>
-                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
                 </div>
             </div>
         </div>
@@ -2109,21 +2361,21 @@
     <div class="toast" id="toast"></div>
 
     <!-- Bottom Navigation -->
-    <div class="bottom-nav">
+    <div class="bottom-nav" id="bottomNav" style="display:none;">
         <button class="nav-item active" onclick="navigate('tables', this)">
-            <span class="nav-icon">🎱</span>
+            <span class="nav-icon">&#127921;</span>
             <span class="nav-label">Столы</span>
         </button>
         <button class="nav-item" onclick="navigate('bookings', this)">
-            <span class="nav-icon">📋</span>
+            <span class="nav-icon">&#128203;</span>
             <span class="nav-label">Мои брони</span>
         </button>
         <button class="nav-item" onclick="navigate('loyalty', this)">
-            <span class="nav-icon">⭐</span>
+            <span class="nav-icon">&#11088;</span>
             <span class="nav-label">Бонусы</span>
         </button>
         <button class="nav-item" onclick="navigate('review', this)">
-            <span class="nav-icon">💬</span>
+            <span class="nav-icon">&#128172;</span>
             <span class="nav-label">Отзыв</span>
         </button>
     </div>
@@ -2141,14 +2393,34 @@
     let guests = 2;
     let currentZone = 'billiard';
 
+    // Welcome screen
+    function dismissWelcome() {
+        const ws = document.getElementById('welcomeScreen');
+        ws.classList.add('hidden');
+        setTimeout(() => {
+            ws.style.display = 'none';
+            document.getElementById('appHeader').style.display = 'flex';
+            document.getElementById('zoneTabs').style.display = 'flex';
+            document.getElementById('bottomNav').style.display = 'flex';
+            // Trigger progress bar animation if on loyalty page
+            animateProgressBar();
+        }, 600);
+    }
+
+    function animateProgressBar() {
+        setTimeout(() => {
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.classList.add('animate');
+        }, 300);
+    }
+
     function switchZone(zone, el) {
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
         currentZone = zone;
         document.getElementById('zone-billiard').style.display = zone === 'billiard' ? 'block' : 'none';
         document.getElementById('zone-restaurant').style.display = zone === 'restaurant' ? 'block' : 'none';
-        document.getElementById('bookingForm').style.display = 'none';
-        // Clear selections
+        document.getElementById('bookingForm').classList.remove('visible');
         document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
         document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
     }
@@ -2173,21 +2445,21 @@
         document.querySelectorAll('.fp-table').forEach(t => t.classList.remove('selected'));
         el.classList.add('selected');
 
-        document.getElementById('selectedTableTitle').textContent = `Стол ${num} — ${type}`;
+        document.getElementById('selectedTableTitle').textContent = 'Стол ' + num + ' \u2014 ' + type;
         selectedTableEl = {
             querySelector: function(sel) {
-                if (sel === '.table-price') return { textContent: '0 ₽ /час' };
+                if (sel === '.table-price') return { textContent: '0 \u20BD /\u0447\u0430\u0441' };
                 if (sel === '.table-type') return { textContent: type };
                 return null;
             }
         };
 
-        document.getElementById('priceTable').textContent = 'Без почасовой оплаты';
+        document.getElementById('priceTable').textContent = '\u0411\u0435\u0437 \u043F\u043E\u0447\u0430\u0441\u043E\u0432\u043E\u0439 \u043E\u043F\u043B\u0430\u0442\u044B';
         document.getElementById('priceDeposit').textContent = formatPrice(guests * 1500);
-        document.getElementById('priceBonus').textContent = '−0 ₽';
+        document.getElementById('priceBonus').textContent = '\u22120 \u20BD';
         document.getElementById('priceTotal').textContent = formatPrice(guests * 1500);
 
-        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -2202,26 +2474,24 @@
         const type = el.dataset.type;
         const price = parseInt(el.dataset.price);
 
-        document.getElementById('selectedTableTitle').textContent = `Стол ${num} — ${type}`;
+        document.getElementById('selectedTableTitle').textContent = '\u0421\u0442\u043E\u043B ' + num + ' \u2014 ' + type;
 
-        // For restaurant tables without hourly price
         if (price === 0) {
-            document.getElementById('priceTable').textContent = 'Без почасовой оплаты';
+            document.getElementById('priceTable').textContent = '\u0411\u0435\u0437 \u043F\u043E\u0447\u0430\u0441\u043E\u0432\u043E\u0439 \u043E\u043F\u043B\u0430\u0442\u044B';
             document.getElementById('priceDeposit').textContent = formatPrice(guests * 1500);
-            document.getElementById('priceBonus').textContent = '−0 ₽';
+            document.getElementById('priceBonus').textContent = '\u22120 \u20BD';
             document.getElementById('priceTotal').textContent = formatPrice(guests * 1500);
         }
 
-        // Create a virtual element for updatePrice
         selectedTableEl = {
             querySelector: function(sel) {
-                if (sel === '.table-price') return { textContent: price + ' ₽ /час' };
+                if (sel === '.table-price') return { textContent: price + ' \u20BD /\u0447\u0430\u0441' };
                 if (sel === '.table-type') return { textContent: type };
                 return null;
             }
         };
 
-        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (price > 0) updatePrice();
     }
@@ -2234,8 +2504,8 @@
         selectedTableEl = el;
 
         const type = el.querySelector('.table-type').textContent;
-        document.getElementById('selectedTableTitle').textContent = `Стол №${num} — ${type}`;
-        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('selectedTableTitle').textContent = '\u0421\u0442\u043E\u043B \u21169' + num + ' \u2014 ' + type;
+        document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
         updatePrice();
     }
@@ -2247,15 +2517,23 @@
 
     function changeDuration(delta) {
         duration = Math.max(1, Math.min(8, duration + delta));
-        document.getElementById('durationValue').textContent = duration;
-        const labels = ['час', 'часа', 'часа', 'часа', 'часов', 'часов', 'часов', 'часов'];
-        document.querySelector('.duration-label').textContent = labels[duration - 1];
+        const el = document.getElementById('durationValue');
+        el.textContent = duration;
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
+        const labels = ['\u0447\u0430\u0441', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432'];
+        el.parentElement.querySelector('.duration-label').textContent = labels[duration - 1];
         updatePrice();
     }
 
     function changeGuests(delta) {
         guests = Math.max(1, Math.min(10, guests + delta));
-        document.getElementById('guestsValue').textContent = guests;
+        const el = document.getElementById('guestsValue');
+        el.textContent = guests;
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
         updatePrice();
     }
 
@@ -2270,25 +2548,41 @@
 
         document.getElementById('priceTable').textContent = formatPrice(tableTotal);
         document.getElementById('priceDeposit').textContent = formatPrice(deposit);
-        document.getElementById('priceBonus').textContent = `−${formatPrice(bonus)}`;
+        document.getElementById('priceBonus').textContent = '\u2212' + formatPrice(bonus);
         document.getElementById('priceTotal').textContent = formatPrice(total);
     }
 
     function formatPrice(n) {
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' \u20BD';
     }
 
     function navigate(page, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(`page-${page}`).classList.add('active');
+        document.getElementById('page-' + page).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+
+        // Animate progress bar when switching to loyalty
+        if (page === 'loyalty') {
+            setTimeout(() => {
+                const fill = document.getElementById('progressFill');
+                if (fill) {
+                    fill.classList.remove('animate');
+                    void fill.offsetWidth;
+                    fill.classList.add('animate');
+                }
+            }, 100);
+        }
     }
 
     function setRating(n) {
         document.querySelectorAll('.star').forEach((s, i) => {
             s.classList.toggle('filled', i < n);
             s.classList.toggle('empty', i >= n);
+            if (i < n) {
+                s.style.transform = 'scale(1.2)';
+                setTimeout(() => { s.style.transform = 'scale(1)'; }, 200);
+            }
         });
     }
 
@@ -2302,64 +2596,62 @@
         el.classList.add('active');
     }
 
-    // Review history tab removed — analytics goes to owner's Telegram bot
-
     // Demo AI review scenarios
     const reviewScenarios = {
         fallback: {
-            improved: 'Хорошее заведение. Приятная атмосфера и дружелюбный персонал. Рекомендую для отдыха с друзьями.',
-            tags: ['Атмосфера', 'Сервис'],
+            improved: '\u0425\u043E\u0440\u043E\u0448\u0435\u0435 \u0437\u0430\u0432\u0435\u0434\u0435\u043D\u0438\u0435. \u041F\u0440\u0438\u044F\u0442\u043D\u0430\u044F \u0430\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430 \u0438 \u0434\u0440\u0443\u0436\u0435\u043B\u044E\u0431\u043D\u044B\u0439 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B. \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u044E \u0434\u043B\u044F \u043E\u0442\u0434\u044B\u0445\u0430 \u0441 \u0434\u0440\u0443\u0437\u044C\u044F\u043C\u0438.',
+            tags: ['\u0410\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430', '\u0421\u0435\u0440\u0432\u0438\u0441'],
             sentiment: 'positive',
-            venueResponse: 'Спасибо за отзыв! Рады, что вам у нас понравилось. Ждём снова!'
+            venueResponse: '\u0421\u043F\u0430\u0441\u0438\u0431\u043E \u0437\u0430 \u043E\u0442\u0437\u044B\u0432! \u0420\u0430\u0434\u044B, \u0447\u0442\u043E \u0432\u0430\u043C \u0443 \u043D\u0430\u0441 \u043F\u043E\u043D\u0440\u0430\u0432\u0438\u043B\u043E\u0441\u044C. \u0416\u0434\u0451\u043C \u0441\u043D\u043E\u0432\u0430!'
         },
         negative: {
             improved: null,
-            tags: ['Сервис'],
+            tags: ['\u0421\u0435\u0440\u0432\u0438\u0441'],
             sentiment: 'negative',
-            venueResponse: 'Приносим извинения за доставленные неудобства. Мы обязательно разберёмся в ситуации. Будем рады предложить комплимент при следующем визите.'
+            venueResponse: '\u041F\u0440\u0438\u043D\u043E\u0441\u0438\u043C \u0438\u0437\u0432\u0438\u043D\u0435\u043D\u0438\u044F \u0437\u0430 \u0434\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0435 \u043D\u0435\u0443\u0434\u043E\u0431\u0441\u0442\u0432\u0430. \u041C\u044B \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0440\u0430\u0437\u0431\u0435\u0440\u0451\u043C\u0441\u044F \u0432 \u0441\u0438\u0442\u0443\u0430\u0446\u0438\u0438. \u0411\u0443\u0434\u0435\u043C \u0440\u0430\u0434\u044B \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0438\u0442\u044C \u043A\u043E\u043C\u043F\u043B\u0438\u043C\u0435\u043D\u0442 \u043F\u0440\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u043C \u0432\u0438\u0437\u0438\u0442\u0435.'
         }
     };
 
     const aiImprovements = [
-        { keywords: ['кухн', 'еда', 'блюд', 'вкусн', 'стейк', 'меню', 'готов'],
-          improved: 'Заведение с отличной кухней. Блюда приготовлены качественно, порции достойные. Рекомендую попробовать.',
-          tags: ['Кухня'], sentiment: 'positive',
-          venueResponse: 'Спасибо! Передадим вашу похвалу шеф-повару. Рекомендуем попробовать наши сезонные новинки при следующем визите!' },
-        { keywords: ['бильярд', 'стол', 'кий', 'игр', 'шар'],
-          improved: 'Хороший бильярдный клуб. Столы в достойном состоянии, выбор большой. Приятно провели время за игрой.',
-          tags: ['Бильярд'], sentiment: 'positive',
-          venueResponse: 'Рады, что вам понравилась игра! У нас 10 столов на любой вкус, включая Императорский. Ждём вас снова!' },
-        { keywords: ['гряз', 'грязн', 'убор', 'чист'],
-          improved: 'В целом хорошее заведение, но хотелось бы обратить внимание на чистоту. При следующем визите надеюсь увидеть улучшения в этом направлении.',
-          tags: ['Сервис', 'Чистота'], sentiment: 'mixed',
-          venueResponse: 'Благодарим за обратную связь. Чистота для нас приоритет, усилим контроль. Приносим извинения за неудобства.' },
-        { keywords: ['долго', 'ждал', 'ожидан', 'медлен', 'задерж'],
-          improved: 'Заведение нравится, но в этот раз пришлось подождать дольше обычного. Надеюсь, в следующий раз обслуживание будет быстрее.',
-          tags: ['Сервис', 'Ожидание'], sentiment: 'mixed',
-          venueResponse: 'Приносим извинения за ожидание. Мы работаем над ускорением обслуживания, особенно в часы пик. Спасибо за терпение!' },
-        { keywords: ['кальян', 'дым', 'лаунж'],
-          improved: 'Отличная лаунж-зона. Кальян приготовлен профессионально, хороший выбор вкусов. Атмосфера располагает к отдыху.',
-          tags: ['Кальян', 'Атмосфера'], sentiment: 'positive',
-          venueResponse: 'Спасибо! Наш мастер Артём рад стараться. Попробуйте авторские миксы при следующем визите!' },
-        { keywords: ['коктейл', 'бар', 'напит', 'пив'],
-          improved: 'Бар на высоте. Коктейли приготовлены с душой, подача красивая. Бармен знает своё дело.',
-          tags: ['Бар', 'Коктейли'], sentiment: 'positive',
-          venueResponse: 'Передадим комплимент нашему бармену Алексею! Каждый месяц обновляем коктейльную карту, заходите пробовать.' },
+        { keywords: ['\u043A\u0443\u0445\u043D', '\u0435\u0434\u0430', '\u0431\u043B\u044E\u0434', '\u0432\u043A\u0443\u0441\u043D', '\u0441\u0442\u0435\u0439\u043A', '\u043C\u0435\u043D\u044E', '\u0433\u043E\u0442\u043E\u0432'],
+          improved: '\u0417\u0430\u0432\u0435\u0434\u0435\u043D\u0438\u0435 \u0441 \u043E\u0442\u043B\u0438\u0447\u043D\u043E\u0439 \u043A\u0443\u0445\u043D\u0435\u0439. \u0411\u043B\u044E\u0434\u0430 \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u044B \u043A\u0430\u0447\u0435\u0441\u0442\u0432\u0435\u043D\u043D\u043E, \u043F\u043E\u0440\u0446\u0438\u0438 \u0434\u043E\u0441\u0442\u043E\u0439\u043D\u044B\u0435. \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u044E \u043F\u043E\u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C.',
+          tags: ['\u041A\u0443\u0445\u043D\u044F'], sentiment: 'positive',
+          venueResponse: '\u0421\u043F\u0430\u0441\u0438\u0431\u043E! \u041F\u0435\u0440\u0435\u0434\u0430\u0434\u0438\u043C \u0432\u0430\u0448\u0443 \u043F\u043E\u0445\u0432\u0430\u043B\u0443 \u0448\u0435\u0444-\u043F\u043E\u0432\u0430\u0440\u0443. \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u043C \u043F\u043E\u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C \u043D\u0430\u0448\u0438 \u0441\u0435\u0437\u043E\u043D\u043D\u044B\u0435 \u043D\u043E\u0432\u0438\u043D\u043A\u0438 \u043F\u0440\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u043C \u0432\u0438\u0437\u0438\u0442\u0435!' },
+        { keywords: ['\u0431\u0438\u043B\u044C\u044F\u0440\u0434', '\u0441\u0442\u043E\u043B', '\u043A\u0438\u0439', '\u0438\u0433\u0440', '\u0448\u0430\u0440'],
+          improved: '\u0425\u043E\u0440\u043E\u0448\u0438\u0439 \u0431\u0438\u043B\u044C\u044F\u0440\u0434\u043D\u044B\u0439 \u043A\u043B\u0443\u0431. \u0421\u0442\u043E\u043B\u044B \u0432 \u0434\u043E\u0441\u0442\u043E\u0439\u043D\u043E\u043C \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0438, \u0432\u044B\u0431\u043E\u0440 \u0431\u043E\u043B\u044C\u0448\u043E\u0439. \u041F\u0440\u0438\u044F\u0442\u043D\u043E \u043F\u0440\u043E\u0432\u0435\u043B\u0438 \u0432\u0440\u0435\u043C\u044F \u0437\u0430 \u0438\u0433\u0440\u043E\u0439.',
+          tags: ['\u0411\u0438\u043B\u044C\u044F\u0440\u0434'], sentiment: 'positive',
+          venueResponse: '\u0420\u0430\u0434\u044B, \u0447\u0442\u043E \u0432\u0430\u043C \u043F\u043E\u043D\u0440\u0430\u0432\u0438\u043B\u0430\u0441\u044C \u0438\u0433\u0440\u0430! \u0423 \u043D\u0430\u0441 10 \u0441\u0442\u043E\u043B\u043E\u0432 \u043D\u0430 \u043B\u044E\u0431\u043E\u0439 \u0432\u043A\u0443\u0441, \u0432\u043A\u043B\u044E\u0447\u0430\u044F \u0418\u043C\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u0441\u043A\u0438\u0439. \u0416\u0434\u0451\u043C \u0432\u0430\u0441 \u0441\u043D\u043E\u0432\u0430!' },
+        { keywords: ['\u0433\u0440\u044F\u0437', '\u0433\u0440\u044F\u0437\u043D', '\u0443\u0431\u043E\u0440', '\u0447\u0438\u0441\u0442'],
+          improved: '\u0412 \u0446\u0435\u043B\u043E\u043C \u0445\u043E\u0440\u043E\u0448\u0435\u0435 \u0437\u0430\u0432\u0435\u0434\u0435\u043D\u0438\u0435, \u043D\u043E \u0445\u043E\u0442\u0435\u043B\u043E\u0441\u044C \u0431\u044B \u043E\u0431\u0440\u0430\u0442\u0438\u0442\u044C \u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435 \u043D\u0430 \u0447\u0438\u0441\u0442\u043E\u0442\u0443. \u041F\u0440\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u043C \u0432\u0438\u0437\u0438\u0442\u0435 \u043D\u0430\u0434\u0435\u044E\u0441\u044C \u0443\u0432\u0438\u0434\u0435\u0442\u044C \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0432 \u044D\u0442\u043E\u043C \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0438.',
+          tags: ['\u0421\u0435\u0440\u0432\u0438\u0441', '\u0427\u0438\u0441\u0442\u043E\u0442\u0430'], sentiment: 'mixed',
+          venueResponse: '\u0411\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u043C \u0437\u0430 \u043E\u0431\u0440\u0430\u0442\u043D\u0443\u044E \u0441\u0432\u044F\u0437\u044C. \u0427\u0438\u0441\u0442\u043E\u0442\u0430 \u0434\u043B\u044F \u043D\u0430\u0441 \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\u0442, \u0443\u0441\u0438\u043B\u0438\u043C \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C. \u041F\u0440\u0438\u043D\u043E\u0441\u0438\u043C \u0438\u0437\u0432\u0438\u043D\u0435\u043D\u0438\u044F \u0437\u0430 \u043D\u0435\u0443\u0434\u043E\u0431\u0441\u0442\u0432\u0430.' },
+        { keywords: ['\u0434\u043E\u043B\u0433\u043E', '\u0436\u0434\u0430\u043B', '\u043E\u0436\u0438\u0434\u0430\u043D', '\u043C\u0435\u0434\u043B\u0435\u043D', '\u0437\u0430\u0434\u0435\u0440\u0436'],
+          improved: '\u0417\u0430\u0432\u0435\u0434\u0435\u043D\u0438\u0435 \u043D\u0440\u0430\u0432\u0438\u0442\u0441\u044F, \u043D\u043E \u0432 \u044D\u0442\u043E\u0442 \u0440\u0430\u0437 \u043F\u0440\u0438\u0448\u043B\u043E\u0441\u044C \u043F\u043E\u0434\u043E\u0436\u0434\u0430\u0442\u044C \u0434\u043E\u043B\u044C\u0448\u0435 \u043E\u0431\u044B\u0447\u043D\u043E\u0433\u043E. \u041D\u0430\u0434\u0435\u044E\u0441\u044C, \u0432 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0440\u0430\u0437 \u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u0435 \u0431\u0443\u0434\u0435\u0442 \u0431\u044B\u0441\u0442\u0440\u0435\u0435.',
+          tags: ['\u0421\u0435\u0440\u0432\u0438\u0441', '\u041E\u0436\u0438\u0434\u0430\u043D\u0438\u0435'], sentiment: 'mixed',
+          venueResponse: '\u041F\u0440\u0438\u043D\u043E\u0441\u0438\u043C \u0438\u0437\u0432\u0438\u043D\u0435\u043D\u0438\u044F \u0437\u0430 \u043E\u0436\u0438\u0434\u0430\u043D\u0438\u0435. \u041C\u044B \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u043C \u043D\u0430\u0434 \u0443\u0441\u043A\u043E\u0440\u0435\u043D\u0438\u0435\u043C \u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u044F, \u043E\u0441\u043E\u0431\u0435\u043D\u043D\u043E \u0432 \u0447\u0430\u0441\u044B \u043F\u0438\u043A. \u0421\u043F\u0430\u0441\u0438\u0431\u043E \u0437\u0430 \u0442\u0435\u0440\u043F\u0435\u043D\u0438\u0435!' },
+        { keywords: ['\u043A\u0430\u043B\u044C\u044F\u043D', '\u0434\u044B\u043C', '\u043B\u0430\u0443\u043D\u0436'],
+          improved: '\u041E\u0442\u043B\u0438\u0447\u043D\u0430\u044F \u043B\u0430\u0443\u043D\u0436-\u0437\u043E\u043D\u0430. \u041A\u0430\u043B\u044C\u044F\u043D \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E, \u0445\u043E\u0440\u043E\u0448\u0438\u0439 \u0432\u044B\u0431\u043E\u0440 \u0432\u043A\u0443\u0441\u043E\u0432. \u0410\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430 \u0440\u0430\u0441\u043F\u043E\u043B\u0430\u0433\u0430\u0435\u0442 \u043A \u043E\u0442\u0434\u044B\u0445\u0443.',
+          tags: ['\u041A\u0430\u043B\u044C\u044F\u043D', '\u0410\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430'], sentiment: 'positive',
+          venueResponse: '\u0421\u043F\u0430\u0441\u0438\u0431\u043E! \u041D\u0430\u0448 \u043C\u0430\u0441\u0442\u0435\u0440 \u0410\u0440\u0442\u0451\u043C \u0440\u0430\u0434 \u0441\u0442\u0430\u0440\u0430\u0442\u044C\u0441\u044F. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0430\u0432\u0442\u043E\u0440\u0441\u043A\u0438\u0435 \u043C\u0438\u043A\u0441\u044B \u043F\u0440\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u043C \u0432\u0438\u0437\u0438\u0442\u0435!' },
+        { keywords: ['\u043A\u043E\u043A\u0442\u0435\u0439\u043B', '\u0431\u0430\u0440', '\u043D\u0430\u043F\u0438\u0442', '\u043F\u0438\u0432'],
+          improved: '\u0411\u0430\u0440 \u043D\u0430 \u0432\u044B\u0441\u043E\u0442\u0435. \u041A\u043E\u043A\u0442\u0435\u0439\u043B\u0438 \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u044B \u0441 \u0434\u0443\u0448\u043E\u0439, \u043F\u043E\u0434\u0430\u0447\u0430 \u043A\u0440\u0430\u0441\u0438\u0432\u0430\u044F. \u0411\u0430\u0440\u043C\u0435\u043D \u0437\u043D\u0430\u0435\u0442 \u0441\u0432\u043E\u0451 \u0434\u0435\u043B\u043E.',
+          tags: ['\u0411\u0430\u0440', '\u041A\u043E\u043A\u0442\u0435\u0439\u043B\u0438'], sentiment: 'positive',
+          venueResponse: '\u041F\u0435\u0440\u0435\u0434\u0430\u0434\u0438\u043C \u043A\u043E\u043C\u043F\u043B\u0438\u043C\u0435\u043D\u0442 \u043D\u0430\u0448\u0435\u043C\u0443 \u0431\u0430\u0440\u043C\u0435\u043D\u0443 \u0410\u043B\u0435\u043A\u0441\u0435\u044E! \u041A\u0430\u0436\u0434\u044B\u0439 \u043C\u0435\u0441\u044F\u0446 \u043E\u0431\u043D\u043E\u0432\u043B\u044F\u0435\u043C \u043A\u043E\u043A\u0442\u0435\u0439\u043B\u044C\u043D\u0443\u044E \u043A\u0430\u0440\u0442\u0443, \u0437\u0430\u0445\u043E\u0434\u0438\u0442\u0435 \u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C.' },
     ];
 
-    // Moderation filter (demo version — in production this is OpenAI API)
+    // Moderation filter
     const badWords = [
-        'хер','херн','хуй','хуё','хуе','хуи','хуя','блять','бляд','блят','сука','сук','пизд','пизж',
-        'ебал','ебан','ебат','ебну','ебло','ёбан','наху','нахуй','нахер','жоп','заеб','заёб',
-        'мудак','мудач','мудил','долбо','гавн','гавно','гнида','тварь','дерьм','шлюх','шалав',
-        'идиот','дебил','урод','падл','козёл','козел','чмо','лох','отстой','фигн','фигня',
-        'говн','дрян','хрен','хренов','чёрт','черт','задниц','срань','сран','засран',
-        'пошёл','пошел нах','иди нах','иди в','катись','вали отсюда'
+        '\u0445\u0435\u0440','\u0445\u0435\u0440\u043D','\u0445\u0443\u0439','\u0445\u0443\u0451','\u0445\u0443\u0435','\u0445\u0443\u0438','\u0445\u0443\u044F','\u0431\u043B\u044F\u0442\u044C','\u0431\u043B\u044F\u0434','\u0431\u043B\u044F\u0442','\u0441\u0443\u043A\u0430','\u0441\u0443\u043A','\u043F\u0438\u0437\u0434','\u043F\u0438\u0437\u0436',
+        '\u0435\u0431\u0430\u043B','\u0435\u0431\u0430\u043D','\u0435\u0431\u0430\u0442','\u0435\u0431\u043D\u0443','\u0435\u0431\u043B\u043E','\u0451\u0431\u0430\u043D','\u043D\u0430\u0445\u0443','\u043D\u0430\u0445\u0443\u0439','\u043D\u0430\u0445\u0435\u0440','\u0436\u043E\u043F','\u0437\u0430\u0435\u0431','\u0437\u0430\u0451\u0431',
+        '\u043C\u0443\u0434\u0430\u043A','\u043C\u0443\u0434\u0430\u0447','\u043C\u0443\u0434\u0438\u043B','\u0434\u043E\u043B\u0431\u043E','\u0433\u0430\u0432\u043D','\u0433\u0430\u0432\u043D\u043E','\u0433\u043D\u0438\u0434\u0430','\u0442\u0432\u0430\u0440\u044C','\u0434\u0435\u0440\u044C\u043C','\u0448\u043B\u044E\u0445','\u0448\u0430\u043B\u0430\u0432',
+        '\u0438\u0434\u0438\u043E\u0442','\u0434\u0435\u0431\u0438\u043B','\u0443\u0440\u043E\u0434','\u043F\u0430\u0434\u043B','\u043A\u043E\u0437\u0451\u043B','\u043A\u043E\u0437\u0435\u043B','\u0447\u043C\u043E','\u043B\u043E\u0445','\u043E\u0442\u0441\u0442\u043E\u0439','\u0444\u0438\u0433\u043D','\u0444\u0438\u0433\u043D\u044F',
+        '\u0433\u043E\u0432\u043D','\u0434\u0440\u044F\u043D','\u0445\u0440\u0435\u043D','\u0445\u0440\u0435\u043D\u043E\u0432','\u0447\u0451\u0440\u0442','\u0447\u0435\u0440\u0442','\u0437\u0430\u0434\u043D\u0438\u0446','\u0441\u0440\u0430\u043D\u044C','\u0441\u0440\u0430\u043D','\u0437\u0430\u0441\u0440\u0430\u043D',
+        '\u043F\u043E\u0448\u0451\u043B','\u043F\u043E\u0448\u0435\u043B \u043D\u0430\u0445','\u0438\u0434\u0438 \u043D\u0430\u0445','\u0438\u0434\u0438 \u0432','\u043A\u0430\u0442\u0438\u0441\u044C','\u0432\u0430\u043B\u0438 \u043E\u0442\u0441\u044E\u0434\u0430'
     ];
 
     function containsBadWords(text) {
-        const lower = text.toLowerCase().replace(/[ё]/g, 'е');
-        return badWords.some(w => lower.includes(w.replace(/[ё]/g, 'е')));
+        const lower = text.toLowerCase().replace(/\u0451/g, '\u0435');
+        return badWords.some(w => lower.includes(w.replace(/\u0451/g, '\u0435')));
     }
 
     function isTooShort(text) {
@@ -2368,28 +2660,23 @@
 
     function isSpammy(text) {
         const lower = text.toLowerCase();
-        // All caps
-        if (text.length > 5 && text === text.toUpperCase() && /[A-ZА-Я]/.test(text)) return true;
-        // Repeated chars
+        if (text.length > 5 && text === text.toUpperCase() && /[A-Z\u0410-\u042F]/.test(text)) return true;
         if (/(.)\1{4,}/.test(text)) return true;
-        // Links
         if (/https?:\/\/|www\.|\.ru|\.com|t\.me/i.test(text)) return true;
-        // Phone numbers
         if (/\+?[78]\d{10}/.test(text.replace(/[\s\-()]/g, ''))) return true;
         return false;
     }
 
     function analyzeReview() {
         const text = document.getElementById('reviewText').value.trim();
-        if (!text) { showToast('Напишите отзыв'); return; }
+        if (!text) { showToast('\u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043E\u0442\u0437\u044B\u0432'); return; }
 
-        // Show step 2: processing
         document.getElementById('review-step1').style.display = 'none';
         document.getElementById('review-step2').style.display = 'block';
         document.getElementById('tips-section').style.display = 'none';
 
         const stepText = document.getElementById('aiStepText');
-        const steps = ['Проверка модерации...', 'Анализ тональности...', 'Категоризация...', 'Генерация улучшенной версии...'];
+        const steps = ['\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u0438...', '\u0410\u043D\u0430\u043B\u0438\u0437 \u0442\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438...', '\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F...', '\u0413\u0435\u043D\u0435\u0440\u0430\u0446\u0438\u044F \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u043E\u0439 \u0432\u0435\u0440\u0441\u0438\u0438...'];
         let i = 0;
         const interval = setInterval(() => {
             i++;
@@ -2400,58 +2687,51 @@
             clearInterval(interval);
             document.getElementById('review-step2').style.display = 'none';
 
-            // --- MODERATION CHECK ---
             const hasBadWords = containsBadWords(text);
             const tooShort = isTooShort(text);
             const spammy = isSpammy(text);
 
             if (hasBadWords || tooShort || spammy) {
-                // Show blocked state
                 document.getElementById('review-step3').style.display = 'block';
                 document.getElementById('tips-section').style.display = 'block';
 
                 let reason = '';
-                if (hasBadWords) reason = 'Обнаружена нецензурная лексика. Пожалуйста, перефразируйте отзыв.';
-                else if (tooShort) reason = 'Отзыв слишком короткий. Напишите хотя бы одно предложение.';
-                else if (spammy) reason = 'Обнаружены признаки спама (ссылки, номера телефонов или повторяющиеся символы).';
+                if (hasBadWords) reason = '\u041E\u0431\u043D\u0430\u0440\u0443\u0436\u0435\u043D\u0430 \u043D\u0435\u0446\u0435\u043D\u0437\u0443\u0440\u043D\u0430\u044F \u043B\u0435\u043A\u0441\u0438\u043A\u0430. \u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043F\u0435\u0440\u0435\u0444\u0440\u0430\u0437\u0438\u0440\u0443\u0439\u0442\u0435 \u043E\u0442\u0437\u044B\u0432.';
+                else if (tooShort) reason = '\u041E\u0442\u0437\u044B\u0432 \u0441\u043B\u0438\u0448\u043A\u043E\u043C \u043A\u043E\u0440\u043E\u0442\u043A\u0438\u0439. \u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u0445\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u043D\u043E \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u0435.';
+                else if (spammy) reason = '\u041E\u0431\u043D\u0430\u0440\u0443\u0436\u0435\u043D\u044B \u043F\u0440\u0438\u0437\u043D\u0430\u043A\u0438 \u0441\u043F\u0430\u043C\u0430 (\u0441\u0441\u044B\u043B\u043A\u0438, \u043D\u043E\u043C\u0435\u0440\u0430 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u043E\u0432 \u0438\u043B\u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u044F\u044E\u0449\u0438\u0435\u0441\u044F \u0441\u0438\u043C\u0432\u043E\u043B\u044B).';
 
-                document.getElementById('moderation-result').style.background = 'rgba(179,68,68,0.1)';
-                document.getElementById('moderation-result').style.borderColor = 'rgba(179,68,68,0.2)';
-                document.getElementById('moderation-result').innerHTML = `
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                        <span style="font-size:18px;">🚫</span>
-                        <span style="font-size:13px; font-weight:600; color:var(--red-light);">Модерация не пройдена</span>
-                    </div>
-                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">${reason}</div>
-                    <button class="btn-secondary" onclick="resetReview()" style="margin-top:12px; padding:10px;">Редактировать отзыв</button>
-                `;
+                document.getElementById('moderation-result').style.background = 'rgba(239,68,68,0.08)';
+                document.getElementById('moderation-result').style.borderColor = 'rgba(239,68,68,0.2)';
+                document.getElementById('moderation-result').innerHTML =
+                    '<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">' +
+                    '<span style="font-size:18px;">\uD83D\uDEAB</span>' +
+                    '<span style="font-size:13px; font-weight:700; color:var(--red-light);">\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F \u043D\u0435 \u043F\u0440\u043E\u0439\u0434\u0435\u043D\u0430</span>' +
+                    '</div>' +
+                    '<div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">' + reason + '</div>' +
+                    '<button class="btn-secondary" onclick="resetReview()" style="margin-top:12px; padding:10px;">\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0437\u044B\u0432</button>';
                 document.getElementById('reviewTags').innerHTML = '';
                 document.getElementById('sentimentBlock').style.display = 'none';
                 document.getElementById('originalText').textContent = '';
                 document.getElementById('aiSuggestionBlock').style.display = 'none';
-                document.querySelector('#review-step3 > div:nth-child(4)').style.display = 'none'; // original text block
+                document.querySelector('#review-step3 > div:nth-child(4)').style.display = 'none';
                 return;
             }
 
-            // --- PASSED MODERATION ---
             document.getElementById('review-step3').style.display = 'block';
             document.getElementById('tips-section').style.display = 'block';
 
-            // Reset moderation block to green
-            document.getElementById('moderation-result').style.background = 'rgba(68,115,75,0.1)';
-            document.getElementById('moderation-result').style.borderColor = 'rgba(68,115,75,0.2)';
-            document.getElementById('moderation-result').innerHTML = `
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                    <span style="font-size:18px;">✅</span>
-                    <span style="font-size:13px; font-weight:600; color:var(--accent-light);">Модерация пройдена</span>
-                </div>
-                <div style="font-size:11px; color:var(--text-secondary); line-height:1.5;">Отзыв не содержит запрещённого контента. Спам не обнаружен.</div>
-            `;
+            document.getElementById('moderation-result').style.background = 'rgba(16,185,129,0.06)';
+            document.getElementById('moderation-result').style.borderColor = 'rgba(16,185,129,0.15)';
+            document.getElementById('moderation-result').innerHTML =
+                '<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">' +
+                '<span style="font-size:18px;">\u2705</span>' +
+                '<span style="font-size:13px; font-weight:700; color:var(--accent-light);">\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F \u043F\u0440\u043E\u0439\u0434\u0435\u043D\u0430</span>' +
+                '</div>' +
+                '<div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">\u041E\u0442\u0437\u044B\u0432 \u043D\u0435 \u0441\u043E\u0434\u0435\u0440\u0436\u0438\u0442 \u0437\u0430\u043F\u0440\u0435\u0449\u0451\u043D\u043D\u043E\u0433\u043E \u043A\u043E\u043D\u0442\u0435\u043D\u0442\u0430. \u0421\u043F\u0430\u043C \u043D\u0435 \u043E\u0431\u043D\u0430\u0440\u0443\u0436\u0435\u043D.</div>';
             document.getElementById('sentimentBlock').style.display = 'block';
             document.getElementById('aiSuggestionBlock').style.display = 'block';
             document.querySelector('#review-step3 > div:nth-child(4)').style.display = 'block';
 
-            // Find matching scenario
             const lower = text.toLowerCase();
             let match = null;
             for (const sc of aiImprovements) {
@@ -2459,38 +2739,33 @@
             }
             if (!match) match = reviewScenarios.fallback;
 
-            // Original text
             document.getElementById('originalText').textContent = text;
 
-            // Tags
             const tagsHtml = match.tags.map(t => {
                 const color = match.sentiment === 'negative' ? 'var(--red-light)' : match.sentiment === 'mixed' ? 'var(--gold)' : 'var(--accent-light)';
-                const bg = match.sentiment === 'negative' ? 'rgba(179,68,68,0.15)' : match.sentiment === 'mixed' ? 'rgba(201,168,76,0.15)' : 'rgba(68,115,75,0.15)';
-                return `<span style="font-size:10px; padding:4px 10px; background:${bg}; color:${color}; border-radius:8px; font-weight:500;">${t}</span>`;
+                const bg = match.sentiment === 'negative' ? 'rgba(239,68,68,0.1)' : match.sentiment === 'mixed' ? 'rgba(245,158,11,0.1)' : 'rgba(45,212,160,0.1)';
+                return '<span style="font-size:10px; padding:5px 12px; background:' + bg + '; color:' + color + '; border-radius:10px; font-weight:600;">' + t + '</span>';
             }).join('');
             document.getElementById('reviewTags').innerHTML = tagsHtml;
 
-            // Sentiment
             const badge = document.getElementById('sentimentBadge');
             if (match.sentiment === 'positive') {
-                badge.textContent = 'Позитивный';
-                badge.style.background = 'rgba(68,115,75,0.15)';
+                badge.textContent = '\u041F\u043E\u0437\u0438\u0442\u0438\u0432\u043D\u044B\u0439';
+                badge.style.background = 'rgba(45,212,160,0.1)';
                 badge.style.color = 'var(--accent-light)';
             } else if (match.sentiment === 'mixed') {
-                badge.textContent = 'Смешанный';
-                badge.style.background = 'rgba(201,168,76,0.15)';
+                badge.textContent = '\u0421\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0439';
+                badge.style.background = 'rgba(245,158,11,0.1)';
                 badge.style.color = 'var(--gold)';
             } else {
-                badge.textContent = 'Негативный';
-                badge.style.background = 'rgba(179,68,68,0.15)';
+                badge.textContent = '\u041D\u0435\u0433\u0430\u0442\u0438\u0432\u043D\u044B\u0439';
+                badge.style.background = 'rgba(239,68,68,0.1)';
                 badge.style.color = 'var(--red-light)';
             }
 
-            // AI improved text
-            const improved = match.improved || ('Улучшенная версия: ' + text);
+            const improved = match.improved || ('\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u0430\u044F \u0432\u0435\u0440\u0441\u0438\u044F: ' + text);
             document.getElementById('aiImprovedText').textContent = improved;
 
-            // Store venue response for later
             document.getElementById('review-step3').dataset.venueResponse = match.venueResponse;
             document.getElementById('review-step3').dataset.improved = improved;
 
@@ -2510,11 +2785,12 @@
         document.getElementById('review-step4').style.display = 'block';
         document.getElementById('publishedText').textContent = text;
 
-        // Show venue auto-response after 1.5s
         setTimeout(() => {
             const resp = document.getElementById('review-step3').dataset.venueResponse;
             document.getElementById('venueResponseText').textContent = resp;
-            document.getElementById('venueResponse').style.display = 'block';
+            const venueEl = document.getElementById('venueResponse');
+            venueEl.style.display = 'block';
+            venueEl.style.animation = 'slideUp 0.4s ease';
         }, 1500);
     }
 
