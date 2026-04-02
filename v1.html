@@ -330,8 +330,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid transparent;
-            border-image: linear-gradient(90deg, transparent, rgba(45,212,160,0.15), transparent) 1;
+            border-bottom: 1px solid var(--border-light);
             background: rgba(10, 26, 28, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -372,7 +371,7 @@
         }
 
         .loyalty-badge {
-            background: linear-gradient(135deg, #c9a84c, #e8c94a, #c9a84c);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             color: #1a1000;
             padding: 7px 14px;
             border-radius: 24px;
@@ -381,7 +380,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            box-shadow: 0 2px 12px rgba(201,168,76,0.3);
+            box-shadow: 0 0 16px var(--gold-glow);
         }
 
         /* ============ ZONE TABS ============ */
@@ -471,7 +470,7 @@
             margin: 22px 0 12px;
             color: var(--text-primary);
             padding-left: 12px;
-            border-left: 3px solid #10b981;
+            border-left: 3px solid var(--accent);
         }
 
         .section-subtitle {
@@ -489,8 +488,8 @@
             background: linear-gradient(180deg, rgba(10,26,28,0.8), rgba(6,18,16,0.9));
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(45,212,160,0.08);
-            border-bottom: 1px solid rgba(45,212,160,0.08);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
             padding: 14px 10px;
             position: relative;
         }
@@ -587,7 +586,7 @@
             overflow: hidden;
             background-clip: padding-box;
             box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 0 0 1px rgba(45,212,160,0.1);
-            background-image: linear-gradient(var(--glass-bg), var(--glass-bg)), linear-gradient(135deg, rgba(45,212,160,0.15), rgba(201,168,76,0.1));
+            background-image: linear-gradient(var(--glass-bg), var(--glass-bg)), linear-gradient(135deg, rgba(45,212,160,0.2), rgba(45,212,160,0.05), rgba(45,212,160,0.15));
             background-origin: border-box;
             background-clip: padding-box, border-box;
         }
@@ -681,8 +680,7 @@
         }
 
         .imperial-badge {
-            background: linear-gradient(135deg, #c9a84c, #e8c94a);
-            box-shadow: 0 0 12px rgba(201,168,76,0.3);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             color: #1a1000;
             padding: 4px 10px;
             border-radius: 8px;
@@ -692,6 +690,7 @@
             letter-spacing: 1.5px;
             display: inline-block;
             margin-bottom: 6px;
+            box-shadow: 0 0 12px var(--gold-glow);
         }
 
         /* ============ RESTAURANT CARDS ============ */
@@ -765,7 +764,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(45,212,160,0.06);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius);
             padding: 22px;
             margin-top: 14px;
@@ -819,10 +818,10 @@
         }
 
         .time-slot.active {
-            background: linear-gradient(135deg, #10b981, #2dd4a0);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
             border-color: var(--accent);
-            box-shadow: 0 0 16px rgba(45,212,160,0.4);
+            box-shadow: 0 0 16px var(--accent-glow);
             transform: scale(1.02);
         }
 
@@ -891,7 +890,7 @@
             background: linear-gradient(135deg, rgba(16,42,30,0.6), rgba(10,26,28,0.6));
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(201,168,76,0.15);
+            border: 1px solid rgba(45,212,160,0.12);
             border-radius: var(--radius);
             padding: 18px;
             margin-top: 16px;
@@ -931,8 +930,8 @@
         .btn-primary {
             width: 100%;
             padding: 17px;
-            background: linear-gradient(135deg, #c9a84c, #e0c068, #c9a84c);
-            color: #0a1a1c;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
             border: none;
             border-radius: 16px;
             font-family: 'Montserrat', sans-serif;
@@ -941,7 +940,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 16px;
-            box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
+            box-shadow: 0 0 24px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.2);
             min-height: 54px;
         }
 
@@ -1043,13 +1042,12 @@
             background: linear-gradient(135deg, rgba(20,50,30,0.7), rgba(16,42,44,0.7));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(201,168,76,0.25);
+            border: 1px solid rgba(245, 158, 11, 0.15);
             border-radius: 22px;
             padding: 28px;
             margin-top: 14px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(201,168,76,0.1);
         }
 
         .loyalty-card::before {
@@ -1159,7 +1157,7 @@
             min-height: 44px;
         }
 
-        .star:active, .star:hover { transform: scale(1.3); filter: drop-shadow(0 0 8px rgba(245,158,11,0.5)); }
+        .star:active { transform: scale(1.3); }
         .star.filled { filter: none; }
         .star.empty { filter: grayscale(1) opacity(0.25); }
 
@@ -1366,8 +1364,7 @@
             background: rgba(10, 26, 28, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid transparent;
-            border-image: linear-gradient(90deg, transparent, rgba(45,212,160,0.2), rgba(201,168,76,0.15), transparent) 1;
+            border-top: 1px solid var(--border-light);
             display: flex;
             justify-content: space-around;
             padding: 6px 0;
@@ -1436,13 +1433,12 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(-100px);
-            background: linear-gradient(135deg, #1a3a2a, #0d2e1a);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: white;
             padding: 15px 28px;
             border-radius: 16px;
             font-size: 14px;
             font-weight: 600;
-            border: 1px solid rgba(45,212,160,0.2);
             box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 24px var(--accent-glow);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 500;
@@ -1550,24 +1546,10 @@
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
             border-radius: 50px;
             scrollbar-width: none;
-            position: relative;
             padding-top: 54px;
         }
 
         .phone-frame::-webkit-scrollbar { display: none; }
-
-        .phone-frame::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 200;
-            opacity: 0.4;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            border-radius: 50px;
-        }
 
         .iphone-btn-power {
             position: absolute;
