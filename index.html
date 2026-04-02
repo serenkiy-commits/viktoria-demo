@@ -2613,40 +2613,28 @@
         const container = document.getElementById('timeSlotsContainer');
         if (!container) return;
         const dateStr = document.getElementById('bookingDate').value;
-        const date = new Date(dateStr + 'T00:00:00');
+        if (!dateStr) return;
+        // Parse date parts manually to avoid timezone issues
+        const parts = dateStr.split('-');
+        const year = parseInt(parts[0]);
+        const month = parseInt(parts[1]) - 1;
+        const day = parseInt(parts[2]);
+        const date = new Date(year, month, day);
         const dow = date.getDay(); // 0=Вс, 1=Пн...6=Сб
 
-        let startHour, endHour;
-        if (dow === 6) { // Сб
-            startHour = 12; endHour = 3;
-        } else if (dow === 5) { // Пт
-            startHour = 15; endHour = 3;
-        } else if (dow === 0) { // Вс
-            startHour = 12; endHour = 1;
-        } else { // Пн-Чт
-            startHour = 15; endHour = 1;
+        let startHour;
+        if (dow === 6 || dow === 0) { // Сб, Вс
+            startHour = 12;
+        } else { // Пн-Пт
+            startHour = 15;
         }
-
-        // Generate slots from startHour to midnight, then to endHour next day
-        const slots = [];
-        for (let h = startHour; h <= 23; h++) {
-            slots.push(h);
-        }
-        // After midnight slots (for display only in demo)
-        for (let h = 0; h <= endHour; h++) {
-            slots.push(h);
-        }
-
-        // Only show main hours (not after midnight for simplicity in demo)
-        const mainSlots = slots.filter(h => h >= startHour);
 
         let html = '';
-        const defaultTime = (dow >= 5 || dow === 0) ? startHour : 15;
-        mainSlots.forEach(h => {
+        for (let h = startHour; h <= 23; h++) {
             const timeStr = String(h).padStart(2, '0') + ':00';
-            const isDefault = (h === defaultTime);
+            const isDefault = (h === startHour);
             html += '<div class="time-slot' + (isDefault ? ' active' : '') + '" onclick="selectTime(this)">' + timeStr + '</div>';
-        });
+        }
 
         container.innerHTML = html;
         updatePrice();
