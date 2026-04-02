@@ -2647,7 +2647,7 @@
             </div><!-- /phone-frame -->
 
     <!-- Bottom Navigation — outside phone-frame, inside iphone-screen-bezel -->
-    <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <div class="bottom-nav" id="bottomNav">
         <button class="nav-item active" onclick="navigate('tables', this)">
             <span class="nav-icon">&#127921;</span>
             <span class="nav-label">Столы</span>
@@ -2756,7 +2756,7 @@
             cs.style.display = 'none';
             document.getElementById('appHeader').style.display = 'flex';
             document.getElementById('zoneTabs').style.display = 'flex';
-            document.getElementById('bottomNav').style.display = 'flex';
+            // bottomNav is always visible, welcome/confirm screens overlay it
             animateProgressBar();
         }, 600);
     }
