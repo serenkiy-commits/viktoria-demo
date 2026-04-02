@@ -104,26 +104,23 @@
         }
 
         .welcome-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 0 60px rgba(45,212,160,0.3), 0 0 120px rgba(45,212,160,0.1);
-            margin-bottom: 24px;
+            width: 160px;
+            margin-bottom: 20px;
             animation: logoPulse 3s ease-in-out infinite;
             position: relative;
             z-index: 1;
+            filter: drop-shadow(0 0 30px rgba(45,212,160,0.25));
         }
 
         .welcome-logo img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
         }
 
         @keyframes logoPulse {
-            0%, 100% { box-shadow: 0 0 60px rgba(45,212,160,0.3), 0 0 120px rgba(45,212,160,0.1); }
-            50% { box-shadow: 0 0 80px rgba(45,212,160,0.4), 0 0 160px rgba(45,212,160,0.15); }
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(45,212,160,0.25)); }
+            50% { filter: drop-shadow(0 0 50px rgba(45,212,160,0.4)); }
         }
 
         .welcome-title {
@@ -349,16 +346,14 @@
         }
 
         .logo {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(45,212,160,0.2);
+            width: 44px;
+            height: auto;
+            flex-shrink: 0;
         }
 
         .logo img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: cover;
         }
 
@@ -1729,8 +1724,7 @@
         <div class="welcome-bg-orb orb1"></div>
         <div class="welcome-bg-orb orb2"></div>
         <div class="welcome-logo"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория"></div>
-        <div class="welcome-title">ВИКТОРИЯ</div>
-        <div class="welcome-subtitle">бильярд и рестобар</div>
+        <div class="welcome-subtitle" style="margin-top:8px; font-size:13px; letter-spacing:3px;">ОДИНЦОВО</div>
         <button class="tg-login-btn" onclick="showConfirmScreen()">
             <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
             Войти через Telegram
@@ -2516,7 +2510,7 @@
                 <div id="venueResponse" style="display:none; margin-top:12px;" class="glass-card">
                     <div style="border-left:3px solid var(--accent); padding-left:12px;">
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                            <div style="width:30px;height:30px;border-radius:50%;overflow:hidden;box-shadow:0 0 8px rgba(45,212,160,0.2);"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
+                            <div style="width:30px;height:auto;filter:drop-shadow(0 0 6px rgba(45,212,160,0.2));"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:auto;"></div>
                             <div>
                                 <div style="font-size:12px; font-weight:700;">Виктория</div>
                                 <div style="font-size:10px; color:var(--text-muted);">только что</div>
@@ -2582,7 +2576,7 @@
                 <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
                 <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--accent);">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                        <div style="width:22px;height:22px;border-radius:50%;overflow:hidden;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
+                        <div style="width:22px;height:auto;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:auto;"></div>
                         <span style="font-size:10px; color:var(--accent-light); font-weight:600;">Виктория</span>
                     </div>
                     <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
@@ -2597,7 +2591,7 @@
                 <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
                 <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--gold); margin-top:8px;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                        <div style="width:22px;height:22px;border-radius:50%;overflow:hidden;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
+                        <div style="width:22px;height:auto;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:auto;"></div>
                         <span style="font-size:10px; color:var(--gold); font-weight:600;">Виктория</span>
                     </div>
                     <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
