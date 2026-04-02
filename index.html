@@ -1330,161 +1330,100 @@
             <div class="floor-plan-container">
                 <div class="floor-plan-legend">
                     <div class="legend-item"><div class="legend-dot free"></div> Свободен</div>
-                    <div class="legend-item"><div class="legend-dot soon"></div> Скоро</div>
                     <div class="legend-item"><div class="legend-dot busy"></div> Занят</div>
                 </div>
 
-                <svg class="floor-plan-svg" viewBox="-10 -5 373 530" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="353" height="520" fill="#071a1b" rx="12"/>
+                <svg class="floor-plan-svg" viewBox="0 0 380 520" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="380" height="520" fill="#0c1c1d" rx="10"/>
 
                     <!-- Walls -->
-                    <rect x="8" y="8" width="337" height="504" class="fp-wall" rx="8"/>
-                    <line x1="8" y1="200" x2="345" y2="200" class="fp-wall"/>
-                    <line x1="176" y1="200" x2="176" y2="504" class="fp-wall" stroke-dasharray="4 4"/>
+                    <rect x="8" y="8" width="364" height="504" rx="6" fill="none" stroke="rgba(234,229,220,0.08)" stroke-width="1.5"/>
+                    <!-- Vertical wall separating VIP -->
+                    <line x1="270" y1="8" x2="270" y2="230" stroke="rgba(234,229,220,0.06)" stroke-width="1.5"/>
 
-                    <!-- Zone labels -->
-                    <text x="176" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">Американский пул</text>
-                    <text x="176" y="220" text-anchor="middle" font-size="9" class="fp-zone-label">Русская пирамида</text>
+                    <!-- ВХОД -->
+                    <text x="190" y="505" text-anchor="middle" font-size="13" fill="rgba(234,229,220,0.25)" font-family="Montserrat" font-weight="700" letter-spacing="4">ВХОД</text>
+                    <line x1="160" y1="488" x2="220" y2="488" stroke="rgba(234,229,220,0.15)" stroke-width="1"/>
+                    <polygon points="190,480 185,488 195,488" fill="rgba(234,229,220,0.15)"/>
 
-                    <!-- === AMERICAN POOL TABLES === -->
-                    <!-- Table 1 - free -->
+                    <!-- VIP label -->
+                    <text x="330" y="30" text-anchor="middle" font-size="8" fill="rgba(201,168,76,0.5)" font-family="Montserrat" font-weight="700" letter-spacing="2">VIP ИМПЕРАТОР</text>
+                    <text x="330" y="42" text-anchor="middle" font-size="7" fill="rgba(201,168,76,0.3)" font-family="Montserrat">ПЕТР I</text>
+
+                    <!-- === ROW 3 (bottom, near entrance): Tables 1, 2 === -->
+                    <!-- Table 1 - free - Пул -->
                     <g class="fp-table" data-table="1" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="24" y="50" width="140" height="130" fill="#0f3a2a"/>
-                        <rect x="38" y="62" width="112" height="106" rx="4" fill="#1a6b3a" opacity="0.3"/>
-                        <rect x="48" y="72" width="92" height="86" rx="2" fill="#1f7a42" opacity="0.15"/>
-                        <!-- Pockets -->
-                        <circle cx="48" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="94" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="140" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="48" cy="148" r="4" fill="#0a2318"/>
-                        <circle cx="94" cy="148" r="4" fill="#0a2318"/>
-                        <circle cx="140" cy="148" r="4" fill="#0a2318"/>
-                        <text x="94" y="110" text-anchor="middle" font-size="16" class="fp-label">№ 1</text>
-                        <text x="94" y="128" text-anchor="middle" font-size="8" class="fp-sublabel">Пул</text>
-                        <circle class="fp-status" cx="148" cy="58" r="5" fill="#5a9963"/>
+                        <rect class="fp-table-bg" x="20" y="410" width="110" height="62" fill="#1a5c32" rx="4"/>
+                        <rect x="28" y="416" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <circle cx="32" cy="420" r="3" fill="#0a2318"/><circle cx="75" cy="420" r="3" fill="#0a2318"/><circle cx="118" cy="420" r="3" fill="#0a2318"/>
+                        <circle cx="32" cy="462" r="3" fill="#0a2318"/><circle cx="75" cy="462" r="3" fill="#0a2318"/><circle cx="118" cy="462" r="3" fill="#0a2318"/>
+                        <text x="75" y="446" text-anchor="middle" font-size="16" class="fp-label">1</text>
                     </g>
 
-                    <!-- Table 2 - occupied -->
-                    <g class="fp-table occupied" data-table="2" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="188" y="50" width="140" height="130" fill="#0f3a2a"/>
-                        <rect x="202" y="62" width="112" height="106" rx="4" fill="#1a6b3a" opacity="0.3"/>
-                        <rect x="212" y="72" width="92" height="86" rx="2" fill="#1f7a42" opacity="0.15"/>
-                        <circle cx="212" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="258" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="304" cy="72" r="4" fill="#0a2318"/>
-                        <circle cx="212" cy="148" r="4" fill="#0a2318"/>
-                        <circle cx="258" cy="148" r="4" fill="#0a2318"/>
-                        <circle cx="304" cy="148" r="4" fill="#0a2318"/>
-                        <text x="258" y="110" text-anchor="middle" font-size="16" class="fp-label">№ 2</text>
-                        <text x="258" y="128" text-anchor="middle" font-size="8" class="fp-sublabel">Пул</text>
-                        <circle class="fp-status" cx="312" cy="58" r="5" fill="#b34444"/>
+                    <!-- Table 2 - free - Пул -->
+                    <g class="fp-table" data-table="2" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="145" y="410" width="110" height="62" fill="#1a5c32" rx="4"/>
+                        <rect x="153" y="416" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <circle cx="157" cy="420" r="3" fill="#0a2318"/><circle cx="200" cy="420" r="3" fill="#0a2318"/><circle cx="243" cy="420" r="3" fill="#0a2318"/>
+                        <circle cx="157" cy="462" r="3" fill="#0a2318"/><circle cx="200" cy="462" r="3" fill="#0a2318"/><circle cx="243" cy="462" r="3" fill="#0a2318"/>
+                        <text x="200" y="446" text-anchor="middle" font-size="16" class="fp-label">2</text>
                     </g>
 
-                    <!-- === RUSSIAN PYRAMID TABLES === -->
-                    <!-- Row 1: tables 3, 4 -->
+                    <!-- === ROW 2 (middle): Tables 3, 4 + 5, 6 === -->
+                    <!-- Table 3 - free -->
                     <g class="fp-table" data-table="3" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="20" y="240" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="28" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="36" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="68" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="36" cy="342" r="3" fill="#0a2318"/>
-                        <circle cx="68" cy="342" r="3" fill="#0a2318"/>
-                        <text x="56" y="296" text-anchor="middle" font-size="14" class="fp-label">№3</text>
-                        <text x="56" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="80" cy="248" r="4" fill="#5a9963"/>
+                        <rect class="fp-table-bg" x="20" y="290" width="110" height="62" fill="#1a5c32" rx="4"/>
+                        <rect x="28" y="296" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <circle cx="32" cy="300" r="3" fill="#0a2318"/><circle cx="75" cy="300" r="3" fill="#0a2318"/><circle cx="118" cy="300" r="3" fill="#0a2318"/>
+                        <circle cx="32" cy="342" r="3" fill="#0a2318"/><circle cx="75" cy="342" r="3" fill="#0a2318"/><circle cx="118" cy="342" r="3" fill="#0a2318"/>
+                        <text x="75" y="326" text-anchor="middle" font-size="16" class="fp-label">3</text>
                     </g>
 
-                    <g class="fp-table" data-table="4" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="100" y="240" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="108" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="116" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="148" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="116" cy="342" r="3" fill="#0a2318"/>
-                        <circle cx="148" cy="342" r="3" fill="#0a2318"/>
-                        <text x="136" y="296" text-anchor="middle" font-size="14" class="fp-label">№4</text>
-                        <text x="136" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="160" cy="248" r="4" fill="#5a9963"/>
+                    <!-- Table 4 - occupied -->
+                    <g class="fp-table occupied" data-table="4" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="145" y="290" width="110" height="62" fill="#5c1a2a" rx="4"/>
+                        <rect x="153" y="296" width="94" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <text x="200" y="326" text-anchor="middle" font-size="16" class="fp-label">4</text>
                     </g>
 
-                    <g class="fp-table" data-table="5" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="180" y="240" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="188" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="196" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="228" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="196" cy="342" r="3" fill="#0a2318"/>
-                        <circle cx="228" cy="342" r="3" fill="#0a2318"/>
-                        <text x="216" y="296" text-anchor="middle" font-size="14" class="fp-label">№5</text>
-                        <text x="216" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="240" cy="248" r="4" fill="#c9a84c"/>
+                    <!-- Table 5 - free (smaller, pool) -->
+                    <g class="fp-table" data-table="5" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="275" y="290" width="46" height="62" fill="#1a5c32" rx="4"/>
+                        <rect x="280" y="296" width="36" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <text x="298" y="326" text-anchor="middle" font-size="14" class="fp-label">5</text>
                     </g>
 
-                    <g class="fp-table occupied" data-table="6" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="260" y="240" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="268" y="250" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="276" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="308" cy="258" r="3" fill="#0a2318"/>
-                        <circle cx="276" cy="342" r="3" fill="#0a2318"/>
-                        <circle cx="308" cy="342" r="3" fill="#0a2318"/>
-                        <text x="296" y="296" text-anchor="middle" font-size="14" class="fp-label">№6</text>
-                        <text x="296" y="312" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="320" cy="248" r="4" fill="#b34444"/>
+                    <!-- Table 6 - occupied (smaller, pool) -->
+                    <g class="fp-table occupied" data-table="6" data-type="Американский пул" data-price="900" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="328" y="290" width="46" height="62" fill="#5c1a2a" rx="4"/>
+                        <rect x="333" y="296" width="36" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <text x="351" y="326" text-anchor="middle" font-size="14" class="fp-label">6</text>
                     </g>
 
-                    <!-- Row 2: tables 7, 8, 9 -->
+                    <!-- === ROW 1 (top): Tables 7, 8 === -->
+                    <!-- Table 7 - free -->
                     <g class="fp-table" data-table="7" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="20" y="374" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="28" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="36" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="68" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="36" cy="476" r="3" fill="#0a2318"/>
-                        <circle cx="68" cy="476" r="3" fill="#0a2318"/>
-                        <text x="56" y="430" text-anchor="middle" font-size="14" class="fp-label">№7</text>
-                        <text x="56" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="80" cy="382" r="4" fill="#5a9963"/>
+                        <rect class="fp-table-bg" x="20" y="175" width="110" height="62" fill="#1a5c32" rx="4"/>
+                        <rect x="28" y="181" width="94" height="50" rx="3" fill="#2a8a48" opacity="0.25"/>
+                        <circle cx="32" cy="185" r="3" fill="#0a2318"/><circle cx="75" cy="185" r="3" fill="#0a2318"/><circle cx="118" cy="185" r="3" fill="#0a2318"/>
+                        <circle cx="32" cy="227" r="3" fill="#0a2318"/><circle cx="75" cy="227" r="3" fill="#0a2318"/><circle cx="118" cy="227" r="3" fill="#0a2318"/>
+                        <text x="75" y="211" text-anchor="middle" font-size="16" class="fp-label">7</text>
                     </g>
 
-                    <g class="fp-table" data-table="8" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="100" y="374" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="108" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="116" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="148" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="116" cy="476" r="3" fill="#0a2318"/>
-                        <circle cx="148" cy="476" r="3" fill="#0a2318"/>
-                        <text x="136" y="430" text-anchor="middle" font-size="14" class="fp-label">№8</text>
-                        <text x="136" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="160" cy="382" r="4" fill="#5a9963"/>
+                    <!-- Table 8 - occupied -->
+                    <g class="fp-table occupied" data-table="8" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="145" y="175" width="110" height="62" fill="#5c1a2a" rx="4"/>
+                        <rect x="153" y="181" width="94" height="50" rx="3" fill="#8a2a3a" opacity="0.25"/>
+                        <text x="200" y="211" text-anchor="middle" font-size="16" class="fp-label">8</text>
                     </g>
 
-                    <g class="fp-table occupied" data-table="9" data-type="Русская пирамида" data-price="1100" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="180" y="374" width="72" height="120" fill="#0f3a2a"/>
-                        <rect x="188" y="384" width="56" height="100" rx="3" fill="#1a6b3a" opacity="0.3"/>
-                        <circle cx="196" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="228" cy="392" r="3" fill="#0a2318"/>
-                        <circle cx="196" cy="476" r="3" fill="#0a2318"/>
-                        <circle cx="228" cy="476" r="3" fill="#0a2318"/>
-                        <text x="216" y="430" text-anchor="middle" font-size="14" class="fp-label">№9</text>
-                        <text x="216" y="446" text-anchor="middle" font-size="7" class="fp-sublabel">Пирамида</text>
-                        <circle class="fp-status" cx="240" cy="382" r="4" fill="#b34444"/>
+                    <!-- === VIP: Table 9 - Император Петр I === -->
+                    <g class="fp-table occupied" data-table="9" data-type="Императорский стол" data-price="1800" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="295" y="60" width="70" height="110" fill="#5c1a2a" rx="4" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+                        <rect x="302" y="68" width="56" height="94" rx="3" fill="#8a2a3a" opacity="0.2"/>
+                        <text x="330" y="115" text-anchor="middle" font-size="18" class="fp-label">9</text>
+                        <text x="330" y="135" text-anchor="middle" font-size="7" fill="rgba(201,168,76,0.6)" font-family="Montserrat" font-weight="600">VIP</text>
                     </g>
-
-                    <!-- Imperial Table 10 -->
-                    <g class="fp-table" data-table="10" data-type="Императорский стол" data-price="1800" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="260" y="374" width="72" height="120" fill="#1a2a14" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
-                        <rect x="268" y="384" width="56" height="100" rx="3" fill="#2a5a1a" opacity="0.2"/>
-                        <circle cx="276" cy="392" r="3" fill="#1a3a10"/>
-                        <circle cx="308" cy="392" r="3" fill="#1a3a10"/>
-                        <circle cx="276" cy="476" r="3" fill="#1a3a10"/>
-                        <circle cx="308" cy="476" r="3" fill="#1a3a10"/>
-                        <text x="296" y="420" text-anchor="middle" font-size="8" fill="#c9a84c" font-weight="700" font-family="Montserrat" letter-spacing="0.5">ПРЕМИУМ</text>
-                        <text x="296" y="438" text-anchor="middle" font-size="14" class="fp-label">№10</text>
-                        <text x="296" y="454" text-anchor="middle" font-size="7" class="fp-sublabel">Императорский</text>
-                        <circle class="fp-status" cx="320" cy="382" r="4" fill="#5a9963"/>
-                    </g>
-
-                    <!-- Decorations: bar area hint -->
-                    <text x="330" y="505" text-anchor="end" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">БАР →</text>
-                    <text x="24" y="505" text-anchor="start" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">← ВХОД</text>
                 </svg>
             </div>
         </div>
@@ -1580,90 +1519,136 @@
                     <div class="legend-item"><div class="legend-dot free"></div> Свободен</div>
                     <div class="legend-item"><div class="legend-dot busy"></div> Занят</div>
                 </div>
-                <svg class="floor-plan-svg" viewBox="-10 -5 373 350" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="353" height="340" fill="#071a1b" rx="12"/>
-                    <rect x="8" y="8" width="337" height="324" class="fp-wall" rx="8"/>
+                <svg class="floor-plan-svg" viewBox="0 0 380 620" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="380" height="620" fill="#0c1c1d" rx="10"/>
+                    <rect x="8" y="8" width="364" height="604" rx="6" fill="none" stroke="rgba(234,229,220,0.08)" stroke-width="1.5"/>
 
-                    <!-- Zone labels -->
-                    <text x="90" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">У окна</text>
-                    <text x="270" y="30" text-anchor="middle" font-size="9" class="fp-zone-label">Основной зал</text>
-                    <text x="176" y="225" text-anchor="middle" font-size="9" class="fp-zone-label">Лаунж-зона</text>
+                    <!-- ВХОД -->
+                    <text x="20" y="140" font-size="11" fill="rgba(234,229,220,0.25)" font-family="Montserrat" font-weight="700" letter-spacing="2">ВХОД</text>
+                    <line x1="65" y1="135" x2="100" y2="135" stroke="rgba(234,229,220,0.15)" stroke-width="1"/>
+                    <polygon points="100,135 93,130 93,140" fill="rgba(234,229,220,0.15)"/>
 
-                    <line x1="176" y1="8" x2="176" y2="210" class="fp-wall" stroke-dasharray="4 4"/>
-                    <line x1="8" y1="210" x2="345" y2="210" class="fp-wall"/>
+                    <!-- БАР -->
+                    <rect x="30" y="175" width="90" height="180" rx="6" fill="rgba(234,229,220,0.03)" stroke="rgba(234,229,220,0.06)" stroke-width="1"/>
+                    <text x="75" y="275" text-anchor="middle" font-size="14" fill="rgba(234,229,220,0.15)" font-family="Montserrat" font-weight="700" letter-spacing="3" transform="rotate(-90, 75, 275)">БАР</text>
 
-                    <!-- Window tables -->
-                    <g class="fp-table" data-table="R1" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="24" y="46" width="64" height="64" fill="#1a2a2b"/>
-                        <circle cx="56" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="56" y="74" text-anchor="middle" font-size="11" class="fp-label">R1</text>
-                        <text x="56" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">2 места</text>
-                        <circle class="fp-status" cx="78" cy="52" r="4" fill="#5a9963"/>
-                    </g>
-                    <g class="fp-table" data-table="R2" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="96" y="46" width="64" height="64" fill="#1a2a2b"/>
-                        <circle cx="128" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="128" y="74" text-anchor="middle" font-size="11" class="fp-label">R2</text>
-                        <text x="128" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">2 места</text>
-                        <circle class="fp-status" cx="150" cy="52" r="4" fill="#5a9963"/>
-                    </g>
-                    <g class="fp-table occupied" data-table="R3" data-type="Ресторан, у окна" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="24" y="120" width="136" height="72" fill="#1a2a2b"/>
-                        <rect x="44" y="134" width="96" height="44" rx="22" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="92" y="156" text-anchor="middle" font-size="11" class="fp-label">R3</text>
-                        <text x="92" y="170" text-anchor="middle" font-size="7" class="fp-sublabel">6 мест</text>
-                        <circle class="fp-status" cx="148" cy="128" r="4" fill="#b34444"/>
-                    </g>
+                    <!-- Arrow to billiard -->
+                    <text x="330" y="140" text-anchor="middle" font-size="8" fill="rgba(234,229,220,0.2)" font-family="Montserrat" font-weight="600" letter-spacing="1">БИЛЬЯРДНЫЙ</text>
+                    <text x="330" y="152" text-anchor="middle" font-size="8" fill="rgba(234,229,220,0.2)" font-family="Montserrat" font-weight="600" letter-spacing="1">ЗАЛ</text>
+                    <line x1="290" y1="145" x2="360" y2="145" stroke="rgba(234,229,220,0.1)" stroke-width="1"/>
+                    <polygon points="360,145 353,140 353,150" fill="rgba(234,229,220,0.1)"/>
 
-                    <!-- Main hall -->
-                    <g class="fp-table" data-table="R4" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="192" y="46" width="64" height="64" fill="#1a2a2b"/>
-                        <circle cx="224" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="224" y="74" text-anchor="middle" font-size="11" class="fp-label">R4</text>
-                        <text x="224" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">4 места</text>
-                        <circle class="fp-status" cx="246" cy="52" r="4" fill="#5a9963"/>
+                    <!-- === TOP ROW: 201, 202, 203, 204 === -->
+                    <g class="fp-table" data-table="201" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="30" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <text x="66" y="62" text-anchor="middle" font-size="14" class="fp-label">201</text>
                     </g>
-                    <g class="fp-table" data-table="R5" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="266" y="46" width="64" height="64" fill="#1a2a2b"/>
-                        <circle cx="298" cy="78" r="18" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="298" y="74" text-anchor="middle" font-size="11" class="fp-label">R5</text>
-                        <text x="298" y="86" text-anchor="middle" font-size="7" class="fp-sublabel">4 места</text>
-                        <circle class="fp-status" cx="320" cy="52" r="4" fill="#b34444"/>
+                    <g class="fp-table" data-table="202" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="110" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <text x="146" y="62" text-anchor="middle" font-size="14" class="fp-label">202</text>
                     </g>
-                    <g class="fp-table" data-table="R6" data-type="Ресторан, основной зал" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="192" y="120" width="138" height="72" fill="#1a2a2b"/>
-                        <rect x="212" y="134" width="98" height="44" rx="22" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="261" y="156" text-anchor="middle" font-size="11" class="fp-label">R6</text>
-                        <text x="261" y="170" text-anchor="middle" font-size="7" class="fp-sublabel">8 мест</text>
-                        <circle class="fp-status" cx="318" cy="128" r="4" fill="#5a9963"/>
+                    <g class="fp-table" data-table="203" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="190" y="30" width="72" height="52" fill="#1a5c32" rx="4"/>
+                        <text x="226" y="62" text-anchor="middle" font-size="14" class="fp-label">203</text>
+                    </g>
+                    <g class="fp-table occupied" data-table="204" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="270" y="30" width="72" height="52" fill="#5c1a2a" rx="4"/>
+                        <text x="306" y="62" text-anchor="middle" font-size="14" class="fp-label">204</text>
                     </g>
 
-                    <!-- Lounge -->
-                    <g class="fp-table" data-table="R7" data-type="Ресторан, лаунж" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="24" y="240" width="96" height="76" fill="#1a2a2b"/>
-                        <rect x="36" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="72" y="278" text-anchor="middle" font-size="11" class="fp-label">R7</text>
-                        <text x="72" y="292" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 4 м.</text>
-                        <circle class="fp-status" cx="110" cy="248" r="4" fill="#5a9963"/>
+                    <!-- === RIGHT COLUMN: 205-209 === -->
+                    <g class="fp-table" data-table="205" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="220" y="175" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="256" y="202" text-anchor="middle" font-size="13" class="fp-label">205</text>
                     </g>
-                    <g class="fp-table occupied" data-table="R8" data-type="Ресторан, лаунж" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="130" y="240" width="96" height="76" fill="#1a2a2b"/>
-                        <rect x="142" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(234,229,220,0.08)" stroke-width="1"/>
-                        <text x="178" y="278" text-anchor="middle" font-size="11" class="fp-label">R8</text>
-                        <text x="178" y="292" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 4 м.</text>
-                        <circle class="fp-status" cx="216" cy="248" r="4" fill="#b34444"/>
+                    <g class="fp-table" data-table="206" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="220" y="224" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="256" y="251" text-anchor="middle" font-size="13" class="fp-label">206</text>
                     </g>
-                    <g class="fp-table" data-table="R9" data-type="Ресторан, лаунж VIP" data-price="0" onclick="selectFloorTable(this)">
-                        <rect class="fp-table-bg" x="236" y="240" width="96" height="76" fill="#1a2a2b" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
-                        <rect x="248" y="252" width="72" height="52" rx="8" fill="#0f2020" stroke="rgba(201,168,76,0.1)" stroke-width="1"/>
-                        <text x="284" y="270" text-anchor="middle" font-size="7" fill="#c9a84c" font-weight="700" font-family="Montserrat">VIP</text>
-                        <text x="284" y="284" text-anchor="middle" font-size="11" class="fp-label">R9</text>
-                        <text x="284" y="298" text-anchor="middle" font-size="7" class="fp-sublabel">Диван, 6 м.</text>
-                        <circle class="fp-status" cx="322" cy="248" r="4" fill="#5a9963"/>
+                    <g class="fp-table" data-table="207" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="220" y="273" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="256" y="300" text-anchor="middle" font-size="13" class="fp-label">207</text>
+                    </g>
+                    <g class="fp-table" data-table="208" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="220" y="322" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="256" y="349" text-anchor="middle" font-size="13" class="fp-label">208</text>
+                    </g>
+                    <g class="fp-table" data-table="209" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="220" y="371" width="72" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="256" y="398" text-anchor="middle" font-size="13" class="fp-label">209</text>
                     </g>
 
-                    <text x="330" y="330" text-anchor="end" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">КАЛЬЯНЫ →</text>
-                    <text x="24" y="330" text-anchor="start" font-size="7" fill="rgba(234,229,220,0.15)" font-family="Montserrat">← БИЛЬЯРД</text>
+                    <!-- === LEFT SMALL TABLES: 35-38 === -->
+                    <g class="fp-table" data-table="35" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="140" y="250" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="159" y="270" text-anchor="middle" font-size="11" class="fp-label">35</text>
+                    </g>
+                    <g class="fp-table" data-table="36" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="140" y="286" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="159" y="306" text-anchor="middle" font-size="11" class="fp-label">36</text>
+                    </g>
+                    <g class="fp-table" data-table="37" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="140" y="322" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="159" y="342" text-anchor="middle" font-size="11" class="fp-label">37</text>
+                    </g>
+                    <g class="fp-table occupied" data-table="38" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="140" y="358" width="38" height="30" fill="#5c1a2a" rx="3"/>
+                        <text x="159" y="378" text-anchor="middle" font-size="11" class="fp-label">38</text>
+                    </g>
+
+                    <!-- === BOTTOM LEFT: 39, 40, 41 === -->
+                    <g class="fp-table" data-table="39" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="118" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="137" y="440" text-anchor="middle" font-size="11" class="fp-label">39</text>
+                    </g>
+                    <g class="fp-table" data-table="40" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="75" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="94" y="440" text-anchor="middle" font-size="11" class="fp-label">40</text>
+                    </g>
+                    <g class="fp-table" data-table="41" data-type="Барная зона" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="32" y="420" width="38" height="30" fill="#1a5c32" rx="3"/>
+                        <text x="51" y="440" text-anchor="middle" font-size="11" class="fp-label">41</text>
+                    </g>
+
+                    <!-- === MIDDLE: 217 (round, occupied) === -->
+                    <g class="fp-table occupied" data-table="217" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <circle cx="130" cy="495" r="26" fill="#5c1a2a" class="fp-table-bg"/>
+                        <text x="130" y="500" text-anchor="middle" font-size="13" class="fp-label">217</text>
+                    </g>
+
+                    <!-- === CENTER: 215, 216 === -->
+                    <g class="fp-table" data-table="216" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="200" y="480" width="50" height="36" fill="#1a5c32" rx="3"/>
+                        <text x="225" y="504" text-anchor="middle" font-size="12" class="fp-label">216</text>
+                    </g>
+                    <g class="fp-table" data-table="215" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="258" y="480" width="50" height="36" fill="#1a5c32" rx="3"/>
+                        <text x="283" y="504" text-anchor="middle" font-size="12" class="fp-label">215</text>
+                    </g>
+
+                    <!-- === RIGHT: 210 (occupied, large) === -->
+                    <g class="fp-table occupied" data-table="210" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="316" y="470" width="50" height="56" fill="#5c1a2a" rx="4"/>
+                        <text x="341" y="504" text-anchor="middle" font-size="13" class="fp-label">210</text>
+                    </g>
+
+                    <!-- === BOTTOM ROW: 214, 213, 212, 211 === -->
+                    <g class="fp-table" data-table="214" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="80" y="555" width="60" height="42" fill="#1a5c32" rx="4"/>
+                        <text x="110" y="582" text-anchor="middle" font-size="13" class="fp-label">214</text>
+                    </g>
+                    <g class="fp-table occupied" data-table="213" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="148" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <text x="178" y="582" text-anchor="middle" font-size="13" class="fp-label">213</text>
+                    </g>
+                    <g class="fp-table occupied" data-table="212" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="216" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <text x="246" y="582" text-anchor="middle" font-size="13" class="fp-label">212</text>
+                    </g>
+                    <g class="fp-table occupied" data-table="211" data-type="Основной зал" data-price="0" onclick="selectFloorTable(this)">
+                        <rect class="fp-table-bg" x="284" y="555" width="60" height="42" fill="#5c1a2a" rx="4"/>
+                        <text x="314" y="582" text-anchor="middle" font-size="13" class="fp-label">211</text>
+                    </g>
                 </svg>
             </div>
             </div>
