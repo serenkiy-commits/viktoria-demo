@@ -1358,21 +1358,30 @@
         .tip-btn:active { transform: scale(0.95); }
 
         /* ============ BOTTOM NAV ============ */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-content::-webkit-scrollbar { display: none; }
+
         .bottom-nav {
-            position: sticky;
+            position: relative;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 26, 28, 0.95);
+            background: rgba(10, 26, 28, 0.97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid transparent;
-            border-image: linear-gradient(90deg, transparent, rgba(45,212,160,0.2), rgba(201,168,76,0.15), transparent) 1;
+            border-top: 1px solid rgba(45,212,160,0.12);
             display: flex;
             justify-content: space-around;
             padding: 6px 0;
             padding-bottom: 20px;
-            z-index: 100;
+            z-index: 150;
+            flex-shrink: 0;
         }
 
         .nav-item {
@@ -1545,8 +1554,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
             border-radius: 50px;
             scrollbar-width: none;
@@ -1700,7 +1709,18 @@
                 display: none;
             }
             .demo-title { display: none; }
-            .bottom-nav { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+            .scroll-content {
+                overflow: visible;
+                flex: none;
+                padding-bottom: 70px;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding-bottom: max(8px, env(safe-area-inset-bottom));
+            }
         }
     </style>
 </head>
@@ -1765,6 +1785,7 @@
     </div>
 
     <!-- ========== HEADER ========== -->
+    <div class="scroll-content" id="scrollContent">
     <div class="header" id="appHeader" style="display:none;">
         <div class="header-left">
             <div class="logo"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория"></div>
@@ -2620,6 +2641,8 @@
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
+
+    </div><!-- /scroll-content -->
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav" id="bottomNav" style="display:none;">
