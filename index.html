@@ -106,19 +106,19 @@
         .welcome-logo {
             width: 100px;
             height: 100px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 48px;
-            color: white;
+            overflow: hidden;
             box-shadow: 0 0 60px rgba(45,212,160,0.3), 0 0 120px rgba(45,212,160,0.1);
             margin-bottom: 24px;
             animation: logoPulse 3s ease-in-out infinite;
             position: relative;
             z-index: 1;
+        }
+
+        .welcome-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         @keyframes logoPulse {
@@ -167,6 +167,166 @@
             box-shadow: 0 0 40px rgba(45,212,160,0.4), 0 4px 20px rgba(0,0,0,0.3);
         }
 
+        .tg-login-btn {
+            padding: 18px 48px;
+            background: linear-gradient(135deg, #2AABEE, #229ED9);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(42,171,238,0.3), 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tg-login-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 0 40px rgba(42,171,238,0.4), 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .tg-login-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        /* ============ CONFIRM SCREEN ============ */
+        .confirm-screen {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #0a1a1c 0%, #061210 40%, #0d2a1a 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 250;
+            padding: 40px 30px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .confirm-screen.visible {
+            display: flex;
+        }
+
+        .confirm-screen.hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .confirm-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 0 40px rgba(45,212,160,0.25);
+        }
+
+        .confirm-avatar svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .confirm-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .confirm-phone {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .confirm-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 28px;
+            max-width: 280px;
+        }
+
+        .confirm-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px 18px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .confirm-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(45,212,160,0.15);
+        }
+
+        .confirm-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+            max-width: 300px;
+        }
+
+        .confirm-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .confirm-checkbox label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .confirm-continue-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(45,212,160,0.3), 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .confirm-continue-btn:active {
+            transform: scale(0.97);
+        }
+
+        .confirm-continue-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         /* ============ HEADER ============ */
         .header {
             padding: 16px 20px 14px;
@@ -191,15 +351,15 @@
         .logo {
             width: 38px;
             height: 38px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 17px;
-            color: white;
+            overflow: hidden;
             box-shadow: 0 0 20px rgba(45,212,160,0.2);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .header-title {
@@ -254,8 +414,9 @@
         }
 
         .zone-tab.active {
-            color: var(--accent-light);
+            color: #fff;
             border-bottom-color: var(--accent);
+            text-shadow: 0 0 10px rgba(45,212,160,0.4);
         }
 
         /* ============ VIEW TOGGLE ============ */
@@ -288,10 +449,10 @@
         }
 
         .view-toggle-btn.active {
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(16,42,44,0.8), rgba(20,56,58,0.6));
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 0 12px rgba(45,212,160,0.15);
+            border: 1px solid rgba(45,212,160,0.25);
         }
 
         /* ============ PAGES ============ */
@@ -309,10 +470,12 @@
 
         /* ============ SECTION TITLES ============ */
         .section-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             margin: 22px 0 12px;
             color: var(--text-primary);
+            padding-left: 12px;
+            border-left: 3px solid var(--accent);
         }
 
         .section-subtitle {
@@ -419,13 +582,18 @@
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid transparent;
             border-radius: var(--radius);
             padding: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            background-clip: padding-box;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 0 0 1px rgba(45,212,160,0.1);
+            background-image: linear-gradient(var(--glass-bg), var(--glass-bg)), linear-gradient(135deg, rgba(45,212,160,0.2), rgba(45,212,160,0.05), rgba(45,212,160,0.15));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
         }
 
         .table-card::before {
@@ -1227,7 +1395,12 @@
         }
 
         .nav-item.active {
-            color: var(--accent-light);
+            color: #fff;
+            text-shadow: 0 0 12px rgba(45,212,160,0.5);
+        }
+
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 6px rgba(45,212,160,0.4));
         }
 
         .nav-item.active::before {
@@ -1241,6 +1414,19 @@
             background: var(--accent);
             border-radius: 2px;
             box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            box-shadow: 0 0 6px var(--accent-glow);
         }
 
         .nav-icon { font-size: 20px; }
@@ -1542,16 +1728,35 @@
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-bg-orb orb1"></div>
         <div class="welcome-bg-orb orb2"></div>
-        <div class="welcome-logo">V</div>
+        <div class="welcome-logo"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория"></div>
         <div class="welcome-title">ВИКТОРИЯ</div>
         <div class="welcome-subtitle">бильярд и рестобар</div>
-        <button class="welcome-btn" onclick="dismissWelcome()">Забронировать стол</button>
+        <button class="tg-login-btn" onclick="showConfirmScreen()">
+            <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Войти через Telegram
+        </button>
+    </div>
+
+    <!-- ========== CONFIRM SCREEN ========== -->
+    <div class="confirm-screen" id="confirmScreen">
+        <div class="confirm-avatar">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <div class="confirm-name">Иван Петров</div>
+        <div class="confirm-phone">+7 (985) ***-**-42</div>
+        <div class="confirm-hint">Telegram автоматически передал ваши данные.<br>Регистрация не требуется.</div>
+        <input type="text" class="confirm-input" id="confirmName" value="Иван" placeholder="Как к вам обращаться?">
+        <div class="confirm-checkbox">
+            <input type="checkbox" id="confirmAgree" onchange="toggleContinueBtn()">
+            <label for="confirmAgree">Согласен с условиями обслуживания</label>
+        </div>
+        <button class="confirm-continue-btn" id="confirmContinueBtn" disabled onclick="dismissWelcome()">Продолжить</button>
     </div>
 
     <!-- ========== HEADER ========== -->
     <div class="header" id="appHeader" style="display:none;">
         <div class="header-left">
-            <div class="logo">V</div>
+            <div class="logo"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория"></div>
             <div>
                 <div class="header-title">ВИКТОРИЯ</div>
                 <div class="header-subtitle">бильярд и рестобар</div>
@@ -2311,7 +2516,7 @@
                 <div id="venueResponse" style="display:none; margin-top:12px;" class="glass-card">
                     <div style="border-left:3px solid var(--accent); padding-left:12px;">
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;">V</div>
+                            <div style="width:30px;height:30px;border-radius:50%;overflow:hidden;box-shadow:0 0 8px rgba(45,212,160,0.2);"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
                             <div>
                                 <div style="font-size:12px; font-weight:700;">Виктория</div>
                                 <div style="font-size:10px; color:var(--text-muted);">только что</div>
@@ -2377,7 +2582,7 @@
                 <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
                 <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--accent);">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                        <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;">V</div>
+                        <div style="width:22px;height:22px;border-radius:50%;overflow:hidden;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
                         <span style="font-size:10px; color:var(--accent-light); font-weight:600;">Виктория</span>
                     </div>
                     <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
@@ -2392,7 +2597,7 @@
                 <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
                 <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--gold); margin-top:8px;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                        <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;">V</div>
+                        <div style="width:22px;height:22px;border-radius:50%;overflow:hidden;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:100%;object-fit:cover;"></div>
                         <span style="font-size:10px; color:var(--gold); font-weight:600;">Виктория</span>
                     </div>
                     <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
@@ -2493,16 +2698,30 @@
         return document.getElementById('bookingDate').value;
     }
 
-    // Welcome screen
-    function dismissWelcome() {
+    // Welcome & auth screens
+    function showConfirmScreen() {
         const ws = document.getElementById('welcomeScreen');
         ws.classList.add('hidden');
         setTimeout(() => {
             ws.style.display = 'none';
+            document.getElementById('confirmScreen').classList.add('visible');
+        }, 600);
+    }
+
+    function toggleContinueBtn() {
+        const cb = document.getElementById('confirmAgree');
+        const btn = document.getElementById('confirmContinueBtn');
+        btn.disabled = !cb.checked;
+    }
+
+    function dismissWelcome() {
+        const cs = document.getElementById('confirmScreen');
+        cs.classList.add('hidden');
+        setTimeout(() => {
+            cs.style.display = 'none';
             document.getElementById('appHeader').style.display = 'flex';
             document.getElementById('zoneTabs').style.display = 'flex';
             document.getElementById('bottomNav').style.display = 'flex';
-            // Trigger progress bar animation if on loyalty page
             animateProgressBar();
         }, 600);
     }
