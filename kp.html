@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КП — Цифровая экосистема для рестобара «Виктория»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-start:#0a1a1c;--bg-end:#061210;
+  --text:#eae5dc;--text-sec:#a09888;
+  --emerald:#10b981;--gold:#f59e0b;
+  --glass:rgba(16,185,129,.06);--glass-border:rgba(16,185,129,.15);
+  --card-bg:rgba(10,26,28,.65);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(180deg,var(--bg-start),var(--bg-end));
+  color:var(--text);
+  line-height:1.7;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--emerald);color:#000}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(6,18,16,.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-border);
+  padding:0 1.5rem;
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:1rem;
+  height:56px;overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav a{
+  color:var(--text-sec);text-decoration:none;font-size:.75rem;font-weight:500;
+  white-space:nowrap;letter-spacing:.03em;text-transform:uppercase;
+  transition:color .3s;
+}
+.nav a:hover,.nav a:focus{color:var(--emerald)}
+.nav-logo{height:28px;margin-right:.5rem;flex-shrink:0}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+section{padding:5rem 0}
+.section-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--glass-border),transparent);
+  margin:0 auto;max-width:800px;
+}
+
+/* FADE IN */
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* HEADINGS */
+.section-label{
+  font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--emerald);font-weight:600;margin-bottom:.5rem;
+}
+.section-title{
+  font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;
+  line-height:1.2;margin-bottom:1rem;
+}
+.section-sub{color:var(--text-sec);font-size:.95rem;max-width:650px;line-height:1.7}
+
+/* GLASS CARD */
+.glass{
+  background:var(--card-bg);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:2rem;
+}
+.glass-sm{padding:1.5rem;border-radius:12px}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 2rem;border-radius:12px;font-weight:700;
+  font-size:1rem;text-decoration:none;cursor:pointer;border:none;
+  transition:transform .2s,box-shadow .3s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-emerald{
+  background:linear-gradient(135deg,#059669,var(--emerald));
+  color:#fff;
+  box-shadow:0 0 24px rgba(16,185,129,.3);
+}
+.btn-emerald:hover{box-shadow:0 0 40px rgba(16,185,129,.5)}
+.btn-gold{
+  background:linear-gradient(135deg,#d97706,var(--gold));
+  color:#000;
+  box-shadow:0 0 24px rgba(245,158,11,.25);
+}
+.btn-gold:hover{box-shadow:0 0 40px rgba(245,158,11,.45)}
+.btn-outline{
+  background:transparent;border:1px solid var(--glass-border);color:var(--text);
+}
+.btn-outline:hover{border-color:var(--emerald);color:var(--emerald)}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+
+/* TABLES */
+.styled-table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  font-size:.88rem;
+}
+.styled-table th{
+  background:rgba(16,185,129,.12);color:var(--emerald);
+  text-align:left;padding:.75rem 1rem;font-weight:600;
+  border-bottom:1px solid var(--glass-border);
+}
+.styled-table th:first-child{border-radius:10px 0 0 0}
+.styled-table th:last-child{border-radius:0 10px 0 0}
+.styled-table td{
+  padding:.75rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);
+  color:var(--text-sec);
+}
+.styled-table tr:last-child td{border-bottom:none}
+.styled-table tr:hover td{background:rgba(16,185,129,.04)}
+.price-highlight{color:var(--gold);font-weight:700;font-size:1.1rem}
+
+/* BADGES */
+.badge{
+  display:inline-block;padding:.25rem .7rem;border-radius:999px;
+  font-size:.7rem;font-weight:600;letter-spacing:.04em;
+}
+.badge-emerald{background:rgba(16,185,129,.15);color:var(--emerald)}
+.badge-gold{background:rgba(245,158,11,.15);color:var(--gold)}
+.badge-red{background:rgba(239,68,68,.15);color:#ef4444}
+
+/* PAIN CARD */
+.pain-card{
+  background:rgba(239,68,68,.05);
+  border:1px solid rgba(239,68,68,.2);
+  border-radius:12px;padding:1.25rem 1.5rem;
+  margin-bottom:.75rem;
+}
+.pain-icon{font-size:1.2rem;margin-right:.5rem}
+
+/* HERO */
+.hero{
+  min-height:70vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:6rem 1.5rem 4rem;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(ellipse at 50% 30%,rgba(16,185,129,.08) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero-logo{height:80px;margin-bottom:2rem;filter:drop-shadow(0 0 30px rgba(16,185,129,.3))}
+.hero h1{
+  font-size:clamp(2rem,5vw,3.2rem);font-weight:900;
+  line-height:1.15;margin-bottom:1rem;
+}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--emerald),#34d399);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{color:var(--text-sec);font-size:clamp(.9rem,2vw,1.15rem);max-width:550px}
+
+/* STEP INDICATOR */
+.step-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:10px;font-weight:800;font-size:.9rem;
+  background:linear-gradient(135deg,var(--emerald),#059669);color:#fff;
+  flex-shrink:0;
+}
+
+/* FLOW */
+.flow{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;
+  padding:1rem 0;
+}
+.flow-step{
+  background:var(--card-bg);border:1px solid var(--glass-border);
+  border-radius:10px;padding:.6rem 1rem;font-size:.8rem;font-weight:500;
+  white-space:nowrap;
+}
+.flow-arrow{color:var(--emerald);font-weight:700;font-size:1.1rem}
+
+/* ENTRY POINT */
+.entry-point{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.75rem 1rem;border-radius:10px;
+  background:var(--card-bg);border:1px solid var(--glass-border);
+  font-size:.88rem;
+}
+.entry-icon{font-size:1.3rem;flex-shrink:0}
+
+/* CTA SECTION */
+.cta-section{
+  text-align:center;padding:5rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 50%,rgba(16,185,129,.06) 0%,transparent 70%);
+}
+
+/* FEEDBACK LIST */
+.feedback-list{list-style:none;counter-reset:fb}
+.feedback-list li{
+  counter-increment:fb;padding:.6rem 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.9rem;color:var(--text-sec);
+}
+.feedback-list li::before{
+  content:counter(fb) ".";color:var(--emerald);font-weight:700;margin-right:.5rem;
+}
+
+/* COMPARISON CHECK/CROSS */
+.check{color:var(--emerald)}
+.cross{color:#ef4444}
+
+/* PRICING CARD */
+.pricing-card{text-align:center;position:relative;overflow:hidden}
+.pricing-card.featured{
+  border-color:var(--gold);
+  box-shadow:0 0 40px rgba(245,158,11,.1);
+}
+.pricing-card.featured::before{
+  content:'Популярный';position:absolute;top:12px;right:-30px;
+  background:var(--gold);color:#000;font-size:.65rem;font-weight:700;
+  padding:.2rem 2.5rem;transform:rotate(45deg);letter-spacing:.05em;
+}
+.pricing-amount{
+  font-size:clamp(2rem,5vw,2.8rem);font-weight:900;color:var(--gold);
+  margin:.75rem 0 .25rem;
+}
+.pricing-amount small{font-size:.5em;font-weight:400;color:var(--text-sec)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  section{padding:3.5rem 0}
+  .glass{padding:1.25rem}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .hero{min-height:auto;padding:5rem 1.5rem 3rem}
+  .styled-table{font-size:.78rem}
+  .styled-table th,.styled-table td{padding:.5rem .6rem}
+  .nav-inner{gap:.6rem}
+}
+@media(max-width:480px){
+  .hero-logo{height:56px}
+  .btn{padding:.7rem 1.4rem;font-size:.9rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория" class="nav-logo">
+    <a href="#demo">Демо</a>
+    <a href="#resta">Resta</a>
+    <a href="#problem">Проблема</a>
+    <a href="#solution">Решение</a>
+    <a href="#entry">Внедрение</a>
+    <a href="#pricing">Стоимость</a>
+    <a href="#why-mini">Mini App</a>
+    <a href="#need">Что нужно</a>
+    <a href="#journey">Путь гостя</a>
+    <a href="#next">Старт</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория" class="hero-logo fade-in">
+  <p class="fade-in" style="color:var(--emerald);font-weight:600;letter-spacing:.1em;font-size:.8rem;text-transform:uppercase;margin-bottom:.5rem">Коммерческое предложение</p>
+  <h1 class="fade-in">Цифровая экосистема<br>для рестобара <span>«Виктория»</span></h1>
+  <p class="fade-in" style="margin-top:1rem">Автоматизация бронирования, лояльность, AI-отзывы и голосовой агент в одном решении</p>
+  <div style="margin-top:2rem" class="fade-in">
+    <a href="#demo" class="btn btn-emerald">Посмотреть демо</a>
+  </div>
+</header>
+
+<div class="section-divider"></div>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Прототип</p>
+      <h2 class="section-title">Интерактивный демо-прототип</h2>
+      <p class="section-sub">Подготовили интерактивный прототип приложения. Откройте с телефона для лучшего опыта:</p>
+    </div>
+    <div style="margin:2.5rem 0;text-align:center" class="fade-in">
+      <a href="https://serenkiy-commits.github.io/viktoria-demo/" target="_blank" class="btn btn-emerald" style="font-size:1.1rem;padding:1rem 3rem">
+        📱 Открыть демо-прототип
+      </a>
+      <p style="margin-top:.75rem;font-size:.8rem;color:var(--text-sec)">Демо-версия — дорабатывается по вашим замечаниям</p>
+    </div>
+    <div class="glass fade-in" style="max-width:700px;margin:0 auto">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--emerald)">Обратная связь по прототипу</h3>
+      <ul class="feedback-list">
+        <li>Что убрать, добавить или изменить?</li>
+        <li>Устраивает ли стиль, цвета и фон?</li>
+        <li>Корректны ли столы, тарифы и депозиты?</li>
+        <li>Какие функции не хватает?</li>
+        <li>Хотите добавить реальные фото столов?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- RESTA PLACE -->
+<section id="resta">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Интеграция</p>
+      <h2 class="section-title">Совместимость с Resta Place</h2>
+    </div>
+    <div class="grid-2" style="margin-top:2rem">
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">API изучен</h3>
+        <p style="font-size:.9rem;color:var(--text-sec)">Все необходимые методы Resta Place API доступны и проверены: управление бронированиями, столы, статусы, депозиты.</p>
+        <div style="margin-top:1rem">
+          <span class="badge badge-emerald">✓ Бронирования</span>
+          <span class="badge badge-emerald" style="margin-left:.3rem">✓ Столы</span>
+          <span class="badge badge-emerald" style="margin-left:.3rem">✓ Депозиты</span>
+        </div>
+      </div>
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Требования</h3>
+        <p style="font-size:.9rem;color:var(--text-sec);margin-bottom:1rem">Для полной интеграции нужен тариф <strong style="color:var(--gold)">PRO+</strong> в Resta Place.</p>
+        <div style="border-top:1px solid var(--glass-border);padding-top:1rem">
+          <p style="font-size:.85rem;font-weight:600;margin-bottom:.5rem;color:var(--emerald)">Два вопроса к вам:</p>
+          <p style="font-size:.85rem;color:var(--text-sec)">1. Какой тариф Resta Place сейчас подключён?</p>
+          <p style="font-size:.85rem;color:var(--text-sec)">2. Готовы ли перейти на PRO+ при необходимости?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Проблема</p>
+      <h2 class="section-title">Текущая ситуация с колл-центром</h2>
+      <p class="section-sub">Типичные болевые точки телефонного бронирования</p>
+    </div>
+    <div style="margin-top:2rem;max-width:750px">
+      <div class="pain-card fade-in">
+        <span class="pain-icon">⚠️</span>
+        <strong>Путаница в бронировании</strong> — столы бронируются одновременно по телефону и в системе, случаются задвоения
+      </div>
+      <div class="pain-card fade-in">
+        <span class="pain-icon">⏱️</span>
+        <strong>3-5 минут на звонок</strong> вместо 30 секунд — оператор уточняет дату, время, количество гостей, стол, депозит
+      </div>
+      <div class="pain-card fade-in">
+        <span class="pain-icon">📵</span>
+        <strong>Недозвоны</strong> — в часы пик линия занята, гости уходят к конкурентам
+      </div>
+      <div class="pain-card fade-in">
+        <span class="pain-icon">😐</span>
+        <strong>Человеческий фактор</strong> — интонация, настроение, ошибки в записи
+      </div>
+      <div class="pain-card fade-in">
+        <span class="pain-icon">🔄</span>
+        <strong>80% звонков — простое бронирование</strong>, которое легко автоматизируется
+      </div>
+      <div class="pain-card fade-in">
+        <span class="pain-icon">💸</span>
+        <strong>Стоимость оператора</strong> — зарплата, обучение, текучка, при этом ночью/рано утром никто не отвечает
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Решение</p>
+      <h2 class="section-title">Три этапа внедрения</h2>
+    </div>
+
+    <!-- ЭТАП 1 -->
+    <div style="margin-top:3rem" class="fade-in">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+        <span class="step-num">1</span>
+        <div>
+          <h3 style="font-size:1.2rem;font-weight:700">Mini App + AI-отзывы</h3>
+          <p style="font-size:.8rem;color:var(--text-sec)">Основной продукт</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="glass glass-sm">
+          <h4 style="font-size:.85rem;font-weight:700;color:var(--emerald);margin-bottom:.75rem">Для гостя</h4>
+          <ul style="list-style:none;font-size:.85rem;color:var(--text-sec)">
+            <li style="padding:.3rem 0">✦ Авторизация через Telegram</li>
+            <li style="padding:.3rem 0">✦ Интерактивная карта зала</li>
+            <li style="padding:.3rem 0">✦ Бронирование в 3 клика</li>
+            <li style="padding:.3rem 0">✦ Оплата депозита (ЮKassa)</li>
+            <li style="padding:.3rem 0">✦ Программа лояльности (Luna)</li>
+            <li style="padding:.3rem 0">✦ Чаевые персоналу</li>
+            <li style="padding:.3rem 0">✦ Отзывы с AI-помощником</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm">
+          <h4 style="font-size:.85rem;font-weight:700;color:var(--emerald);margin-bottom:.75rem">AI-модерация отзывов</h4>
+          <ul style="list-style:none;font-size:.85rem;color:var(--text-sec)">
+            <li style="padding:.3rem 0">✦ Фильтрация мата и спама</li>
+            <li style="padding:.3rem 0">✦ Улучшение текста (стиль, грамматика)</li>
+            <li style="padding:.3rem 0">✦ Автоматические ответы от заведения</li>
+            <li style="padding:.3rem 0">✦ Анализ тональности</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm">
+          <h4 style="font-size:.85rem;font-weight:700;color:var(--emerald);margin-bottom:.75rem">Для руководства</h4>
+          <ul style="list-style:none;font-size:.85rem;color:var(--text-sec)">
+            <li style="padding:.3rem 0">✦ Алерты о негативных отзывах</li>
+            <li style="padding:.3rem 0">✦ Кнопки: последние отзывы, статистика</li>
+            <li style="padding:.3rem 0">✦ Темы жалоб, тренды</li>
+            <li style="padding:.3rem 0">✦ Загрузка: сегодня / неделя / месяц</li>
+            <li style="padding:.3rem 0">✦ Еженедельный AI-отчёт</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ЭТАП 2 -->
+    <div style="margin-top:3rem" class="fade-in">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+        <span class="step-num">2</span>
+        <div>
+          <h3 style="font-size:1.2rem;font-weight:700">Голосовой AI-агент</h3>
+          <p style="font-size:.8rem;color:var(--text-sec)">Замена колл-центра</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="glass glass-sm">
+          <h4 style="font-size:.85rem;font-weight:700;color:var(--emerald);margin-bottom:.75rem">Возможности</h4>
+          <ul style="list-style:none;font-size:.85rem;color:var(--text-sec)">
+            <li style="padding:.3rem 0">✦ Работает 24/7 без выходных</li>
+            <li style="padding:.3rem 0">✦ Естественный русский язык</li>
+            <li style="padding:.3rem 0">✦ Персонализация по данным amoCRM</li>
+            <li style="padding:.3rem 0">✦ Бронирование голосом</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm">
+          <h4 style="font-size:.85rem;font-weight:700;color:var(--emerald);margin-bottom:.75rem">Подключение к номеру</h4>
+          <div style="overflow-x:auto">
+            <table class="styled-table" style="font-size:.8rem">
+              <tr><th>Параметр</th><th>Переадресация</th><th>Перенос номера</th></tr>
+              <tr><td>Сложность</td><td>Простая</td><td>Средняя</td></tr>
+              <tr><td>Сроки</td><td>1 день</td><td>5-7 дней</td></tr>
+              <tr><td>Текущий номер</td><td>Сохраняется</td><td>Переносится</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ЭТАП 3 -->
+    <div style="margin-top:3rem" class="fade-in">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+        <span class="step-num">3</span>
+        <div>
+          <h3 style="font-size:1.2rem;font-weight:700">Реактивация базы</h3>
+          <p style="font-size:.8rem;color:var(--text-sec)">Возврат остывших клиентов</p>
+        </div>
+      </div>
+      <div class="glass glass-sm" style="max-width:600px">
+        <ul style="list-style:none;font-size:.85rem;color:var(--text-sec)">
+          <li style="padding:.3rem 0">✦ Автоматический обзвон «остывших» клиентов из amoCRM</li>
+          <li style="padding:.3rem 0">✦ Персонализированные предложения на основе истории визитов</li>
+          <li style="padding:.3rem 0">✦ AI-агент ведёт диалог, предлагает акции и бронирует</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ENTRY POINTS -->
+<section id="entry">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Внедрение</p>
+      <h2 class="section-title">Куда внедрить Mini App</h2>
+      <p class="section-sub">7 точек входа для гостей</p>
+    </div>
+    <div class="grid-2" style="margin-top:2rem">
+      <div class="entry-point fade-in"><span class="entry-icon">📷</span><div><strong>QR-коды на столах</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Сканировал — сразу в приложении</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">✈️</span><div><strong>Telegram-канал</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Кнопка в описании и постах</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">📍</span><div><strong>Яндекс Карты</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Ссылка в карточке заведения</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">🌐</span><div><strong>Сайт viktorybar.ru</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Кнопка «Забронировать»</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">📸</span><div><strong>Instagram / VK / YouTube</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Ссылка в био и Stories</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">💬</span><div><strong>WhatsApp</strong><br><span style="font-size:.8rem;color:var(--text-sec)">Автоответ с ссылкой на бронирование</span></div></div>
+      <div class="entry-point fade-in"><span class="entry-icon">🪪</span><div><strong>Визитки и полиграфия</strong><br><span style="font-size:.8rem;color:var(--text-sec)">QR-код на визитках персонала</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Стоимость</p>
+      <h2 class="section-title">Инвестиции в автоматизацию</h2>
+    </div>
+
+    <!-- WORK BREAKDOWN -->
+    <div class="glass fade-in" style="margin-top:2rem;overflow-x:auto">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Разбивка по работам</h3>
+      <table class="styled-table">
+        <thead>
+          <tr><th>Работа</th><th>Этап</th><th style="text-align:right">Стоимость</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Telegram Mini App (карта зала, бронирование, депозиты, лояльность, чаевые)</td><td><span class="badge badge-emerald">Этап 1</span></td><td style="text-align:right" class="price-highlight">90 000 ₽</td></tr>
+          <tr><td>AI-модерация отзывов + дашборд руководителя</td><td><span class="badge badge-emerald">Этап 1</span></td><td style="text-align:right" class="price-highlight">40 000 ₽</td></tr>
+          <tr><td>Интеграция Resta Place API + ЮKassa + Luna</td><td><span class="badge badge-emerald">Этап 1</span></td><td style="text-align:right" class="price-highlight">20 000 ₽</td></tr>
+          <tr><td colspan="2" style="font-weight:700;color:var(--text)">Итого Этап 1</td><td style="text-align:right" class="price-highlight">150 000 ₽</td></tr>
+          <tr><td>Голосовой AI-агент (настройка, сценарии, подключение)</td><td><span class="badge badge-gold">Этап 2</span></td><td style="text-align:right" class="price-highlight">50 000 ₽</td></tr>
+          <tr><td>Реактивация базы (обзвон через AI)</td><td><span class="badge badge-gold">Этап 3</span></td><td style="text-align:right" class="price-highlight">30 000 ₽</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PRICING CARDS -->
+    <div class="grid-3" style="margin-top:2.5rem">
+      <div class="glass pricing-card fade-in">
+        <span class="badge badge-emerald" style="margin-bottom:.5rem">Вариант А</span>
+        <h3 style="font-weight:700;font-size:1.05rem;margin-top:.5rem">Mini App + AI-отзывы</h3>
+        <p style="font-size:.8rem;color:var(--text-sec);margin-top:.25rem">Этап 1</p>
+        <div class="pricing-amount">150K<small> ₽</small></div>
+        <p style="font-size:.75rem;color:var(--text-sec)">разовая разработка</p>
+      </div>
+      <div class="glass pricing-card featured fade-in">
+        <span class="badge badge-gold" style="margin-bottom:.5rem">Вариант Б</span>
+        <h3 style="font-weight:700;font-size:1.05rem;margin-top:.5rem">А + Голосовой агент</h3>
+        <p style="font-size:.8rem;color:var(--text-sec);margin-top:.25rem">Этапы 1 + 2</p>
+        <div class="pricing-amount">200K<small> ₽</small></div>
+        <p style="font-size:.75rem;color:var(--text-sec)">разовая разработка</p>
+      </div>
+      <div class="glass pricing-card fade-in">
+        <span class="badge badge-gold" style="margin-bottom:.5rem">Вариант В</span>
+        <h3 style="font-weight:700;font-size:1.05rem;margin-top:.5rem">Б + Реактивация</h3>
+        <p style="font-size:.8rem;color:var(--text-sec);margin-top:.25rem">Этапы 1 + 2 + 3</p>
+        <div class="pricing-amount">230K<small> ₽</small></div>
+        <p style="font-size:.8rem;color:var(--gold);font-weight:600;margin-top:.25rem">215 000 ₽ при оплате сразу</p>
+        <p style="font-size:.75rem;color:var(--text-sec)">разовая разработка</p>
+      </div>
+    </div>
+
+    <!-- ЕЖЕМЕСЯЧНО -->
+    <div class="glass fade-in" style="margin-top:2rem;text-align:center">
+      <p style="font-size:.85rem;color:var(--text-sec)">Ежемесячное обслуживание, поддержка и хостинг</p>
+      <p style="font-size:1.1rem;font-weight:700;color:var(--gold);margin-top:.5rem">обсуждается отдельно</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHY MINI APP -->
+<section id="why-mini">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Сравнение</p>
+      <h2 class="section-title">Почему Mini App, а не мобильное приложение</h2>
+    </div>
+    <div class="fade-in" style="margin-top:1.5rem">
+      <div class="glass" style="margin-bottom:1.5rem">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;color:#ef4444">Проблемы App Store в РФ</h3>
+        <ul style="list-style:none;font-size:.88rem;color:var(--text-sec)">
+          <li style="padding:.3rem 0"><span class="cross">✕</span> Apple удаляет российские приложения без предупреждения</li>
+          <li style="padding:.3rem 0"><span class="cross">✕</span> $99/год за аккаунт разработчика Apple + $25 Google</li>
+          <li style="padding:.3rem 0"><span class="cross">✕</span> Модерация App Store: 2-14 дней на каждое обновление</li>
+          <li style="padding:.3rem 0"><span class="cross">✕</span> Комиссия Apple/Google 15-30% с платежей</li>
+        </ul>
+      </div>
+    </div>
+    <div class="glass fade-in" style="overflow-x:auto">
+      <table class="styled-table">
+        <thead>
+          <tr><th>Параметр</th><th style="color:var(--emerald)">Mini App</th><th>Мобильное приложение</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Стоимость разработки</td><td><span class="check">✓</span> от 150K</td><td><span class="cross">✕</span> от 800K-1.5M</td></tr>
+          <tr><td>Сроки</td><td><span class="check">✓</span> 4-5 недель</td><td><span class="cross">✕</span> 3-6 месяцев</td></tr>
+          <tr><td>Скачивание из стора</td><td><span class="check">✓</span> Не требуется</td><td><span class="cross">✕</span> Обязательно</td></tr>
+          <tr><td>Регистрация</td><td><span class="check">✓</span> Автоматическая (Telegram)</td><td><span class="cross">✕</span> Email + пароль + верификация</td></tr>
+          <tr><td>Обновления</td><td><span class="check">✓</span> Мгновенно</td><td><span class="cross">✕</span> Через модерацию стора</td></tr>
+          <tr><td>Риск блокировки</td><td><span class="check">✓</span> Нет</td><td><span class="cross">✕</span> Высокий (санкции)</td></tr>
+          <tr><td>Push-уведомления</td><td><span class="check">✓</span> Через Telegram</td><td><span class="check">✓</span> Нативные</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHAT WE NEED -->
+<section id="need">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Подготовка</p>
+      <h2 class="section-title">Что нужно от вас</h2>
+    </div>
+    <div class="grid-2" style="margin-top:2rem">
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--emerald)">API-доступы</h3>
+        <ul style="list-style:none;font-size:.88rem;color:var(--text-sec)">
+          <li style="padding:.4rem 0">✦ Resta Place (API-ключ, тариф PRO+)</li>
+          <li style="padding:.4rem 0">✦ Luna (API лояльности)</li>
+          <li style="padding:.4rem 0">✦ ЮKassa (shopId, секретный ключ)</li>
+          <li style="padding:.4rem 0">✦ amoCRM (для Этапов 2 и 3)</li>
+        </ul>
+      </div>
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--emerald)">Контент и информация</h3>
+        <ul style="list-style:none;font-size:.88rem;color:var(--text-sec)">
+          <li style="padding:.4rem 0">✦ Фото столов и залов (по желанию)</li>
+          <li style="padding:.4rem 0">✦ Нумерация столов (схема зала)</li>
+          <li style="padding:.4rem 0">✦ Список сотрудников для чаевых</li>
+          <li style="padding:.4rem 0">✦ Логотип в высоком разрешении</li>
+          <li style="padding:.4rem 0">✦ Правила отмены бронирования</li>
+          <li style="padding:.4rem 0">✦ Реквизиты организации</li>
+          <li style="padding:.4rem 0">✦ Обратная связь по стилю прототипа</li>
+        </ul>
+      </div>
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--emerald)">Telegram</h3>
+        <ul style="list-style:none;font-size:.88rem;color:var(--text-sec)">
+          <li style="padding:.4rem 0">✦ Telegram ID через <strong>@userinfobot</strong></li>
+          <li style="padding:.4rem 0">✦ Бот создаётся нами через @BotFather</li>
+        </ul>
+      </div>
+      <div class="glass fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--emerald)">Для голосового агента (Этап 2)</h3>
+        <ul style="list-style:none;font-size:.88rem;color:var(--text-sec)">
+          <li style="padding:.4rem 0">✦ Записи реальных звонков (5-10 шт.)</li>
+          <li style="padding:.4rem 0">✦ Типовой сценарий бронирования</li>
+          <li style="padding:.4rem 0">✦ Оператор связи текущего номера</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- GUEST JOURNEY -->
+<section id="journey">
+  <div class="container">
+    <div class="fade-in" style="text-align:center">
+      <p class="section-label">Путь гостя</p>
+      <h2 class="section-title" style="margin:0 auto">От QR-кода до отзыва за 2 минуты</h2>
+    </div>
+    <div class="flow fade-in" style="margin-top:2.5rem">
+      <div class="flow-step">📷 QR / ссылка</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">✈️ Telegram</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">🔑 Авторизация</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">🪑 Выбор стола</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">📅 Бронирование</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="border-color:var(--gold)">💳 Оплата</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="border-color:var(--emerald)">✅ Подтверждение</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">🔔 Напоминание</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">⭐ Отзыв</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- NEXT STEP -->
+<section id="next" class="cta-section">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Следующий шаг</p>
+      <h2 class="section-title" style="margin:0 auto .5rem">Готовы начать?</h2>
+      <p class="section-sub" style="margin:0 auto">Простая последовательность действий до запуска</p>
+    </div>
+    <div style="margin-top:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;max-width:500px;margin-left:auto;margin-right:auto">
+      <div class="glass fade-in" style="width:100%;text-align:left;display:flex;align-items:center;gap:1rem">
+        <span class="step-num">1</span>
+        <div>
+          <strong style="font-size:.95rem">Выбрать вариант</strong>
+          <p style="font-size:.8rem;color:var(--text-sec)">А (150K) / Б (200K) / В (230K)</p>
+        </div>
+      </div>
+      <div class="glass fade-in" style="width:100%;text-align:left;display:flex;align-items:center;gap:1rem">
+        <span class="step-num">2</span>
+        <div>
+          <strong style="font-size:.95rem">Созвон 15-20 минут</strong>
+          <p style="font-size:.8rem;color:var(--text-sec)">Обсудить детали и ответить на вопросы</p>
+        </div>
+      </div>
+      <div class="glass fade-in" style="width:100%;text-align:left;display:flex;align-items:center;gap:1rem">
+        <span class="step-num">3</span>
+        <div>
+          <strong style="font-size:.95rem">Передать API-доступы</strong>
+          <p style="font-size:.8rem;color:var(--text-sec)">Resta Place, ЮKassa, Luna, amoCRM</p>
+        </div>
+      </div>
+      <div class="glass fade-in" style="width:100%;text-align:left;display:flex;align-items:center;gap:1rem">
+        <span class="step-num">4</span>
+        <div>
+          <strong style="font-size:.95rem">Старт разработки</strong>
+          <p style="font-size:.8rem;color:var(--text-sec)">Начинаем сразу после получения доступов</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in" style="margin-top:2.5rem">
+      <p style="font-size:1.3rem;font-weight:800;color:var(--emerald)">Первый результат через 4-5 недель</p>
+      <div style="margin-top:1.5rem">
+        <a href="https://t.me/" class="btn btn-gold" style="font-size:1.05rem">Написать в Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="text-align:center;padding:2rem 1.5rem;font-size:.75rem;color:var(--text-sec);border-top:1px solid var(--glass-border)">
+  2025 &copy; Коммерческое предложение для рестобара «Виктория»
+</footer>
+
+<!-- SCROLL ANIMATIONS -->
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+});
+</script>
+</body>
+</html>
