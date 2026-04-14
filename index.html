@@ -1792,8 +1792,12 @@
                 <div class="header-subtitle">бильярд и рестобар</div>
             </div>
         </div>
-        <div class="loyalty-badge">
+        <div class="loyalty-badge" id="guestBadge">
             <span>&#9733;</span> 1 850 &#8381;
+        </div>
+        <div id="adminBadge" onclick="toggleAdminMode()" style="display:none; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; align-items:center; gap:5px; box-shadow:0 3px 10px rgba(245,158,11,0.4);">
+            <span id="adminBadgeIcon" style="font-size:14px;">👑</span>
+            <span id="adminBadgeText">Админ</span>
         </div>
     </div>
 
@@ -3011,13 +3015,8 @@
         </button>
     </div>
 
-    <!-- Admin mode toggle (внутри phone-frame, над навигацией справа) -->
-    <div id="adminToggle" style="position:absolute; bottom:80px; right:12px; z-index:250; display:none;">
-        <button onclick="toggleAdminMode()" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; padding:8px 14px; border-radius:20px; font-size:11px; font-weight:700; font-family:Montserrat; cursor:pointer; box-shadow:0 4px 14px rgba(245,158,11,0.5); display:flex; align-items:center; gap:6px;">
-            <span style="font-size:13px;">👑</span>
-            <span>Админ</span>
-        </button>
-    </div>
+    <!-- Admin toggle moved to header badge -->
+    <div id="adminToggle" style="display:none;"></div>
 
         </div><!-- /iphone-screen-bezel -->
     </div><!-- /iphone-body -->
@@ -3511,11 +3510,13 @@
     let isAdminMode = false;
 
     function checkAdminAccess() {
-        // В реальном Mini App здесь будет Telegram.WebApp.initDataUnsafe.user.id
-        // Для демо: если URL содержит ?admin=1 — показываем кнопку
+        // В реальном Mini App: const userId = Telegram.WebApp.initDataUnsafe.user.id
+        // if (ADMIN_IDS.includes(userId)) показать админский бейдж
+        // Для демо: ?admin=1 в URL
         const params = new URLSearchParams(window.location.search);
         if (params.get('admin') === '1') {
-            document.getElementById('adminToggle').style.display = 'block';
+            const badge = document.getElementById('adminBadge');
+            if (badge) badge.style.display = 'inline-flex';
         }
     }
 
@@ -3524,24 +3525,32 @@
         const guestNav = document.getElementById('bottomNav');
         const adminNav = document.getElementById('adminNav');
         const zoneTabs = document.getElementById('zoneTabs');
+        const guestBadge = document.getElementById('guestBadge');
+        const adminBadgeIcon = document.getElementById('adminBadgeIcon');
+        const adminBadgeText = document.getElementById('adminBadgeText');
+
         if (isAdminMode) {
             guestNav.style.display = 'none';
             adminNav.style.display = 'flex';
             if (zoneTabs) zoneTabs.style.display = 'none';
+            if (guestBadge) guestBadge.style.display = 'none';
+            if (adminBadgeIcon) adminBadgeIcon.textContent = '👤';
+            if (adminBadgeText) adminBadgeText.textContent = 'Гость';
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-admin').classList.add('active');
             document.querySelectorAll('#adminNav .nav-item').forEach(n => n.classList.remove('active'));
             adminNav.querySelector('.nav-item').classList.add('active');
-            document.querySelector('#adminToggle button').innerHTML = '👤 Гость';
         } else {
             guestNav.style.display = 'flex';
             adminNav.style.display = 'none';
+            if (guestBadge) guestBadge.style.display = 'flex';
+            if (adminBadgeIcon) adminBadgeIcon.textContent = '👑';
+            if (adminBadgeText) adminBadgeText.textContent = 'Админ';
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-tables').classList.add('active');
             if (zoneTabs) zoneTabs.style.display = 'flex';
             document.querySelectorAll('#bottomNav .nav-item').forEach(n => n.classList.remove('active'));
             guestNav.querySelector('.nav-item').classList.add('active');
-            document.querySelector('#adminToggle button').innerHTML = '👑 Админ';
         }
     }
 
