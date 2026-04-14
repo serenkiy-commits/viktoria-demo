@@ -2353,7 +2353,21 @@
                 <strong>Депозит Пт-Вс с 18:00:</strong> 1 500 &#8381; на гостя. Используется в баре и кухне. При отмене менее чем за 24 часа депозит невозвратный.
             </div>
 
-            <button class="btn-primary" onclick="showToast('Бронирование подтверждено!')">
+            <!-- Промокод / Сертификат -->
+            <div style="margin-top:14px; padding:14px; border-radius:14px; border:1px solid rgba(245,158,11,0.15); background:linear-gradient(135deg, rgba(245,158,11,0.05), var(--bg-card));">
+                <div style="font-size:12px; color:var(--text-sec); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <span>🎁</span><span>Есть подарочный сертификат или промокод?</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="certCodeInput" placeholder="VIKXXXXX" class="form-input" style="flex:1; text-transform:uppercase; font-weight:600; letter-spacing:1px;">
+                    <button onclick="applyCertCode()" style="padding:0 16px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap;">
+                        Применить
+                    </button>
+                </div>
+                <div id="certCodeStatus" style="font-size:11px; margin-top:6px; display:none;"></div>
+            </div>
+
+            <button class="btn-primary" onclick="showToast('Бронирование подтверждено!')" style="margin-top:14px;">
                 Оплатить и забронировать
             </button>
             <button class="btn-secondary" onclick="showToast('Позвоним вам для подтверждения')">
@@ -2997,10 +3011,11 @@
         </button>
     </div>
 
-    <!-- Admin mode toggle (only visible when ?admin=1 or for admin Telegram IDs: 77408468, 5923429546) -->
-    <div id="adminToggle" style="position:absolute; top:8px; right:16px; z-index:250; display:none;">
-        <button onclick="toggleAdminMode()" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; font-family:Montserrat; cursor:pointer; box-shadow:0 2px 8px rgba(245,158,11,0.4);">
-            👑 Админ
+    <!-- Admin mode toggle (always visible when ?admin=1, внизу справа над навигацией) -->
+    <div id="adminToggle" style="position:fixed; bottom:90px; right:12px; z-index:250; display:none;">
+        <button onclick="toggleAdminMode()" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; padding:8px 14px; border-radius:20px; font-size:11px; font-weight:700; font-family:Montserrat; cursor:pointer; box-shadow:0 4px 14px rgba(245,158,11,0.5); display:flex; align-items:center; gap:6px;">
+            <span style="font-size:13px;">👑</span>
+            <span>Админ</span>
         </button>
     </div>
 
@@ -3367,6 +3382,65 @@
     // ПОДАРОЧНЫЕ СЕРТИФИКАТЫ
     // =========================
     let selectedCertAmount = 0;
+
+    // Применение кода сертификата при бронировании
+    const VALID_CERT_CODES = {
+        'VIKABC123': { amount: 5000, balance: 5000, name: 'Мария Селезнева' },
+        'VIK2024XY': { amount: 10000, balance: 10000, name: 'Андрей Смирнов' },
+        'PRUJN4DSQ': { amount: 3000, balance: 3000, name: 'Арут' }, // пример от Надежды
+        'DEMO3000':  { amount: 3000, balance: 3000, name: 'Тест' },
+    };
+
+    function applyCertCode() {
+        const input = document.getElementById('certCodeInput');
+        const status = document.getElementById('certCodeStatus');
+        const code = input.value.trim().toUpperCase();
+
+        if (!code) {
+            status.style.display = 'block';
+            status.style.color = '#ef4444';
+            status.textContent = '⚠ Введите код сертификата';
+            return;
+        }
+
+        // Имитация проверки через Resta Place API
+        status.style.display = 'block';
+        status.style.color = 'var(--text-muted)';
+        status.textContent = '⏳ Проверяем сертификат в Resta Place...';
+
+        setTimeout(() => {
+            const cert = VALID_CERT_CODES[code];
+            if (cert) {
+                status.style.color = 'var(--accent-light)';
+                status.innerHTML = '✓ Сертификат применён! На балансе: <strong>' + cert.balance.toLocaleString('ru-RU') + ' ₽</strong>. Владелец: ' + cert.name;
+
+                // Пересчитываем итоговую сумму — вычитаем номинал (но не больше итого)
+                const totalEl = document.getElementById('priceTotal');
+                if (totalEl) {
+                    const currentTotal = parseInt(totalEl.textContent.replace(/[^\d]/g,''));
+                    const discount = Math.min(cert.balance, currentTotal);
+                    const newTotal = Math.max(0, currentTotal - discount);
+
+                    // Добавим строку со скидкой если ещё нет
+                    let certRow = document.getElementById('priceCertRow');
+                    if (!certRow) {
+                        const priceRows = totalEl.parentElement.parentElement;
+                        const newRow = document.createElement('div');
+                        newRow.className = 'price-row';
+                        newRow.id = 'priceCertRow';
+                        newRow.innerHTML = `<span class="label" style="color:var(--gold);">🎁 Сертификат ${code}</span><span class="value" style="color:var(--gold);">−${discount.toLocaleString('ru-RU')} ₽</span>`;
+                        priceRows.insertBefore(newRow, totalEl.parentElement);
+                    }
+                    totalEl.textContent = newTotal.toLocaleString('ru-RU') + ' ₽';
+                }
+
+                document.getElementById('certCodeInput').disabled = true;
+            } else {
+                status.style.color = '#ef4444';
+                status.textContent = '✗ Сертификат не найден или уже использован. Попробуйте: DEMO3000';
+            }
+        }, 600);
+    }
 
     function generateCertCode() {
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
