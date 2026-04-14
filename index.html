@@ -2754,7 +2754,7 @@
         <div class="glass" style="padding:16px; margin-bottom:10px;">
             <div style="font-size:13px; font-weight:700; margin-bottom:10px;">🤖 AI-модерация отзывов</div>
             <div style="font-size:12px; color:var(--text-sec); line-height:1.5; margin-bottom:10px;">AI автоматически отвечает на отзывы, фильтрует мат и спам, улучшает грамматику в гостевых текстах.</div>
-            <button style="width:100%; padding:10px; border:1px solid var(--accent); background:rgba(16,185,129,0.08); color:var(--accent-light); border-radius:10px; font-size:12px; font-weight:600;">Настроить AI</button>
+            <button onclick="openAISettings()" style="width:100%; padding:10px; border:1px solid var(--accent); background:rgba(16,185,129,0.08); color:var(--accent-light); border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">Настроить AI →</button>
         </div>
 
         <div class="glass" style="padding:16px; margin-bottom:10px;">
@@ -2778,6 +2778,158 @@
         <button onclick="toggleAdminMode()" style="width:100%; padding:14px; margin-top:12px; background:linear-gradient(135deg, rgba(234,229,220,0.05), rgba(234,229,220,0.02)); border:1px solid rgba(234,229,220,0.1); color:var(--text-pri); border-radius:12px; font-size:13px; font-weight:600;">
             👤 Войти как гость
         </button>
+    </div>
+
+    <!-- ========== PAGE: ADMIN AI SETTINGS ========== -->
+    <div class="page" id="page-admin-ai">
+        <div style="margin-top:16px; display:flex; align-items:center; gap:10px;">
+            <button onclick="navigateAdmin('admin-settings', document.querySelectorAll('#adminNav .nav-item')[4])" style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(234,229,220,0.1); background:var(--bg-card); color:var(--text-pri); font-size:16px; cursor:pointer;">←</button>
+            <div>
+                <div style="font-size:16px; font-weight:700;">🤖 Настройки AI</div>
+                <div style="font-size:11px; color:var(--text-sec);">Модерация и автоответы на отзывы</div>
+            </div>
+        </div>
+
+        <!-- Включение AI -->
+        <div class="glass" style="padding:16px; margin-top:16px; border:1px solid rgba(16,185,129,0.2); background:linear-gradient(135deg, rgba(16,185,129,0.05), var(--bg-card));">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-size:13px; font-weight:700;">AI-модерация включена</div>
+                    <div style="font-size:11px; color:var(--text-sec); margin-top:2px;">Обрабатывает новые отзывы автоматически</div>
+                </div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative; transition:all 0.2s;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%; transition:all 0.2s;"></div></div>
+            </div>
+        </div>
+
+        <!-- Строгость модерации -->
+        <div class="section-title" style="margin-top:20px;">🎚 Строгость модерации</div>
+        <div class="glass" style="padding:16px;">
+            <div style="font-size:12px; color:var(--text-sec); line-height:1.5; margin-bottom:14px;">Насколько строго AI фильтрует нецензурную лексику, оскорбления и спам в отзывах гостей</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                <div onclick="selectStrictness('soft', this)" style="cursor:pointer; padding:14px 10px; border-radius:12px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); text-align:center;">
+                    <div style="font-size:20px;">😊</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Мягкая</div>
+                    <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">Только явный спам</div>
+                </div>
+                <div onclick="selectStrictness('medium', this)" class="strictness-active" style="cursor:pointer; padding:14px 10px; border-radius:12px; border:1px solid var(--accent); background:rgba(16,185,129,0.1); text-align:center;">
+                    <div style="font-size:20px;">⚖️</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Средняя</div>
+                    <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">Мат + спам</div>
+                </div>
+                <div onclick="selectStrictness('strict', this)" style="cursor:pointer; padding:14px 10px; border-radius:12px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); text-align:center;">
+                    <div style="font-size:20px;">🛡️</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Жёсткая</div>
+                    <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">Всё спорное</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Тональность ответов -->
+        <div class="section-title" style="margin-top:20px;">💬 Стиль ответов AI</div>
+        <div class="glass" style="padding:16px;">
+            <div style="font-size:12px; color:var(--text-sec); line-height:1.5; margin-bottom:14px;">Каким тоном AI отвечает гостям на отзывы от имени заведения</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div onclick="selectTone('friendly', this)" class="tone-active" style="cursor:pointer; padding:12px; border-radius:10px; border:1px solid var(--accent); background:rgba(16,185,129,0.1); text-align:center;">
+                    <div style="font-size:18px;">😊</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Дружелюбный</div>
+                </div>
+                <div onclick="selectTone('formal', this)" style="cursor:pointer; padding:12px; border-radius:10px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); text-align:center;">
+                    <div style="font-size:18px;">🎩</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Формальный</div>
+                </div>
+                <div onclick="selectTone('warm', this)" style="cursor:pointer; padding:12px; border-radius:10px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); text-align:center;">
+                    <div style="font-size:18px;">💚</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">Тёплый</div>
+                </div>
+                <div onclick="selectTone('witty', this)" style="cursor:pointer; padding:12px; border-radius:10px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); text-align:center;">
+                    <div style="font-size:18px;">✨</div>
+                    <div style="font-size:11px; font-weight:700; margin-top:4px;">С лёгким юмором</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подпись в ответах -->
+        <div class="section-title" style="margin-top:20px;">✍️ Подпись в ответах</div>
+        <div class="glass" style="padding:16px;">
+            <div style="font-size:12px; color:var(--text-sec); margin-bottom:10px;">От чьего имени AI будет подписывать ответы гостям</div>
+            <input type="text" class="form-input" id="aiSignature" value="Надежда, управляющая «Виктория»" style="width:100%;">
+            <div style="font-size:10px; color:var(--text-muted); margin-top:6px;">Пример: «Спасибо за отзыв! — Надежда, управляющая «Виктория»»</div>
+        </div>
+
+        <!-- Что делать с негативными отзывами -->
+        <div class="section-title" style="margin-top:20px;">⚠️ Негативные отзывы</div>
+        <div class="glass" style="padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(234,229,220,0.05);">
+                <div style="font-size:12px;">AI автоматически отвечает на негатив</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(234,229,220,0.05);">
+                <div style="font-size:12px;">Присылать уведомление админу</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0;">
+                <div>
+                    <div style="font-size:12px;">Приоритет критичных</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Оценка ≤ 2 ★</div>
+                </div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+        </div>
+
+        <!-- Категории отзывов -->
+        <div class="section-title" style="margin-top:20px;">🏷 Категории для классификации</div>
+        <div class="glass" style="padding:16px;">
+            <div style="font-size:12px; color:var(--text-sec); margin-bottom:12px;">AI автоматически распределяет отзывы по этим категориям</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Кухня <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Сервис <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Бильярд <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Бар <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Кальян <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Атмосфера <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Чистота <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-size:11px; display:flex; align-items:center; gap:4px;">Цены <span style="cursor:pointer; opacity:0.7;">×</span></span>
+                <span style="padding:5px 10px; border-radius:8px; background:rgba(234,229,220,0.05); color:var(--text-muted); font-size:11px; cursor:pointer; border:1px dashed rgba(234,229,220,0.15);">+ Добавить</span>
+            </div>
+        </div>
+
+        <!-- Шаблоны бонусов -->
+        <div class="section-title" style="margin-top:20px;">🎁 Компенсации для негатива</div>
+        <div class="glass" style="padding:16px;">
+            <div style="font-size:12px; color:var(--text-sec); margin-bottom:12px;">Что AI может предложить гостю при негативном отзыве</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(234,229,220,0.05);">
+                <div style="font-size:12px;">Бесплатный кальян</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(234,229,220,0.05);">
+                <div style="font-size:12px;">Час игры в бильярд бесплатно</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(234,229,220,0.05);">
+                <div style="font-size:12px;">Комплимент от шефа</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:rgba(234,229,220,0.1); border-radius:12px; position:relative;"><div style="position:absolute; left:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
+                <div style="font-size:12px;">Скидка 15% на следующий визит</div>
+                <div onclick="toggleAiSwitch(this)" style="cursor:pointer; width:44px; height:24px; background:var(--accent); border-radius:12px; position:relative;"><div style="position:absolute; right:2px; top:2px; width:20px; height:20px; background:white; border-radius:50%;"></div></div>
+            </div>
+        </div>
+
+        <!-- Пример ответа AI -->
+        <div class="section-title" style="margin-top:20px;">👀 Пример ответа AI</div>
+        <div class="glass" style="padding:14px; border-left:3px solid var(--gold);">
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Отзыв гостя (негатив 2★):</div>
+            <div style="font-size:12px; color:var(--text-sec); font-style:italic; margin-bottom:12px;">«Долго ждали официанта, минут 15...»</div>
+            <div style="font-size:11px; color:var(--accent-light); margin-bottom:6px;">🤖 AI ответит (Средняя строгость, Дружелюбный):</div>
+            <div style="font-size:12px; color:var(--text-pri); line-height:1.5;">«Мария, искренне извините за такое ожидание! Это правда долго и недопустимо. Разобрались с командой, чтобы больше такого не было. В следующий визит угощаем бесплатным кальяном — ждём вас!<br><br><em style="color:var(--text-muted);">— Надежда, управляющая «Виктория»</em>»</div>
+        </div>
+
+        <!-- Кнопка сохранить -->
+        <div style="padding-bottom:30px;">
+            <button onclick="saveAiSettings()" style="width:100%; margin-top:20px; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(16,185,129,0.4);">
+                Сохранить настройки
+            </button>
+        </div>
     </div>
 
     <!-- ========== PAGE: REVIEW ========== -->
@@ -3552,6 +3704,54 @@
             document.querySelectorAll('#bottomNav .nav-item').forEach(n => n.classList.remove('active'));
             guestNav.querySelector('.nav-item').classList.add('active');
         }
+    }
+
+    function openAISettings() {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-admin-ai').classList.add('active');
+    }
+
+    function toggleAiSwitch(el) {
+        const inner = el.querySelector('div');
+        const bg = el.style.background || getComputedStyle(el).background;
+        const isOn = bg.includes('185, 129') || (el.getAttribute('data-state') !== 'off' && !bg.includes('rgba(234'));
+        if (isOn) {
+            el.style.background = 'rgba(234,229,220,0.1)';
+            inner.style.left = '2px';
+            inner.style.right = 'auto';
+            el.setAttribute('data-state', 'off');
+        } else {
+            el.style.background = 'var(--accent)';
+            inner.style.right = '2px';
+            inner.style.left = 'auto';
+            el.setAttribute('data-state', 'on');
+        }
+    }
+
+    function selectStrictness(level, el) {
+        document.querySelectorAll('#page-admin-ai [onclick*="selectStrictness"]').forEach(c => {
+            c.style.border = '1px solid rgba(234,229,220,0.08)';
+            c.style.background = 'var(--bg-card)';
+            c.classList.remove('strictness-active');
+        });
+        el.style.border = '1px solid var(--accent)';
+        el.style.background = 'rgba(16,185,129,0.1)';
+        el.classList.add('strictness-active');
+    }
+
+    function selectTone(tone, el) {
+        document.querySelectorAll('#page-admin-ai [onclick*="selectTone"]').forEach(c => {
+            c.style.border = '1px solid rgba(234,229,220,0.08)';
+            c.style.background = 'var(--bg-card)';
+            c.classList.remove('tone-active');
+        });
+        el.style.border = '1px solid var(--accent)';
+        el.style.background = 'rgba(16,185,129,0.1)';
+        el.classList.add('tone-active');
+    }
+
+    function saveAiSettings() {
+        showToast('✓ Настройки AI сохранены');
     }
 
     function navigateAdmin(page, el) {
