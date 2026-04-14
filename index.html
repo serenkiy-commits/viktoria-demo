@@ -2616,99 +2616,29 @@
 
     <!-- ========== PAGE: ADMIN БРОНИ ========== -->
     <div class="page" id="page-admin-bookings">
-        <div class="section-title" style="margin-top:16px;">📅 Брони на сегодня</div>
+        <div class="section-title" style="margin-top:16px;">📅 Брони</div>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px;">
-            <button class="glass" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600;">Сегодня</button>
-            <button class="glass" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Завтра</button>
-            <button class="glass" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Неделя</button>
-            <button class="glass" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Месяц</button>
+            <button onclick="filterBookings('today', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Сегодня</button>
+            <button onclick="filterBookings('tomorrow', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Завтра</button>
+            <button onclick="filterBookings('week', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Неделя</button>
+            <button onclick="filterBookings('month', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Месяц</button>
         </div>
 
-        <div class="glass" style="padding:14px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div style="font-size:13px; font-weight:700;">Иван П.</div>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">+7 (925) 123-45-67</div>
-                </div>
-                <span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>
-            </div>
-            <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec);">
-                <span>🎱 Стол №8</span><span>🕒 20:00—23:00</span><span>👥 3 гостя</span>
-            </div>
-            <div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: 4 500 ₽</div>
-        </div>
-
-        <div class="glass" style="padding:14px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div style="font-size:13px; font-weight:700;">Алексей М.</div>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">+7 (903) 555-12-34</div>
-                </div>
-                <span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>
-            </div>
-            <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec);">
-                <span>🍽 Стол №12</span><span>🕒 19:30—22:00</span><span>👥 4 гостя</span>
-            </div>
-            <div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: 6 000 ₽</div>
-        </div>
-
-        <div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid var(--gold);">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div style="font-size:13px; font-weight:700;">Мария С.</div>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">+7 (916) 777-88-99</div>
-                </div>
-                <span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">ЖДЁТ ОПЛАТЫ</span>
-            </div>
-            <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec);">
-                <span>🍽 Стол №5</span><span>🕒 21:00—23:00</span><span>👥 2 гостя</span>
-            </div>
-        </div>
+        <div id="adminBookingsList"></div>
     </div>
 
     <!-- ========== PAGE: ADMIN ОТЗЫВЫ ========== -->
     <div class="page" id="page-admin-reviews">
-        <div class="section-title" style="margin-top:16px;">💬 Все отзывы</div>
+        <div class="section-title" style="margin-top:16px;">💬 Отзывы</div>
 
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px;">
-            <button style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600;">Все</button>
-            <button style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Негатив</button>
-            <button style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Позитив</button>
-            <button style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Новые</button>
+            <button onclick="filterReviews('all', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Все</button>
+            <button onclick="filterReviews('negative', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Негатив</button>
+            <button onclick="filterReviews('positive', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Позитив</button>
+            <button onclick="filterReviews('new', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Новые</button>
         </div>
 
-        <div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid #ef4444;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-weight:600; font-size:13px;">Мария К.</div>
-                <div style="color:#ef4444;">★★☆☆☆</div>
-            </div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Сегодня, 22:15</div>
-            <div style="font-size:12px; color:var(--text-sec); margin-top:8px; line-height:1.5;">Долго ждали официанта, минут 15. Бильярд ок, но сервис подвёл</div>
-            <div style="margin-top:8px; display:flex; gap:6px;">
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:600;">НЕГАТИВ</span>
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444;">Сервис</span>
-            </div>
-            <div style="margin-top:10px; padding:10px; background:rgba(239,68,68,0.06); border-radius:10px; font-size:11px; color:var(--text-sec);">
-                <strong style="color:#ef4444;">🤖 AI-ответ отправлен:</strong> «Мария, приносим извинения! Разберёмся с сервисом. Приглашаем на бесплатный кальян»
-            </div>
-            <div style="margin-top:10px; display:flex; gap:6px;">
-                <button style="flex:1; padding:8px; border:1px solid var(--accent); background:rgba(16,185,129,0.08); color:var(--accent-light); border-radius:8px; font-size:11px; font-weight:600;">✓ Разобрано</button>
-                <button style="flex:1; padding:8px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:8px; font-size:11px;">Ответить лично</button>
-            </div>
-        </div>
-
-        <div class="glass" style="padding:14px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-weight:600; font-size:13px;">Иван П.</div>
-                <div style="color:var(--gold);">★★★★★</div>
-            </div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Сегодня, 21:30</div>
-            <div style="font-size:12px; color:var(--text-sec); margin-top:8px; line-height:1.5;">Отличный вечер, стол №8 идеальный. Коктейли супер</div>
-            <div style="margin-top:8px; display:flex; gap:6px;">
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light);">Бильярд</span>
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light);">Бар</span>
-            </div>
-        </div>
+        <div id="adminReviewsList"></div>
     </div>
 
     <!-- ========== PAGE: ADMIN АНАЛИТИКА ========== -->
@@ -2716,47 +2646,39 @@
         <div class="section-title" style="margin-top:16px;">📊 Аналитика</div>
 
         <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:14px;">
-            <button style="padding:10px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600;">Неделя</button>
-            <button style="padding:10px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Месяц</button>
-            <button style="padding:10px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px;">Год</button>
+            <button onclick="filterAnalytics('week', this)" style="padding:10px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Неделя</button>
+            <button onclick="filterAnalytics('month', this)" style="padding:10px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Месяц</button>
+            <button onclick="filterAnalytics('year', this)" style="padding:10px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Год</button>
         </div>
 
         <div class="glass" style="padding:16px; margin-bottom:10px;">
-            <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Всего броней за неделю</div>
-            <div style="font-size:36px; font-weight:700; margin-top:4px; color:var(--accent-light);">127</div>
-            <div style="font-size:12px; color:var(--accent-light); font-weight:600;">▲ +14% к прошлой неделе</div>
+            <div id="analyticsTitle" style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Всего броней за неделю</div>
+            <div id="analyticsTotal" style="font-size:36px; font-weight:700; margin-top:4px; color:var(--accent-light);">127</div>
+            <div id="analyticsTrend" style="font-size:12px; color:var(--accent-light); font-weight:600;">▲ +14% к прошлой неделе</div>
         </div>
 
         <div class="glass" style="padding:14px; margin-bottom:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:10px;">Броней по дням</div>
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; height:100px;">
-                <div style="width:10%; background:linear-gradient(to top, var(--accent), var(--accent-light)); height:40%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Пн</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--accent), var(--accent-light)); height:55%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Вт</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--accent), var(--accent-light)); height:48%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Ср</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--accent), var(--accent-light)); height:62%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Чт</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--gold), #fbbf24); height:85%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Пт</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--gold), #fbbf24); height:95%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Сб</div></div>
-                <div style="width:10%; background:linear-gradient(to top, var(--gold), #fbbf24); height:78%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">Вс</div></div>
-            </div>
-            <div style="margin-top:24px; font-size:11px; color:var(--text-muted);">Пик: суббота (24 брони)</div>
+            <div style="font-size:12px; font-weight:600; margin-bottom:10px;">Броней по периодам</div>
+            <div id="analyticsChart" style="display:flex; justify-content:space-between; align-items:flex-end; height:100px;"></div>
+            <div id="analyticsPeak" style="margin-top:24px; font-size:11px; color:var(--text-muted);">Пик: суббота (24 брони)</div>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div class="glass" style="padding:14px;">
                 <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Выручка депозитов</div>
-                <div style="font-size:22px; font-weight:700; margin-top:4px; color:var(--gold);">248 500 ₽</div>
+                <div id="analyticsRevenue" style="font-size:22px; font-weight:700; margin-top:4px; color:var(--gold);">248 500 ₽</div>
             </div>
             <div class="glass" style="padding:14px;">
                 <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Средний чек</div>
-                <div style="font-size:22px; font-weight:700; margin-top:4px;">1 956 ₽</div>
+                <div id="analyticsAvgCheck" style="font-size:22px; font-weight:700; margin-top:4px;">1 956 ₽</div>
             </div>
             <div class="glass" style="padding:14px;">
                 <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Средний рейтинг</div>
-                <div style="font-size:22px; font-weight:700; margin-top:4px; color:var(--gold);">4.7 ★</div>
+                <div id="analyticsRating" style="font-size:22px; font-weight:700; margin-top:4px; color:var(--gold);">4.7 ★</div>
             </div>
             <div class="glass" style="padding:14px;">
                 <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Отмены</div>
-                <div style="font-size:22px; font-weight:700; margin-top:4px; color:#ef4444;">8</div>
+                <div id="analyticsCancellations" style="font-size:22px; font-weight:700; margin-top:4px; color:#ef4444;">8</div>
             </div>
         </div>
     </div>
@@ -3473,9 +3395,11 @@
         isAdminMode = !isAdminMode;
         const guestNav = document.getElementById('bottomNav');
         const adminNav = document.getElementById('adminNav');
+        const zoneTabs = document.getElementById('zoneTabs');
         if (isAdminMode) {
             guestNav.style.display = 'none';
             adminNav.style.display = 'flex';
+            if (zoneTabs) zoneTabs.style.display = 'none';
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-admin').classList.add('active');
             document.querySelectorAll('#adminNav .nav-item').forEach(n => n.classList.remove('active'));
@@ -3486,6 +3410,7 @@
             adminNav.style.display = 'none';
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-tables').classList.add('active');
+            if (zoneTabs) zoneTabs.style.display = 'flex';
             document.querySelectorAll('#bottomNav .nav-item').forEach(n => n.classList.remove('active'));
             guestNav.querySelector('.nav-item').classList.add('active');
             document.querySelector('#adminToggle button').innerHTML = '👑 Админ';
@@ -3497,6 +3422,184 @@
         document.getElementById('page-' + page).classList.add('active');
         document.querySelectorAll('#adminNav .nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+        // Скрываем вкладки зала в админке
+        const zoneTabs = document.getElementById('zoneTabs');
+        if (zoneTabs) zoneTabs.style.display = 'none';
+
+        // Инициализация данных на вкладках
+        if (page === 'admin-bookings') {
+            const firstBtn = document.querySelector('#page-admin-bookings button');
+            if (firstBtn) filterBookings('today', firstBtn);
+        } else if (page === 'admin-reviews') {
+            const firstBtn = document.querySelector('#page-admin-reviews button');
+            if (firstBtn) filterReviews('all', firstBtn);
+        } else if (page === 'admin-stats') {
+            const firstBtn = document.querySelector('#page-admin-stats button');
+            if (firstBtn) filterAnalytics('week', firstBtn);
+        }
+    }
+
+    // =========================
+    // АДМИН-ФИЛЬТРЫ (рабочие переключатели)
+    // =========================
+
+    // Данные-заглушки для брони
+    const MOCK_BOOKINGS = {
+        today: [
+            {name:'Иван П.', phone:'+7 (925) 123-45-67', icon:'🎱', table:'Стол №8', time:'20:00—23:00', guests:3, deposit:4500, status:'paid'},
+            {name:'Алексей М.', phone:'+7 (903) 555-12-34', icon:'🍽', table:'Стол №12', time:'19:30—22:00', guests:4, deposit:6000, status:'paid'},
+            {name:'Мария С.', phone:'+7 (916) 777-88-99', icon:'🍽', table:'Стол №5', time:'21:00—23:00', guests:2, deposit:3000, status:'pending'},
+        ],
+        tomorrow: [
+            {name:'Сергей К.', phone:'+7 (901) 222-33-44', icon:'🎱', table:'Стол №3', time:'18:00—21:00', guests:2, deposit:3000, status:'paid'},
+            {name:'Ольга Д.', phone:'+7 (915) 888-99-00', icon:'🍽', table:'Стол №9', time:'20:30—23:00', guests:5, deposit:7500, status:'paid'},
+        ],
+        week: [
+            {name:'Виктор Л.', phone:'+7 (925) 111-22-33', icon:'🎱', table:'Стол №1', time:'Вт, 21:00', guests:4, deposit:6000, status:'paid'},
+            {name:'Наталья Р.', phone:'+7 (916) 333-44-55', icon:'🍽', table:'Стол №7', time:'Ср, 19:00', guests:2, deposit:3000, status:'paid'},
+            {name:'Дмитрий А.', phone:'+7 (903) 777-11-22', icon:'🍽', table:'Стол №4', time:'Чт, 20:00', guests:6, deposit:9000, status:'paid'},
+            {name:'Елена Б.', phone:'+7 (965) 555-66-77', icon:'🎱', table:'Стол №6', time:'Пт, 22:00', guests:3, deposit:4500, status:'pending'},
+        ],
+        month: [
+            {name:'+ 87 броней за месяц', phone:'Всего гостей: 312', icon:'📊', table:'Средний чек: 1 956 ₽', time:'Выручка депозитов: 248 500 ₽', guests:0, deposit:0, status:'info'},
+        ]
+    };
+
+    function filterBookings(period, el) {
+        el.parentElement.querySelectorAll('button').forEach(b => {
+            b.style.background = 'var(--bg-card)';
+            b.style.border = '1px solid rgba(234,229,220,0.08)';
+            b.style.color = 'var(--text-pri)';
+            b.style.fontWeight = '400';
+        });
+        el.style.background = 'var(--accent)';
+        el.style.color = '#0a1a1c';
+        el.style.border = 'none';
+        el.style.fontWeight = '600';
+
+        const list = document.getElementById('adminBookingsList');
+        const data = MOCK_BOOKINGS[period] || [];
+        list.innerHTML = data.map(b => {
+            const statusBadge = b.status === 'paid'
+                ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>'
+                : b.status === 'pending'
+                    ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">ЖДЁТ ОПЛАТЫ</span>'
+                    : '';
+            const depositLine = b.deposit > 0 ? `<div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: ${b.deposit.toLocaleString('ru-RU')} ₽</div>` : '';
+            const borderColor = b.status === 'pending' ? 'var(--gold)' : 'transparent';
+            return `<div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid ${borderColor};">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:13px; font-weight:700;">${b.name}</div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${b.phone}</div>
+                    </div>
+                    ${statusBadge}
+                </div>
+                <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec); flex-wrap:wrap;">
+                    <span>${b.icon} ${b.table}</span><span>🕒 ${b.time}</span>${b.guests > 0 ? `<span>👥 ${b.guests} гостя</span>` : ''}
+                </div>
+                ${depositLine}
+            </div>`;
+        }).join('');
+    }
+
+    // Отзывы
+    const MOCK_REVIEWS = {
+        all: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта, минут 15. Бильярд ок, но сервис подвёл', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения! Разберёмся с сервисом. Приглашаем на бесплатный кальян'},
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер, стол №8 идеальный. Коктейли супер', tags:['Бильярд','Бар']},
+            {type:'positive', name:'Алексей М.', rating:5, time:'Вчера, 19:20', text:'Шикарные стейки, атмосфера супер. Вернёмся!', tags:['Кухня']},
+            {type:'negative', name:'Ольга Н.', rating:2, time:'Вчера, 14:10', text:'Столы плохо убраны, шары грязные', tags:['НЕГАТИВ','Чистота'], aiResponse:'Ольга, спасибо за обратную связь, уже работаем над этим'},
+        ],
+        negative: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта, минут 15', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения!'},
+            {type:'negative', name:'Ольга Н.', rating:2, time:'Вчера, 14:10', text:'Столы плохо убраны', tags:['НЕГАТИВ','Чистота'], aiResponse:'Ольга, уже работаем'},
+        ],
+        positive: [
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер, коктейли супер', tags:['Бильярд','Бар']},
+            {type:'positive', name:'Алексей М.', rating:5, time:'Вчера, 19:20', text:'Шикарные стейки, атмосфера супер', tags:['Кухня']},
+        ],
+        new: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения!'},
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер', tags:['Бильярд']},
+        ],
+    };
+
+    function filterReviews(type, el) {
+        el.parentElement.querySelectorAll('button').forEach(b => {
+            b.style.background = 'var(--bg-card)';
+            b.style.border = '1px solid rgba(234,229,220,0.08)';
+            b.style.color = 'var(--text-pri)';
+            b.style.fontWeight = '400';
+        });
+        el.style.background = 'var(--accent)';
+        el.style.color = '#0a1a1c';
+        el.style.border = 'none';
+        el.style.fontWeight = '600';
+
+        const list = document.getElementById('adminReviewsList');
+        const data = MOCK_REVIEWS[type] || [];
+        list.innerHTML = data.map(r => {
+            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            const starColor = r.type === 'negative' ? '#ef4444' : 'var(--gold)';
+            const borderColor = r.type === 'negative' ? '#ef4444' : 'transparent';
+            const tagsHtml = r.tags.map(t => {
+                const isNeg = t === 'НЕГАТИВ' || t === 'Сервис' || t === 'Чистота';
+                const bg = isNeg ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)';
+                const color = isNeg ? '#ef4444' : 'var(--accent-light)';
+                const weight = t === 'НЕГАТИВ' ? '600' : '400';
+                return `<span style="font-size:10px; padding:3px 8px; border-radius:6px; background:${bg}; color:${color}; font-weight:${weight};">${t}</span>`;
+            }).join('');
+            const aiBlock = r.aiResponse ? `<div style="margin-top:10px; padding:10px; background:rgba(239,68,68,0.06); border-radius:10px; font-size:11px; color:var(--text-sec);"><strong style="color:#ef4444;">🤖 AI-ответ:</strong> «${r.aiResponse}»</div>` : '';
+            return `<div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid ${borderColor};">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-weight:600; font-size:13px;">${r.name}</div>
+                    <div style="color:${starColor};">${stars}</div>
+                </div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${r.time}</div>
+                <div style="font-size:12px; color:var(--text-sec); margin-top:8px; line-height:1.5;">${r.text}</div>
+                <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">${tagsHtml}</div>
+                ${aiBlock}
+            </div>`;
+        }).join('');
+    }
+
+    // Аналитика
+    const MOCK_ANALYTICS = {
+        week: {title:'Всего броней за неделю', total:'127', trend:'▲ +14% к прошлой неделе', days:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'], values:[40,55,48,62,85,95,78], peak:'суббота (24 брони)', revenue:'248 500 ₽', avgCheck:'1 956 ₽', rating:'4.7 ★', cancellations:'8'},
+        month: {title:'Всего броней за месяц', total:'512', trend:'▲ +8% к прошлому месяцу', days:['1-7','8-14','15-21','22-28','29-30'], values:[65,72,80,88,45], peak:'22-28 число (148 броней)', revenue:'1 124 000 ₽', avgCheck:'2 014 ₽', rating:'4.6 ★', cancellations:'34'},
+        year: {title:'Всего броней за год', total:'6 248', trend:'▲ +22% к прошлому году', days:['Q1','Q2','Q3','Q4'], values:[55,70,85,92], peak:'Q4 (2 120 броней)', revenue:'12 890 000 ₽', avgCheck:'2 088 ₽', rating:'4.7 ★', cancellations:'412'},
+    };
+
+    function filterAnalytics(period, el) {
+        el.parentElement.querySelectorAll('button').forEach(b => {
+            b.style.background = 'var(--bg-card)';
+            b.style.border = '1px solid rgba(234,229,220,0.08)';
+            b.style.color = 'var(--text-pri)';
+            b.style.fontWeight = '400';
+        });
+        el.style.background = 'var(--accent)';
+        el.style.color = '#0a1a1c';
+        el.style.border = 'none';
+        el.style.fontWeight = '600';
+
+        const data = MOCK_ANALYTICS[period];
+        document.getElementById('analyticsTitle').textContent = data.title;
+        document.getElementById('analyticsTotal').textContent = data.total;
+        document.getElementById('analyticsTrend').textContent = data.trend;
+        document.getElementById('analyticsRevenue').textContent = data.revenue;
+        document.getElementById('analyticsAvgCheck').textContent = data.avgCheck;
+        document.getElementById('analyticsRating').textContent = data.rating;
+        document.getElementById('analyticsCancellations').textContent = data.cancellations;
+        document.getElementById('analyticsPeak').textContent = 'Пик: ' + data.peak;
+
+        const chart = document.getElementById('analyticsChart');
+        chart.innerHTML = data.days.map((d,i) => {
+            const h = data.values[i];
+            const isGold = h >= 75;
+            const bg = isGold ? 'linear-gradient(to top, var(--gold), #fbbf24)' : 'linear-gradient(to top, var(--accent), var(--accent-light))';
+            return `<div style="width:${90/data.days.length}%; background:${bg}; height:${h}%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">${d}</div></div>`;
+        }).join('');
     }
 
     // Вызвать при загрузке
