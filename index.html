@@ -2458,6 +2458,187 @@
         </div>
     </div>
 
+    <!-- ========== PAGE: CERTIFICATES ========== -->
+    <div class="page" id="page-certificates">
+        <div class="section-title" style="margin-top:16px;">🎁 Подарочные сертификаты</div>
+        <div class="section-subtitle">Идеальный подарок близким на любой праздник</div>
+
+        <div class="glass" style="margin-top:12px; padding:16px; border:1px solid rgba(245,158,11,0.2); background:linear-gradient(135deg, rgba(245,158,11,0.05), rgba(16,185,129,0.05));">
+            <div style="font-size:13px; color:var(--text-sec); line-height:1.6;">
+                Сертификат можно использовать для оплаты бронирования столов, игры в бильярд, заказов в ресторане и баре. Действителен 1 год с даты покупки.
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px;">Выберите номинал</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="cert-card" onclick="selectCertAmount(3000, this)" style="padding:16px; border-radius:16px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); cursor:pointer; text-align:center; transition:all 0.25s;">
+                <div style="font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase;">Номинал</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px; background:linear-gradient(135deg,#10b981,#2dd4a0); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">3 000 ₽</div>
+                <div style="font-size:11px; color:var(--text-sec); margin-top:4px;">Базовый</div>
+            </div>
+
+            <div class="cert-card" onclick="selectCertAmount(5000, this)" style="padding:16px; border-radius:16px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); cursor:pointer; text-align:center; transition:all 0.25s;">
+                <div style="font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase;">Номинал</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px; background:linear-gradient(135deg,#10b981,#2dd4a0); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">5 000 ₽</div>
+                <div style="font-size:11px; color:var(--text-sec); margin-top:4px;">Популярный</div>
+            </div>
+
+            <div class="cert-card" onclick="selectCertAmount(10000, this)" style="padding:16px; border-radius:16px; border:1px solid rgba(245,158,11,0.25); background:linear-gradient(135deg, rgba(245,158,11,0.08), var(--bg-card)); cursor:pointer; text-align:center; transition:all 0.25s; position:relative;">
+                <div style="position:absolute; top:-8px; right:8px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; font-size:9px; font-weight:800; padding:3px 8px; border-radius:8px; letter-spacing:1px;">ХИТ</div>
+                <div style="font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase;">Номинал</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px; background:linear-gradient(135deg,#f59e0b,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">10 000 ₽</div>
+                <div style="font-size:11px; color:var(--text-sec); margin-top:4px;">Для компании</div>
+            </div>
+
+            <div class="cert-card" onclick="selectCertAmount(15000, this)" style="padding:16px; border-radius:16px; border:1px solid rgba(245,158,11,0.25); background:linear-gradient(135deg, rgba(245,158,11,0.08), var(--bg-card)); cursor:pointer; text-align:center; transition:all 0.25s;">
+                <div style="font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase;">Номинал</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px; background:linear-gradient(135deg,#f59e0b,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">15 000 ₽</div>
+                <div style="font-size:11px; color:var(--text-sec); margin-top:4px;">VIP</div>
+            </div>
+        </div>
+
+        <div id="certForm" style="display:none; margin-top:20px;">
+            <div class="section-title">Данные получателя</div>
+
+            <div class="form-group">
+                <label class="form-label">Имя получателя</label>
+                <input type="text" class="form-input" id="certRecipientName" placeholder="Например: Иван">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Способ доставки сертификата</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="delivery-option active" onclick="selectDelivery('email', this)" style="padding:12px; border-radius:12px; border:1px solid var(--accent); background:rgba(16,185,129,0.1); cursor:pointer; text-align:center;">
+                        <div style="font-size:20px;">📧</div>
+                        <div style="font-size:12px; margin-top:4px;">Email</div>
+                    </div>
+                    <div class="delivery-option" onclick="selectDelivery('telegram', this)" style="padding:12px; border-radius:12px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); cursor:pointer; text-align:center;">
+                        <div style="font-size:20px;">💬</div>
+                        <div style="font-size:12px; margin-top:4px;">Telegram</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="certEmailGroup">
+                <label class="form-label">Email получателя</label>
+                <input type="email" class="form-input" id="certRecipientEmail" placeholder="example@mail.ru">
+            </div>
+
+            <div class="form-group" id="certTelegramGroup" style="display:none;">
+                <label class="form-label">Telegram ник или номер</label>
+                <input type="text" class="form-input" id="certRecipientTelegram" placeholder="@username или +7...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Поздравление (опционально)</label>
+                <textarea class="form-input" id="certMessage" rows="3" placeholder="С Днём Рождения! Отметим вместе в Виктории"></textarea>
+            </div>
+
+            <div class="glass" style="margin-top:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(245,158,11,0.25);">
+                <span style="font-size:14px; color:var(--text-sec);">Итого к оплате</span>
+                <span id="certTotalAmount" style="font-size:24px; font-weight:700; color:var(--gold);">0 ₽</span>
+            </div>
+
+            <button class="btn-pay" onclick="buyCertificate()" style="margin-top:14px; width:100%; padding:16px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer; box-shadow:0 4px 16px rgba(245,158,11,0.4);">
+                Купить сертификат
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== PAGE: ADMIN DASHBOARD (только для Надежды и Юрия) ========== -->
+    <div class="page" id="page-admin">
+        <div style="margin-top:16px; padding:16px; border-radius:16px; background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(16,185,129,0.05)); border:1px solid rgba(245,158,11,0.3);">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="font-size:28px;">👑</div>
+                <div>
+                    <div style="font-size:16px; font-weight:700;">Панель управляющего</div>
+                    <div style="font-size:11px; color:var(--text-sec);">Доступна только администраторам</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top:18px;">📊 Сегодня, 14 апреля</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="glass" style="padding:14px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Броней</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px; color:var(--accent-light);">18</div>
+                <div style="font-size:11px; color:var(--text-sec);">+3 к вчера</div>
+            </div>
+            <div class="glass" style="padding:14px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Гостей</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px;">47</div>
+                <div style="font-size:11px; color:var(--text-sec);">Ожидается</div>
+            </div>
+            <div class="glass" style="padding:14px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Депозиты</div>
+                <div style="font-size:24px; font-weight:700; margin-top:4px; color:var(--gold);">34 500 ₽</div>
+                <div style="font-size:11px; color:var(--text-sec);">Оплачено</div>
+            </div>
+            <div class="glass" style="padding:14px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Загрузка</div>
+                <div style="font-size:28px; font-weight:700; margin-top:4px;">72%</div>
+                <div style="font-size:11px; color:var(--text-sec);">Вечер</div>
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px;">💬 Последние отзывы</div>
+        <div class="glass" style="padding:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:600;">Иван П.</div>
+                <div style="color:var(--gold);">★★★★★</div>
+            </div>
+            <div style="font-size:12px; color:var(--text-sec); margin-top:6px; line-height:1.5;">Отличный вечер, стол №8 идеальный. Депозит ушёл в бар — коктейли супер</div>
+            <div style="margin-top:8px; display:flex; gap:6px;">
+                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light);">Бильярд</span>
+                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light);">Бар</span>
+            </div>
+        </div>
+
+        <div class="glass" style="padding:14px; margin-top:10px; border-left:3px solid #ef4444;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:600;">Мария К.</div>
+                <div style="color:#ef4444;">★★☆☆☆</div>
+            </div>
+            <div style="font-size:12px; color:var(--text-sec); margin-top:6px; line-height:1.5;">Долго ждали официанта, минут 15. Бильярд ок, но сервис подвёл</div>
+            <div style="margin-top:8px; display:flex; gap:6px;">
+                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:600;">НЕГАТИВ</span>
+                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444;">Сервис</span>
+            </div>
+            <div style="margin-top:10px; padding:10px; background:rgba(239,68,68,0.06); border-radius:10px; font-size:11px; color:var(--text-sec);">
+                <strong style="color:#ef4444;">🤖 AI-ответ отправлен:</strong> «Мария, приносим извинения! Разберёмся с сервисом. Приглашаем на бесплатный кальян в следующий визит»
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px;">🔥 Темы недели (AI)</div>
+        <div class="glass" style="padding:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
+                <span>Хвалят кухню</span><span style="color:var(--accent-light); font-weight:600;">+12</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
+                <span>Коктейли</span><span style="color:var(--accent-light); font-weight:600;">+8</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
+                <span>Долгое ожидание</span><span style="color:#ef4444; font-weight:600;">−4</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
+                <span>Чистота столов</span><span style="color:#ef4444; font-weight:600;">−2</span>
+            </div>
+        </div>
+
+        <div class="glass" style="margin-top:16px; padding:14px; border:1px solid rgba(245,158,11,0.25);">
+            <div style="font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:1.5px; font-weight:700;">💡 AI-рекомендация</div>
+            <div style="font-size:12px; color:var(--text-sec); margin-top:6px; line-height:1.6;">За эту неделю 4 жалобы на долгое ожидание в вечерние часы пт-сб. Рекомендуем проверить расписание официантов на выходные или добавить ещё одного в prime-time</div>
+        </div>
+
+        <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-bottom:40px;">
+            <button class="btn-pay" style="padding:14px; border:1px solid var(--accent); background:rgba(16,185,129,0.1); color:var(--accent-light); border-radius:12px; font-weight:600; font-size:12px; cursor:pointer;">📥 Все отзывы</button>
+            <button class="btn-pay" style="padding:14px; border:1px solid var(--gold); background:rgba(245,158,11,0.08); color:var(--gold); border-radius:12px; font-weight:600; font-size:12px; cursor:pointer;">📅 Календарь броней</button>
+            <button class="btn-pay" style="padding:14px; border:1px solid rgba(234,229,220,0.15); background:var(--bg-card); color:var(--text-pri); border-radius:12px; font-weight:600; font-size:12px; cursor:pointer;">📊 За неделю</button>
+            <button class="btn-pay" style="padding:14px; border:1px solid rgba(234,229,220,0.15); background:var(--bg-card); color:var(--text-pri); border-radius:12px; font-weight:600; font-size:12px; cursor:pointer;">📆 За месяц</button>
+        </div>
+    </div>
+
     <!-- ========== PAGE: REVIEW ========== -->
     <div class="page" id="page-review">
 
@@ -2650,9 +2831,13 @@
             <span class="nav-icon">&#127921;</span>
             <span class="nav-label">Столы</span>
         </button>
+        <button class="nav-item" onclick="navigate('certificates', this)">
+            <span class="nav-icon">&#127873;</span>
+            <span class="nav-label">Сертификат</span>
+        </button>
         <button class="nav-item" onclick="navigate('bookings', this)">
             <span class="nav-icon">&#128203;</span>
-            <span class="nav-label">Мои брони</span>
+            <span class="nav-label">Брони</span>
         </button>
         <button class="nav-item" onclick="navigate('loyalty', this)">
             <span class="nav-icon">&#11088;</span>
@@ -2661,6 +2846,13 @@
         <button class="nav-item" onclick="navigate('review', this)">
             <span class="nav-icon">&#128172;</span>
             <span class="nav-label">Отзыв</span>
+        </button>
+    </div>
+
+    <!-- Admin mode toggle (only visible when ?admin=1 or for admin Telegram IDs: 77408468, 5923429546) -->
+    <div id="adminToggle" style="position:absolute; top:8px; right:16px; z-index:250; display:none;">
+        <button onclick="toggleAdminMode()" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; font-family:Montserrat; cursor:pointer; box-shadow:0 2px 8px rgba(245,158,11,0.4);">
+            👑 Админ
         </button>
     </div>
 
@@ -3021,6 +3213,86 @@
                 }
             }, 100);
         }
+    }
+
+    // =========================
+    // ПОДАРОЧНЫЕ СЕРТИФИКАТЫ
+    // =========================
+    let selectedCertAmount = 0;
+    let selectedDelivery = 'email';
+
+    function selectCertAmount(amount, el) {
+        selectedCertAmount = amount;
+        document.querySelectorAll('.cert-card').forEach(c => {
+            c.style.transform = 'scale(1)';
+            c.style.boxShadow = 'none';
+        });
+        el.style.transform = 'scale(1.02)';
+        el.style.boxShadow = '0 0 20px rgba(245,158,11,0.3)';
+
+        document.getElementById('certForm').style.display = 'block';
+        document.getElementById('certTotalAmount').textContent = amount.toLocaleString('ru-RU') + ' ₽';
+        document.getElementById('certForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function selectDelivery(type, el) {
+        selectedDelivery = type;
+        document.querySelectorAll('.delivery-option').forEach(o => {
+            o.classList.remove('active');
+            o.style.border = '1px solid rgba(234,229,220,0.08)';
+            o.style.background = 'var(--bg-card)';
+        });
+        el.classList.add('active');
+        el.style.border = '1px solid var(--accent)';
+        el.style.background = 'rgba(16,185,129,0.1)';
+
+        document.getElementById('certEmailGroup').style.display = (type === 'email') ? 'block' : 'none';
+        document.getElementById('certTelegramGroup').style.display = (type === 'telegram') ? 'block' : 'none';
+    }
+
+    function buyCertificate() {
+        const name = document.getElementById('certRecipientName').value;
+        const email = document.getElementById('certRecipientEmail').value;
+        const telegram = document.getElementById('certRecipientTelegram').value;
+
+        if (!name) { alert('Укажите имя получателя'); return; }
+        if (selectedDelivery === 'email' && !email) { alert('Укажите email получателя'); return; }
+        if (selectedDelivery === 'telegram' && !telegram) { alert('Укажите Telegram получателя'); return; }
+
+        alert('Переход к оплате ' + selectedCertAmount.toLocaleString('ru-RU') + ' ₽ через ЮKassa\n\nПолучатель: ' + name + '\nДоставка: ' + (selectedDelivery === 'email' ? email : telegram));
+    }
+
+    // =========================
+    // АДМИН-РЕЖИМ
+    // =========================
+    const ADMIN_IDS = [77408468, 5923429546]; // Надежда, Юрий
+    let isAdminMode = false;
+
+    function checkAdminAccess() {
+        // В реальном Mini App здесь будет Telegram.WebApp.initDataUnsafe.user.id
+        // Для демо: если URL содержит ?admin=1 — показываем кнопку
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('admin') === '1') {
+            document.getElementById('adminToggle').style.display = 'block';
+        }
+    }
+
+    function toggleAdminMode() {
+        isAdminMode = !isAdminMode;
+        if (isAdminMode) {
+            navigate('admin', document.querySelector('.nav-item'));
+            document.querySelector('#adminToggle button').innerHTML = '👤 Гость';
+        } else {
+            navigate('tables', document.querySelector('.nav-item'));
+            document.querySelector('#adminToggle button').innerHTML = '👑 Админ';
+        }
+    }
+
+    // Вызвать при загрузке
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    } else {
+        checkAdminAccess();
     }
 
     function setRating(n) {
