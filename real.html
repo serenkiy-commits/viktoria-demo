@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Виктория — Real Data Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a1a1c;--bg-deep:#061210;--card:rgba(16,42,44,0.6);
+  --accent:#10b981;--accent-light:#2dd4a0;--gold:#f59e0b;
+  --text:#eae5dc;--text-sec:#a09888;--text-muted:#6b6055;
+  --border:rgba(234,229,220,0.08);
+}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 100%);
+  color:var(--text);min-height:100vh;padding:20px;
+}
+.container{max-width:1400px;margin:0 auto}
+h1{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.sub{color:var(--text-sec);font-size:14px;margin-bottom:24px}
+.banner{background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(245,158,11,0.08));border:1px solid rgba(16,185,129,0.3);border-radius:14px;padding:14px 18px;margin-bottom:24px;font-size:13px}
+.banner strong{color:var(--accent-light)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.stat{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:16px;padding:18px}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px}
+.stat-value{font-size:32px;font-weight:800;margin-top:6px;color:var(--accent-light)}
+.stat-sub{font-size:12px;color:var(--text-sec);margin-top:4px}
+.gold{color:var(--gold)!important}
+.red{color:#ef4444!important}
+.section{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}
+.section h2{font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section h2 .cnt{font-size:12px;padding:3px 10px;background:rgba(16,185,129,0.15);color:var(--accent-light);border-radius:10px}
+
+/* Tables grid */
+.tables-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.table-card{background:var(--bg-deep);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all 0.2s}
+.table-card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 30px rgba(16,185,129,0.15)}
+.table-photo{width:100%;height:160px;background-size:cover;background-position:center;background-color:#0f3a2a;position:relative}
+.table-photo .badge{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:700;backdrop-filter:blur(12px);background:rgba(10,26,28,0.8)}
+.table-photo .badge.free{color:var(--accent-light);border:1px solid rgba(16,185,129,0.4)}
+.table-photo .badge.busy{color:#ef4444;border:1px solid rgba(239,68,68,0.4)}
+.table-info{padding:12px 14px}
+.table-num{font-size:18px;font-weight:800}
+.table-meta{font-size:11px;color:var(--text-sec);margin-top:4px;display:flex;justify-content:space-between}
+.hall-tag{font-size:10px;padding:2px 8px;background:rgba(245,158,11,0.15);color:var(--gold);border-radius:6px;display:inline-block;margin-top:6px}
+.hall-tag.main{background:rgba(16,185,129,0.15);color:var(--accent-light)}
+
+/* Filter */
+.filter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter button{padding:8px 14px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.filter button.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+.filter button:hover:not(.active){border-color:var(--accent-light)}
+
+/* Reserves table */
+.rsv{background:var(--bg-deep);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 120px;gap:14px;align-items:center;font-size:13px}
+.rsv-time{font-weight:700;color:var(--accent-light)}
+.rsv-name{font-weight:600}
+.rsv-phone{font-size:11px;color:var(--text-muted)}
+.rsv-deposit{text-align:right;font-weight:700;color:var(--gold)}
+.rsv-status{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.rsv-status span{font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700}
+.paid{background:rgba(16,185,129,0.15);color:var(--accent-light)}
+.unpaid{background:rgba(245,158,11,0.15);color:var(--gold)}
+.fromwidget{background:rgba(16,185,129,0.08);color:var(--accent-light)}
+.fromadmin{background:rgba(107,96,85,0.15);color:var(--text-sec)}
+@media (max-width:800px){
+  .rsv{grid-template-columns:1fr;gap:4px}
+  .rsv-deposit,.rsv-status{text-align:left;justify-content:flex-start}
+}
+
+/* Hall tabs */
+.hall-tabs{display:flex;gap:10px;margin-bottom:16px}
+.hall-tab{padding:10px 18px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;transition:all 0.2s}
+.hall-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:var(--bg);border-color:transparent}
+
+.legend{display:flex;gap:16px;margin-bottom:12px;font-size:11px;color:var(--text-sec)}
+.legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.dot-free{background:var(--accent-light)}
+.dot-busy{background:#ef4444}
+
+.occupancy{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-top:10px}
+.occ-h{height:30px;background:rgba(16,185,129,0.15);border-radius:3px;position:relative}
+.occ-h.busy{background:rgba(239,68,68,0.4)}
+.occ-h.free{background:rgba(16,185,129,0.3)}
+.occ-time{font-size:9px;color:var(--text-muted);text-align:center;margin-top:2px}
+
+.no-photo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:48px;opacity:0.3}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📊 Виктория — Real Dashboard</h1>
+  <div class="sub">Отдельное демо с живыми данными из Resta Place API · обновлено 15.04.2026</div>
+
+  <div class="banner">
+    💡 <strong>Это не прототип, а реальные данные заведения.</strong> Всё подтянуто через Resta Place API (ключ: 1b95a59...cbe).
+    Фото столов, вместимость, зал, брони, депозиты, занятость — всё из ЛК «Виктория». Так будет в приложении для гостей и админов.
+  </div>
+
+  <div class="stats" id="statsGrid"></div>
+
+  <div class="section">
+    <h2>🎯 Занятость на сегодня (15.04)</h2>
+    <div class="legend">
+      <span><span class="legend-dot dot-free"></span>Свободно</span>
+      <span><span class="legend-dot dot-busy"></span>Есть бронь</span>
+    </div>
+    <div id="timeline"></div>
+  </div>
+
+  <div class="section">
+    <h2>🍽 Столы заведения <span class="cnt" id="tablesCount">—</span></h2>
+    <div class="hall-tabs">
+      <button class="hall-tab active" onclick="filterHall('all', this)">Все</button>
+      <button class="hall-tab" onclick="filterHall(39372, this)">Основной зал</button>
+      <button class="hall-tab" onclick="filterHall(39790, this)">Бильярдный зал</button>
+    </div>
+    <div class="tables-grid" id="tablesGrid"></div>
+  </div>
+
+  <div class="section">
+    <h2>📋 Активные брони на сегодня <span class="cnt" id="reservesCount">—</span></h2>
+    <div class="filter">
+      <button class="active" onclick="filterReserves('all', this)">Все</button>
+      <button onclick="filterReserves('paid', this)">Оплачены</button>
+      <button onclick="filterReserves('unpaid', this)">Без оплаты</button>
+      <button onclick="filterReserves('widget', this)">Через виджет</button>
+    </div>
+    <div id="reservesList"></div>
+  </div>
+
+</div>
+
+<script>
+let DATA = null;
+let currentHall = 'all';
+let currentRsvFilter = 'all';
+
+async function load(){
+  const res = await fetch('_dashboard_data.json');
+  DATA = await res.json();
+  renderStats();
+  renderTables();
+  renderReserves();
+  renderTimeline();
+}
+
+function renderStats(){
+  const s = DATA.stats;
+  const paidCount = DATA.reserves.filter(r=>r.deposit_paid>0).length;
+  const totalGuests = DATA.reserves.reduce((sum,r)=>sum+(r.count||0),0);
+  const grid = document.getElementById('statsGrid');
+  grid.innerHTML = `
+    <div class="stat"><div class="stat-label">Всего столов</div><div class="stat-value">${DATA.items.length}</div><div class="stat-sub">в 2 залах</div></div>
+    <div class="stat"><div class="stat-label">Броней сегодня</div><div class="stat-value">${s.active_reserves}</div><div class="stat-sub">активных</div></div>
+    <div class="stat"><div class="stat-label">Ожидается гостей</div><div class="stat-value">${totalGuests}</div><div class="stat-sub">всего</div></div>
+    <div class="stat"><div class="stat-label">Депозитов оплачено</div><div class="stat-value gold">${s.total_deposit.toLocaleString('ru-RU')} ₽</div><div class="stat-sub">${paidCount} броней</div></div>
+  `;
+}
+
+function renderTables(){
+  const grid = document.getElementById('tablesGrid');
+  let filtered = DATA.items;
+  if (currentHall !== 'all') filtered = filtered.filter(i=>i.hall==currentHall);
+  document.getElementById('tablesCount').textContent = filtered.length;
+  grid.innerHTML = filtered.map(t=>{
+    // Check if table is booked now
+    const now = new Date();
+    const busy = DATA.reserves.some(r=>{
+      if (!r.item_ids.includes(t.id)) return false;
+      if (!r.from || !r.to) return false;
+      const f = new Date(r.from.replace(' ','T'));
+      const to = new Date(r.to.replace(' ','T'));
+      return now >= f && now <= to;
+    });
+    const isBilliard = t.hall === 39790;
+    const hallName = isBilliard ? 'Бильярдный' : 'Основной';
+    const hallCls = isBilliard ? '' : 'main';
+    const photo = t.preview || t.photo;
+    const photoHtml = photo ? `background-image:url('${photo}')` : '';
+    const noPhoto = photo ? '' : '<div class="no-photo">'+(isBilliard?'🎱':'🍽')+'</div>';
+    return `
+      <div class="table-card">
+        <div class="table-photo" style="${photoHtml}">
+          ${noPhoto}
+          <span class="badge ${busy?'busy':'free'}">${busy?'ЗАНЯТ':'СВОБОДЕН'}</span>
+        </div>
+        <div class="table-info">
+          <div class="table-num">Стол №${t.number}</div>
+          <div class="table-meta">
+            <span>👥 ${t.min}–${t.max} мест</span>
+            <span>ID ${t.id}</span>
+          </div>
+          <span class="hall-tag ${hallCls}">${hallName}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterHall(id,btn){
+  currentHall = id;
+  document.querySelectorAll('.hall-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTables();
+}
+
+function renderReserves(){
+  let filtered = DATA.reserves.filter(r=>r.from); // только с временем
+  // Today only
+  filtered = filtered.filter(r=>r.from && r.from.startsWith('2026-04-15'));
+  if (currentRsvFilter==='paid') filtered=filtered.filter(r=>r.deposit_paid>0);
+  if (currentRsvFilter==='unpaid') filtered=filtered.filter(r=>r.deposit_paid==0 && r.deposit_price>0);
+  if (currentRsvFilter==='widget') filtered=filtered.filter(r=>r.source==='widget' || r.source==='web');
+
+  // Sort by time
+  filtered.sort((a,b)=>(a.from||'').localeCompare(b.from||''));
+
+  document.getElementById('reservesCount').textContent = filtered.length;
+
+  const list = document.getElementById('reservesList');
+  if (filtered.length===0){
+    list.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">Нет броней в этой категории</div>';
+    return;
+  }
+  list.innerHTML = filtered.slice(0,50).map(r=>{
+    const timeFrom = r.from ? r.from.split(' ')[1].slice(0,5) : '—';
+    const timeTo = r.to ? r.to.split(' ')[1].slice(0,5) : '—';
+    const paid = r.deposit_paid > 0;
+    const hasDeposit = r.deposit_price > 0;
+    const tableIds = r.item_ids.map(id=>{
+      const item = DATA.items.find(i=>i.id===id);
+      return item ? '№'+item.number : '?';
+    }).join(', ');
+    const isBilliard = r.floor_id === 39790;
+    return `
+      <div class="rsv">
+        <div>
+          <div class="rsv-time">${timeFrom}–${timeTo}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${isBilliard?'🎱 Бильярд':'🍽 Осн. зал'} · ${tableIds}</div>
+        </div>
+        <div>
+          <div class="rsv-name">${r.name||'—'}</div>
+          <div class="rsv-phone">+${r.phone||'—'}</div>
+        </div>
+        <div style="text-align:center">
+          <div>👥 ${r.count||1} гостя</div>
+        </div>
+        <div class="rsv-deposit">
+          ${hasDeposit ? r.deposit_price.toLocaleString('ru-RU')+' ₽' : '<span style="color:var(--text-muted);font-weight:400">без депозита</span>'}
+        </div>
+        <div class="rsv-status">
+          ${hasDeposit ? (paid ? '<span class="paid">ОПЛАЧЕН</span>' : '<span class="unpaid">ЖДЁТ</span>') : ''}
+          ${r.source==='widget' ? '<span class="fromwidget">Виджет</span>' : r.source==='adminpanel' ? '<span class="fromadmin">Админ</span>' : ''}
+        </div>
+      </div>
+    `;
+  }).join('') + (filtered.length>50 ? `<div style="padding:14px;text-align:center;color:var(--text-muted);font-size:12px">... и ещё ${filtered.length-50} броней</div>` : '');
+}
+
+function filterReserves(f,btn){
+  currentRsvFilter = f;
+  document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReserves();
+}
+
+function renderTimeline(){
+  const timeline = document.getElementById('timeline');
+  const hours = [];
+  for (let h=12; h<=23; h++) hours.push(h);
+  // For each hour count booked tables
+  const busy = {};
+  DATA.reserves.forEach(r=>{
+    if (!r.from || !r.to) return;
+    if (!r.from.startsWith('2026-04-15')) return;
+    const fh = parseInt(r.from.split(' ')[1].slice(0,2));
+    const th = parseInt(r.to.split(' ')[1].slice(0,2));
+    for (let h=fh; h<=th && h<=23; h++){
+      busy[h] = (busy[h]||0) + r.item_ids.length;
+    }
+  });
+  const maxBusy = Math.max(...Object.values(busy), 1);
+  timeline.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(${hours.length},1fr);gap:4px">
+      ${hours.map(h=>{
+        const b = busy[h]||0;
+        const pct = Math.round(b/DATA.items.length*100);
+        const col = pct>70?'#ef4444':pct>40?'var(--gold)':'var(--accent)';
+        return `<div style="text-align:center">
+          <div style="height:60px;display:flex;align-items:flex-end;justify-content:center">
+            <div style="width:80%;height:${Math.max(pct,5)}%;background:${col};border-radius:4px 4px 0 0;transition:all 0.3s" title="${b} броней"></div>
+          </div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px">${h}:00</div>
+          <div style="font-size:11px;font-weight:700">${b}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px">Количество забронированных столов по часам</div>
+  `;
+}
+
+load();
+</script>
+</body>
+</html>
