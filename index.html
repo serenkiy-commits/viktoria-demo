@@ -2513,7 +2513,7 @@
                     «Виктория»
                 </div>
                 <div style="font-size:11px; font-weight:700; color:#000; margin-top:14px; letter-spacing:0.5px;">СЕРТИФИКАТ В БИЛЬЯРДНЫЙ КЛУБ «ВИКТОРИЯ»</div>
-                <div style="font-size:32px; font-weight:800; margin-top:6px; color:#000;" id="certPreviewAmount">3 000,00 ₽</div>
+                <div style="font-size:26px; font-weight:800; margin-top:6px; color:#000; white-space:nowrap;" id="certPreviewAmount">3 000 ₽</div>
                 <div style="font-size:14px; font-weight:700; margin-top:10px;" id="certPreviewName">—</div>
                 <div style="font-size:10px; color:#555; margin-top:4px; line-height:1.5;">Данный сертификат предоставляет возможность использовать услуги заведения на сумму указанную в номинале сертификата и в срок указанный в сертификате</div>
 
@@ -3617,7 +3617,7 @@
         const previewDates = document.getElementById('certPreviewDates');
         if (previewDates) previewDates.textContent = fmt(today) + ' – ' + fmt(expiry);
         const previewAmount = document.getElementById('certPreviewAmount');
-        if (previewAmount) previewAmount.textContent = amount.toLocaleString('ru-RU').replace(',', ' ') + ',00 ₽';
+        if (previewAmount) previewAmount.textContent = amount.toLocaleString('ru-RU') + ' ₽';
 
         updateCertPreview();
 
