@@ -3658,6 +3658,8 @@
             const guestBadge = document.getElementById('guestBadge');
             if (adminBadge) adminBadge.style.display = 'flex';
             if (guestBadge) guestBadge.style.display = 'none';
+            // Автоматически открыть админ-панель
+            setTimeout(() => { toggleAdminMode(); }, 300);
         }
     }
 
@@ -3770,22 +3772,36 @@
     // Данные-заглушки для брони
     const MOCK_BOOKINGS = {
         today: [
-            {name:'Иван П.', phone:'+7 (925) 123-45-67', icon:'🎱', table:'Стол №8', time:'20:00—23:00', guests:3, deposit:4500, status:'paid'},
-            {name:'Алексей М.', phone:'+7 (903) 555-12-34', icon:'🍽', table:'Стол №12', time:'19:30—22:00', guests:4, deposit:6000, status:'paid'},
-            {name:'Мария С.', phone:'+7 (916) 777-88-99', icon:'🍽', table:'Стол №5', time:'21:00—23:00', guests:2, deposit:3000, status:'pending'},
+            {name:'тест',phone:'+7 (909) 685-70-29',icon:'🍽',table:'Стол №209',time:'15:00—16:00',guests:1,deposit:0,status:'paid'},
+            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🍽',table:'Стол №7',time:'15:00—20:49',guests:2,deposit:0,status:'paid'},
+            {name:'Сергей',phone:'+7 (926) 144-64-40',icon:'🍽',table:'Стол №3',time:'16:44—20:58',guests:2,deposit:0,status:'confirmed'},
+            {name:'Сергей',phone:'+7 (926) 144-64-40',icon:'🍽',table:'Стол №3',time:'18:00—21:00',guests:2,deposit:3000,status:'paid'},
+            {name:'Юрий',phone:'+7 (926) 863-55-66',icon:'🍽',table:'Стол №9',time:'19:00—21:00',guests:3,deposit:0,status:'confirmed'},
+            {name:'Никита',phone:'+7 (909) 673-69-12',icon:'🍽',table:'Стол №5',time:'19:06—21:51',guests:2,deposit:3000,status:'paid'}
         ],
         tomorrow: [
-            {name:'Сергей К.', phone:'+7 (901) 222-33-44', icon:'🎱', table:'Стол №3', time:'18:00—21:00', guests:2, deposit:3000, status:'paid'},
-            {name:'Ольга Д.', phone:'+7 (915) 888-99-00', icon:'🍽', table:'Стол №9', time:'20:30—23:00', guests:5, deposit:7500, status:'paid'},
+            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №6',time:'15:18—17:00',guests:1,deposit:0,status:'confirmed'},
+            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №1',time:'16:00—18:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №3',time:'16:00—18:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Кирилл',phone:'+7 (916) 116-07-07',icon:'🍽',table:'Стол №7',time:'18:01—22:01',guests:2,deposit:3000,status:'paid'},
+            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №204',time:'18:35—00:18',guests:4,deposit:6000,status:'paid'}
         ],
         week: [
-            {name:'Виктор Л.', phone:'+7 (925) 111-22-33', icon:'🎱', table:'Стол №1', time:'Вт, 21:00', guests:4, deposit:6000, status:'paid'},
-            {name:'Наталья Р.', phone:'+7 (916) 333-44-55', icon:'🍽', table:'Стол №7', time:'Ср, 19:00', guests:2, deposit:3000, status:'paid'},
-            {name:'Дмитрий А.', phone:'+7 (903) 777-11-22', icon:'🍽', table:'Стол №4', time:'Чт, 20:00', guests:6, deposit:9000, status:'paid'},
-            {name:'Елена Б.', phone:'+7 (965) 555-66-77', icon:'🎱', table:'Стол №6', time:'Пт, 22:00', guests:3, deposit:4500, status:'pending'},
+            {name:'Анна',phone:'+7 (962) 949-11-97',icon:'🍽',table:'Стол №6',time:'Сб 15.03, 19:59',guests:7,deposit:0,status:'confirmed'},
+            {name:'Никита',phone:'+7 (916) 910-74-44',icon:'🍽',table:'Стол №4',time:'Сб 15.03, 22:00',guests:4,deposit:0,status:'confirmed'},
+            {name:'Даниил',phone:'+7 (925) 606-17-99',icon:'🍽',table:'Стол №2',time:'Вс 16.03, 16:55',guests:2,deposit:0,status:'confirmed'},
+            {name:'Ренат',phone:'+7 (916) 501-81-76',icon:'🍽',table:'Стол №8',time:'Пн 17.03, 15:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Эдуард',phone:'+7 (909) 935-08-83',icon:'🍽',table:'Стол №8',time:'Пн 17.03, 16:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🍽',table:'Стол №7',time:'Вт 18.03, 17:58',guests:1,deposit:0,status:'paid'},
+            {name:'Андрей',phone:'+7 (977) 599-27-11',icon:'🍽',table:'Стол №8',time:'Вт 18.03, 19:59',guests:2,deposit:0,status:'confirmed'},
+            {name:'Юрий',phone:'+7 (926) 863-55-66',icon:'🍽',table:'Стол №9',time:'Ср 19.03, 19:00',guests:3,deposit:0,status:'confirmed'},
+            {name:'Никита',phone:'+7 (909) 673-69-12',icon:'🍽',table:'Стол №5',time:'Ср 19.03, 19:06',guests:2,deposit:3000,status:'paid'},
+            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №6',time:'Чт 20.03, 15:18',guests:1,deposit:0,status:'confirmed'},
+            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №1',time:'Чт 20.03, 16:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №204',time:'Пт 21.03, 18:35',guests:4,deposit:6000,status:'paid'}
         ],
         month: [
-            {name:'+ 87 броней за месяц', phone:'Всего гостей: 312', icon:'📊', table:'Средний чек: 1 956 ₽', time:'Выручка депозитов: 248 500 ₽', guests:0, deposit:0, status:'info'},
+            {name:'📊 400 броней за 15–21.03',phone:'Всего гостей: 351',icon:'📊',table:'iiko: 261 · админ: 113 · виджет: 26',time:'Средняя загрузка: 57 броней/день',guests:0,deposit:0,status:'info'},
         ]
     };
 
@@ -3808,6 +3824,8 @@
                 ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>'
                 : b.status === 'pending'
                     ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">ЖДЁТ ОПЛАТЫ</span>'
+                    : b.status === 'confirmed'
+                    ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(107,96,85,0.15); color:var(--text-sec); font-weight:700;">БЕЗ ДЕПОЗИТА</span>'
                     : '';
             const depositLine = b.deposit > 0 ? `<div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: ${b.deposit.toLocaleString('ru-RU')} ₽</div>` : '';
             const borderColor = b.status === 'pending' ? 'var(--gold)' : 'transparent';
