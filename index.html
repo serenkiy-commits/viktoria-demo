@@ -2648,12 +2648,11 @@
     <!-- ========== PAGE: ADMIN БРОНИ ========== -->
     <div class="page" id="page-admin-bookings">
         <div class="section-title" style="margin-top:16px;">📅 Брони</div>
-        <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px; padding:6px 10px; background:rgba(16,185,129,0.06); border-radius:8px; line-height:1.5;">📡 Реальные данные из Resta Place API · Период: 15–21 марта 2026</div>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px;">
-            <button onclick="filterBookings('today', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Ср 19.03</button>
-            <button onclick="filterBookings('tomorrow', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Чт 20.03</button>
+            <button onclick="filterBookings('today', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Сегодня</button>
+            <button onclick="filterBookings('tomorrow', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Завтра</button>
             <button onclick="filterBookings('week', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Неделя</button>
-            <button onclick="filterBookings('month', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Период</button>
+            <button onclick="filterBookings('month', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Месяц</button>
         </div>
 
         <div id="adminBookingsList"></div>
@@ -3784,36 +3783,32 @@
     // Данные-заглушки для брони
     const MOCK_BOOKINGS = {
         today: [
-            {name:'тест',phone:'+7 (909) 685-70-29',icon:'🍽',table:'Стол №209',time:'15:00—16:00',guests:1,deposit:0,status:'paid'},
-            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🍽',table:'Стол №7',time:'15:00—20:49',guests:2,deposit:0,status:'paid'},
-            {name:'Сергей',phone:'+7 (926) 144-64-40',icon:'🍽',table:'Стол №3',time:'16:44—20:58',guests:2,deposit:0,status:'confirmed'},
-            {name:'Сергей',phone:'+7 (926) 144-64-40',icon:'🍽',table:'Стол №3',time:'18:00—21:00',guests:2,deposit:3000,status:'paid'},
-            {name:'Юрий',phone:'+7 (926) 863-55-66',icon:'🍽',table:'Стол №9',time:'19:00—21:00',guests:3,deposit:0,status:'confirmed'},
-            {name:'Никита',phone:'+7 (909) 673-69-12',icon:'🍽',table:'Стол №5',time:'19:06—21:51',guests:2,deposit:3000,status:'paid'}
+            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🎱',table:'Стол №7',time:'18:00—21:00',guests:3,deposit:4500,status:'paid'},
+            {name:'Кирилл',phone:'+7 (916) 116-07-07',icon:'🎱',table:'Стол №3',time:'19:00—22:00',guests:2,deposit:3000,status:'paid'},
+            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №204',time:'19:30—22:00',guests:4,deposit:6000,status:'paid'},
+            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №209',time:'20:00—23:00',guests:2,deposit:3000,status:'pending'},
+            {name:'Никита',phone:'+7 (909) 673-69-12',icon:'🎱',table:'Стол №5',time:'20:30—23:30',guests:3,deposit:4500,status:'paid'},
         ],
         tomorrow: [
-            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №6',time:'15:18—17:00',guests:1,deposit:0,status:'confirmed'},
-            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №1',time:'16:00—18:00',guests:2,deposit:0,status:'confirmed'},
-            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №3',time:'16:00—18:00',guests:2,deposit:0,status:'confirmed'},
-            {name:'Кирилл',phone:'+7 (916) 116-07-07',icon:'🍽',table:'Стол №7',time:'18:01—22:01',guests:2,deposit:3000,status:'paid'},
-            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №204',time:'18:35—00:18',guests:4,deposit:6000,status:'paid'}
+            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🎱',table:'Стол №8',time:'16:00—19:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Андрей',phone:'+7 (977) 599-27-11',icon:'🎱',table:'Стол №1',time:'18:00—21:00',guests:2,deposit:3000,status:'paid'},
+            {name:'Анна',phone:'+7 (962) 949-11-97',icon:'🍽',table:'Стол №6',time:'19:00—22:00',guests:6,deposit:9000,status:'paid'},
+            {name:'Ренат',phone:'+7 (916) 501-81-76',icon:'🎱',table:'Стол №3',time:'20:00—23:00',guests:4,deposit:6000,status:'pending'},
         ],
         week: [
-            {name:'Анна',phone:'+7 (962) 949-11-97',icon:'🍽',table:'Стол №6',time:'Сб 15.03, 19:59',guests:7,deposit:0,status:'confirmed'},
-            {name:'Никита',phone:'+7 (916) 910-74-44',icon:'🍽',table:'Стол №4',time:'Сб 15.03, 22:00',guests:4,deposit:0,status:'confirmed'},
-            {name:'Даниил',phone:'+7 (925) 606-17-99',icon:'🍽',table:'Стол №2',time:'Вс 16.03, 16:55',guests:2,deposit:0,status:'confirmed'},
-            {name:'Ренат',phone:'+7 (916) 501-81-76',icon:'🍽',table:'Стол №8',time:'Пн 17.03, 15:00',guests:2,deposit:0,status:'confirmed'},
-            {name:'Эдуард',phone:'+7 (909) 935-08-83',icon:'🍽',table:'Стол №8',time:'Пн 17.03, 16:00',guests:2,deposit:0,status:'confirmed'},
-            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🍽',table:'Стол №7',time:'Вт 18.03, 17:58',guests:1,deposit:0,status:'paid'},
-            {name:'Андрей',phone:'+7 (977) 599-27-11',icon:'🍽',table:'Стол №8',time:'Вт 18.03, 19:59',guests:2,deposit:0,status:'confirmed'},
-            {name:'Юрий',phone:'+7 (926) 863-55-66',icon:'🍽',table:'Стол №9',time:'Ср 19.03, 19:00',guests:3,deposit:0,status:'confirmed'},
-            {name:'Никита',phone:'+7 (909) 673-69-12',icon:'🍽',table:'Стол №5',time:'Ср 19.03, 19:06',guests:2,deposit:3000,status:'paid'},
-            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №6',time:'Чт 20.03, 15:18',guests:1,deposit:0,status:'confirmed'},
-            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🍽',table:'Стол №1',time:'Чт 20.03, 16:00',guests:2,deposit:0,status:'confirmed'},
-            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №204',time:'Пт 21.03, 18:35',guests:4,deposit:6000,status:'paid'}
+            {name:'Александр',phone:'+7 (916) 333-70-35',icon:'🎱',table:'Стол №7',time:'Ср 16.04, 18:00',guests:3,deposit:4500,status:'paid'},
+            {name:'Елена',phone:'+7 (985) 798-08-08',icon:'🍽',table:'Стол №204',time:'Ср 16.04, 19:30',guests:4,deposit:6000,status:'paid'},
+            {name:'Евгений',phone:'+7 (936) 000-21-00',icon:'🎱',table:'Стол №8',time:'Чт 17.04, 16:00',guests:2,deposit:0,status:'confirmed'},
+            {name:'Анна',phone:'+7 (962) 949-11-97',icon:'🍽',table:'Стол №6',time:'Чт 17.04, 19:00',guests:6,deposit:9000,status:'paid'},
+            {name:'Даниил',phone:'+7 (925) 606-17-99',icon:'🎱',table:'Стол №2',time:'Пт 18.04, 19:00',guests:2,deposit:3000,status:'paid'},
+            {name:'Рафаэль',phone:'+7 (903) 171-35-75',icon:'🎱',table:'Стол №4',time:'Пт 18.04, 20:00',guests:3,deposit:4500,status:'paid'},
+            {name:'Николай',phone:'+7 (925) 757-54-27',icon:'🎱',table:'Стол №9',time:'Сб 19.04, 18:00',guests:4,deposit:6000,status:'paid'},
+            {name:'Яна',phone:'+7 (999) 822-52-17',icon:'🍽',table:'Стол №209',time:'Сб 19.04, 19:00',guests:2,deposit:3000,status:'paid'},
+            {name:'Петр',phone:'+7 (977) 863-33-36',icon:'🎱',table:'Стол №5',time:'Вс 20.04, 17:00',guests:2,deposit:3000,status:'pending'},
+            {name:'Михаил',phone:'+7 (915) 072-45-11',icon:'🍽',table:'Стол №202',time:'Вс 20.04, 19:00',guests:3,deposit:4500,status:'paid'},
         ],
         month: [
-            {name:'📊 400 броней за 15–21.03',phone:'Всего гостей: 351',icon:'📊',table:'iiko: 261 · админ: 113 · виджет: 26',time:'Средняя загрузка: 57 броней/день',guests:0,deposit:0,status:'info'},
+            {name:'📊 87 броней за апрель',phone:'Всего гостей: 312',icon:'📊',table:'Средний чек: 1 956 ₽',time:'Выручка депозитов: 248 500 ₽',guests:0,deposit:0,status:'info'},
         ]
     };
 
