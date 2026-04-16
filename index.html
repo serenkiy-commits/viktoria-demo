@@ -2648,11 +2648,12 @@
     <!-- ========== PAGE: ADMIN БРОНИ ========== -->
     <div class="page" id="page-admin-bookings">
         <div class="section-title" style="margin-top:16px;">📅 Брони</div>
+        <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px; padding:6px 10px; background:rgba(16,185,129,0.06); border-radius:8px; line-height:1.5;">📡 Реальные данные из Resta Place API · Период: 15–21 марта 2026</div>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px;">
-            <button onclick="filterBookings('today', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Сегодня</button>
-            <button onclick="filterBookings('tomorrow', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Завтра</button>
+            <button onclick="filterBookings('today', this)" style="padding:8px; font-size:11px; background:var(--accent); color:#0a1a1c; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Ср 19.03</button>
+            <button onclick="filterBookings('tomorrow', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Чт 20.03</button>
             <button onclick="filterBookings('week', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Неделя</button>
-            <button onclick="filterBookings('month', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Месяц</button>
+            <button onclick="filterBookings('month', this)" style="padding:8px; font-size:11px; border:1px solid rgba(234,229,220,0.08); background:var(--bg-card); color:var(--text-pri); border-radius:10px; cursor:pointer;">Период</button>
         </div>
 
         <div id="adminBookingsList"></div>
