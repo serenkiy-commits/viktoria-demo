@@ -2310,7 +2310,7 @@
                         <button class="duration-btn" onclick="changeGuests(-1)">&#8722;</button>
                         <div>
                             <div class="duration-value" id="guestsValue">2</div>
-                            <div class="duration-label">гостя</div>
+                            <div class="duration-label">гостя</div><!-- обновляется в changeGuests() -->
                         </div>
                         <button class="duration-btn" onclick="changeGuests(1)">+</button>
                     </div>
@@ -3404,6 +3404,8 @@
         el.classList.remove('bump');
         void el.offsetWidth;
         el.classList.add('bump');
+        const label = el.parentElement.querySelector('.duration-label');
+        if (label) label.textContent = plural(guests, 'гость', 'гостя', 'гостей');
         updatePrice();
     }
 
@@ -3473,7 +3475,7 @@
         // Deposit row visibility
         if (hasDeposit) {
             depositRow.style.display = '';
-            depositLabel.textContent = '\u0414\u0435\u043F\u043E\u0437\u0438\u0442 (' + guests + ' \u0433\u043E\u0441\u0442. \u00d7 1 500 \u20BD)';
+            depositLabel.textContent = 'Депозит (' + guests + ' ' + plural(guests,'гость','гостя','гостей') + ' × 1 500 ₽)';
             document.getElementById('priceDeposit').textContent = formatPrice(deposit);
             depositNotice.style.display = '';
         } else {
@@ -3646,6 +3648,15 @@
     // АДМИН-РЕЖИМ
     // =========================
     const ADMIN_IDS = [77408468, 5923429546]; // Надежда, Юрий
+    function plural(n, one, two, five) {
+        const abs = Math.abs(n) % 100;
+        const last = abs % 10;
+        if (abs > 10 && abs < 20) return five;
+        if (last > 1 && last < 5) return two;
+        if (last === 1) return one;
+        return five;
+    }
+
     let isAdminMode = false;
 
     function checkAdminAccess() {
@@ -3838,7 +3849,7 @@
                     ${statusBadge}
                 </div>
                 <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec); flex-wrap:wrap;">
-                    <span>${b.icon} ${b.table}</span><span>🕒 ${b.time}</span>${b.guests > 0 ? `<span>👥 ${b.guests} гостя</span>` : ''}
+                    <span>${b.icon} ${b.table}</span><span>🕒 ${b.time}</span>${b.guests > 0 ? `<span>👥 ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}</span>` : ''}
                 </div>
                 ${depositLine}
             </div>`;
