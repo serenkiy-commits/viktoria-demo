@@ -3684,7 +3684,7 @@
     // =========================
     // АДМИН-РЕЖИМ
     // =========================
-    const ADMIN_IDS = [77408468, 5923429546]; // Надежда, Юрий
+    const ADMIN_IDS = [77408468, 5923429546, 440919047]; // Надежда, Юрий, Сергей (разработчик)
     function plural(n, one, two, five) {
         const abs = Math.abs(n) % 100;
         const last = abs % 10;
@@ -3697,16 +3697,26 @@
     let isAdminMode = false;
 
     function checkAdminAccess() {
-        // В реальном Mini App: const userId = Telegram.WebApp.initDataUnsafe.user.id
-        // if (ADMIN_IDS.includes(userId)) { показать admin бейдж вместо guest }
-        // Для демо: ?admin=1 в URL
+        let isAdmin = false;
+
+        // 1. Реальная проверка по Telegram ID
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const userId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+        if (userId && ADMIN_IDS.includes(userId)) {
+            isAdmin = true;
+        }
+
+        // 2. Fallback для браузера (без Telegram)
         const params = new URLSearchParams(window.location.search);
         if (params.get('admin') === '1') {
+            isAdmin = true;
+        }
+
+        if (isAdmin) {
             const adminBadge = document.getElementById('adminBadge');
             const guestBadge = document.getElementById('guestBadge');
             if (adminBadge) adminBadge.style.display = 'flex';
             if (guestBadge) guestBadge.style.display = 'none';
-            // Автоматически открыть админ-панель
             setTimeout(() => { toggleAdminMode(); }, 300);
         }
     }
