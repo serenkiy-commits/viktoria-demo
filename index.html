@@ -1721,6 +1721,20 @@
             }
         }
     </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        if (tg.requestFullscreen) {
+          try { tg.requestFullscreen(); } catch(e) {}
+        }
+        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        tg.setHeaderColor('#0a1a1c');
+        tg.setBackgroundColor('#0a1a1c');
+      }
+    </script>
 </head>
 <body>
 
