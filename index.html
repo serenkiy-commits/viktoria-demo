@@ -1843,8 +1843,8 @@
         <div class="header-left">
             <div class="logo" style="width:80px; height:auto;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="Виктория" style="width:100%; height:auto; display:block;"></div>
         </div>
-        <div class="loyalty-badge" id="guestBadge">
-            <span>&#9733;</span> 1 850 &#8381;
+        <div class="loyalty-badge" id="guestBadge" onclick="connectLunaCard()" style="cursor:pointer;">
+            <span>&#9733;</span> <span id="guestBadgeAmount">— ₽</span>
         </div>
         <div class="loyalty-badge" id="adminBadge" onclick="toggleAdminMode()" style="display:none; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#d97706); color:#0a1a1c;">
             <span id="adminBadgeIcon">👑</span>
@@ -3273,10 +3273,15 @@
     }
 
     function updateBonusBadge(user) {
+        const amountEl = document.getElementById('guestBadgeAmount');
         const badge = document.getElementById('guestBadge');
-        if (badge && user && user.luna_balance !== null && user.luna_balance !== undefined) {
-            const span = badge.querySelector('span:last-child') || badge;
-            badge.innerHTML = `<span>⭐</span><span>${Math.round(user.luna_balance)} ₽</span>`;
+        if (!amountEl) return;
+        if (user && user.luna_card_id && user.luna_balance !== null && user.luna_balance !== undefined) {
+            amountEl.textContent = `${Math.round(user.luna_balance).toLocaleString('ru-RU')} ₽`;
+            if (badge) badge.title = `Уровень ${user.luna_level || 1} Luna`;
+        } else {
+            // Карта не подключена — показываем призыв
+            amountEl.textContent = 'подключить';
         }
     }
 
@@ -3435,7 +3440,10 @@
     async function refreshCurrentUser() {
         const tg = window.Telegram && window.Telegram.WebApp;
         const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
-        if (!uid) return;
+        if (!uid) {
+            updateBonusBadge(null);
+            return;
+        }
         try {
             const res = await fetch('/api/user/me?telegram_id=' + uid);
             const data = await res.json();
@@ -3443,9 +3451,28 @@
                 window.currentUser = data.user;
                 localStorage.setItem('viktoria_user', JSON.stringify(data.user));
                 updateBonusBadge(data.user);
+            } else {
+                window.currentUser = null;
+                localStorage.removeItem('viktoria_user');
+                updateBonusBadge(null);
             }
-        } catch(e) {}
+        } catch(e) {
+            updateBonusBadge(null);
+        }
     }
+
+    // Инициализация бейджа сразу при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            const cached = localStorage.getItem('viktoria_user');
+            if (cached) {
+                window.currentUser = JSON.parse(cached);
+                updateBonusBadge(window.currentUser);
+            } else {
+                updateBonusBadge(null);
+            }
+        } catch(e) { updateBonusBadge(null); }
+    });
 
     // Пропускаем экраны авторизации если пользователь уже входил
     (function skipAuthIfReturning() {
