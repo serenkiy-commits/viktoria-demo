@@ -3918,7 +3918,32 @@
         ]
     };
 
-    function filterBookings(period, el) {
+    function renderBookingCard(b) {
+        const statusBadge = b.status === 'paid'
+            ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>'
+            : b.status === 'pending'
+                ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">ЖДЁТ ОПЛАТЫ</span>'
+                : b.status === 'confirmed'
+                ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(107,96,85,0.15); color:var(--text-sec); font-weight:700;">БЕЗ ДЕПОЗИТА</span>'
+                : '';
+        const depositLine = b.deposit > 0 ? `<div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: ${b.deposit.toLocaleString('ru-RU')} ₽</div>` : '';
+        const borderColor = b.status === 'pending' ? 'var(--gold)' : 'transparent';
+        return `<div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid ${borderColor};">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-size:13px; font-weight:700;">${b.name}</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${b.phone || ''}</div>
+                </div>
+                ${statusBadge}
+            </div>
+            <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec); flex-wrap:wrap;">
+                <span>${b.icon} ${b.table}</span><span>🕒 ${b.time}</span>${b.guests > 0 ? `<span>👥 ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}</span>` : ''}
+            </div>
+            ${depositLine}
+        </div>`;
+    }
+
+    async function filterBookings(period, el) {
         el.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = 'var(--bg-card)';
             b.style.border = '1px solid rgba(234,229,220,0.08)';
@@ -3931,31 +3956,24 @@
         el.style.fontWeight = '600';
 
         const list = document.getElementById('adminBookingsList');
-        const data = MOCK_BOOKINGS[period] || [];
-        list.innerHTML = data.map(b => {
-            const statusBadge = b.status === 'paid'
-                ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>'
-                : b.status === 'pending'
-                    ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">ЖДЁТ ОПЛАТЫ</span>'
-                    : b.status === 'confirmed'
-                    ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(107,96,85,0.15); color:var(--text-sec); font-weight:700;">БЕЗ ДЕПОЗИТА</span>'
-                    : '';
-            const depositLine = b.deposit > 0 ? `<div style="margin-top:8px; font-size:12px; color:var(--gold); font-weight:600;">Депозит: ${b.deposit.toLocaleString('ru-RU')} ₽</div>` : '';
-            const borderColor = b.status === 'pending' ? 'var(--gold)' : 'transparent';
-            return `<div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid ${borderColor};">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="font-size:13px; font-weight:700;">${b.name}</div>
-                        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${b.phone}</div>
-                    </div>
-                    ${statusBadge}
-                </div>
-                <div style="margin-top:10px; display:flex; gap:14px; font-size:12px; color:var(--text-sec); flex-wrap:wrap;">
-                    <span>${b.icon} ${b.table}</span><span>🕒 ${b.time}</span>${b.guests > 0 ? `<span>👥 ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}</span>` : ''}
-                </div>
-                ${depositLine}
-            </div>`;
-        }).join('');
+        list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Загрузка...</div>';
+
+        try {
+            const res = await fetch(`/api/admin/bookings?period=${period}`);
+            const data = await res.json();
+            if (!data.bookings || data.bookings.length === 0) {
+                const labels = {today:'сегодня',tomorrow:'завтра',week:'на этой неделе',month:'за месяц'};
+                list.innerHTML = `<div style="padding:30px 16px; text-align:center; background:var(--bg-card); border-radius:14px; border:1px dashed rgba(234,229,220,0.15);">
+                    <div style="font-size:32px; margin-bottom:10px;">📅</div>
+                    <div style="font-size:14px; font-weight:600; margin-bottom:4px;">Броней ${labels[period] || ''} нет</div>
+                    <div style="font-size:11px; color:var(--text-muted); line-height:1.5;">Как только появится бронь в Resta Place — она отобразится здесь автоматически</div>
+                </div>`;
+                return;
+            }
+            list.innerHTML = data.bookings.map(renderBookingCard).join('');
+        } catch (e) {
+            list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки: ${e.message}</div>`;
+        }
     }
 
     // Отзывы
