@@ -2339,7 +2339,7 @@
             <div class="booking-form">
                 <div class="form-row">
                     <label class="form-label">Дата</label>
-                    <input type="date" class="form-input" id="bookingDate" value="2026-04-05" onchange="generateTimeSlots()">
+                    <input type="date" class="form-input" id="bookingDate" onchange="generateTimeSlots(); refreshOccupancy && refreshOccupancy();">
                 </div>
 
                 <div class="form-row">
@@ -3437,6 +3437,63 @@
     }
 
     // При возврате в приложение — подтягиваем свежие данные
+    // Мапа: номер стола на плане → item_id в Resta Place (подгружается из /api/tables)
+    window.tableNumToItemId = {};
+
+    async function loadTablesMapping() {
+        try {
+            const res = await fetch('/api/tables');
+            const data = await res.json();
+            (data.items || []).forEach(it => {
+                if (it.number) window.tableNumToItemId[String(it.number)] = it.id;
+            });
+        } catch(e) {}
+    }
+
+    // Проверяет занят ли стол в выбранные дату/время
+    function isTableBusy(occupancy, itemId, dateStr, hour, duration) {
+        const list = occupancy[itemId] || [];
+        if (list.length === 0) return false;
+        const startMs = new Date(`${dateStr}T${String(hour).padStart(2,'0')}:00:00`).getTime();
+        const endMs = startMs + duration * 3600 * 1000;
+        for (const r of list) {
+            const rFrom = new Date(r.from.replace(' ','T')).getTime();
+            const rTo = new Date(r.to.replace(' ','T')).getTime();
+            if (startMs < rTo && endMs > rFrom) return true;
+        }
+        return false;
+    }
+
+    async function refreshOccupancy() {
+        if (!window.tableNumToItemId || Object.keys(window.tableNumToItemId).length === 0) {
+            await loadTablesMapping();
+        }
+        const dateStr = document.getElementById('bookingDate') ? document.getElementById('bookingDate').value : new Date().toISOString().slice(0,10);
+        const hour = getSelectedTime ? getSelectedTime() : 18;
+        const durationVal = (typeof duration !== 'undefined') ? duration : 2;
+        try {
+            const res = await fetch(`/api/admin/occupancy/${dateStr}`);
+            const data = await res.json();
+            const occ = data.occupancy || {};
+
+            document.querySelectorAll('.fp-table').forEach(fp => {
+                const tNum = fp.dataset.table;
+                const itemId = window.tableNumToItemId[tNum];
+                if (!itemId) return;
+                const busy = isTableBusy(occ, itemId, dateStr, hour, durationVal);
+                if (busy) {
+                    fp.classList.add('occupied');
+                    const bg = fp.querySelector('.fp-table-bg');
+                    if (bg) bg.setAttribute('fill', '#5c1a2a');
+                } else {
+                    fp.classList.remove('occupied');
+                    const bg = fp.querySelector('.fp-table-bg');
+                    if (bg) bg.setAttribute('fill', '#145c38');
+                }
+            });
+        } catch(e) { console.warn('occupancy fetch failed:', e); }
+    }
+
     async function refreshCurrentUser() {
         const tg = window.Telegram && window.Telegram.WebApp;
         const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
@@ -3472,6 +3529,17 @@
                 updateBonusBadge(null);
             }
         } catch(e) { updateBonusBadge(null); }
+
+        // Устанавливаем сегодняшнюю дату в форме бронирования
+        const dateInput = document.getElementById('bookingDate');
+        if (dateInput && !dateInput.value) {
+            const now = new Date();
+            dateInput.value = now.toISOString().slice(0,10);
+            dateInput.min = now.toISOString().slice(0,10);
+        }
+
+        // Подтягиваем занятость столов
+        refreshOccupancy && refreshOccupancy();
     });
 
     // Пропускаем экраны авторизации если пользователь уже входил
@@ -3603,6 +3671,7 @@
         document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
         updatePrice();
+        refreshOccupancy && refreshOccupancy();
     }
 
     // Generate time slots based on selected date (day of week)
@@ -3686,14 +3755,29 @@
             // Billiard table with dynamic pricing
             const pricePerHour = tariffInfo.price;
             const tableTotal = pricePerHour * duration;
-            const bonus = Math.round(tableTotal * 0.2);
+
+            // Списание бонусов — только если есть карта Luna и есть баланс
+            const u = window.currentUser;
+            const availableBonuses = (u && u.luna_card_id && u.luna_balance) ? Math.floor(u.luna_balance) : 0;
+            const maxSpend = Math.floor(tableTotal * 0.2); // до 20% от счёта
+            const bonus = Math.min(availableBonuses, maxSpend);
             const total = tableTotal + deposit - bonus;
 
             document.getElementById('priceTableLabel').textContent = '\u0421\u0442\u043E\u043B \u2116' + selectedTableNum + ', ' + duration + ' \u0447. \u00d7 ' + formatPrice(pricePerHour);
             document.getElementById('priceTable').textContent = formatPrice(tableTotal);
             tariffLabel.textContent = tariffInfo.tariff;
             tariffRow.style.display = '';
-            document.getElementById('priceBonus').textContent = '\u2212' + formatPrice(bonus);
+
+            // Показываем строку бонусов только если есть списание
+            const bonusRow = document.getElementById('priceBonus').closest('div[class*="price-row"], div[style*="display:flex"]');
+            if (bonus > 0) {
+                document.getElementById('priceBonus').textContent = '\u2212' + formatPrice(bonus);
+                const bonusLabel = document.querySelector('[id="priceBonus"]').parentElement.querySelector('.label');
+                if (bonusLabel) bonusLabel.textContent = 'Списание бонусов';
+                if (bonusRow) bonusRow.style.display = '';
+            } else {
+                if (bonusRow) bonusRow.style.display = 'none';
+            }
             document.getElementById('priceTotal').textContent = formatPrice(total);
 
             // Update table-card prices in list view
