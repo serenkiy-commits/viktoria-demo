@@ -3292,21 +3292,94 @@
         btn.disabled = !cb.checked;
     }
 
-    function dismissWelcome() {
-        const cs = document.getElementById('confirmScreen');
-        cs.classList.add('hidden');
-        // Запоминаем что пользователь уже прошёл авторизацию
+    window.currentUser = null;
+
+    async function registerUser(phone, name) {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
         try {
-            const tg = window.Telegram && window.Telegram.WebApp;
-            const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
-            localStorage.setItem('viktoria_auth_' + (uid || 'browser'), '1');
+            const res = await fetch('/api/user/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone,
+                    name,
+                    initData: tg ? tg.initData : null,
+                    user: user || { id: Date.now(), first_name: name }
+                })
+            });
+            const data = await res.json();
+            if (data.ok) {
+                window.currentUser = data.user;
+                localStorage.setItem('viktoria_user', JSON.stringify(data.user));
+                updateBonusBadge(data.user);
+                if (data.has_luna) showToast(`✓ Найдена карта Luna. Баланс: ${data.user.luna_balance} ₽`);
+                return true;
+            }
+            showToast('Не удалось зарегистрировать: ' + (data.error || 'ошибка'));
+            return false;
+        } catch(e) {
+            showToast('Ошибка связи с сервером');
+            return false;
+        }
+    }
+
+    function updateBonusBadge(user) {
+        const badge = document.getElementById('guestBadge');
+        if (badge && user && user.luna_balance !== null && user.luna_balance !== undefined) {
+            const span = badge.querySelector('span:last-child') || badge;
+            badge.innerHTML = `<span>⭐</span><span>${Math.round(user.luna_balance)} ₽</span>`;
+        }
+    }
+
+    async function dismissWelcome() {
+        const cs = document.getElementById('confirmScreen');
+        const nameInput = document.getElementById('confirmName');
+        const name = nameInput ? nameInput.value : '';
+
+        // Запрашиваем телефон через Telegram
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if (tg && tg.requestContact) {
+            tg.requestContact(async (ok, ev) => {
+                if (ok && ev.responseUnsafe && ev.responseUnsafe.contact) {
+                    const phone = ev.responseUnsafe.contact.phone_number;
+                    await registerUser(phone, name);
+                }
+                finishDismiss();
+            });
+        } else {
+            finishDismiss();
+        }
+
+        function finishDismiss() {
+            cs.classList.add('hidden');
+            try {
+                const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+                localStorage.setItem('viktoria_auth_' + (uid || 'browser'), '1');
+            } catch(e) {}
+            setTimeout(() => {
+                cs.style.display = 'none';
+                document.getElementById('appHeader').style.display = 'flex';
+                document.getElementById('zoneTabs').style.display = 'flex';
+                animateProgressBar();
+            }, 600);
+        }
+    }
+
+    // При возврате в приложение — подтягиваем свежие данные
+    async function refreshCurrentUser() {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+        if (!uid) return;
+        try {
+            const res = await fetch('/api/user/me?telegram_id=' + uid);
+            const data = await res.json();
+            if (data.registered && data.user) {
+                window.currentUser = data.user;
+                localStorage.setItem('viktoria_user', JSON.stringify(data.user));
+                updateBonusBadge(data.user);
+            }
         } catch(e) {}
-        setTimeout(() => {
-            cs.style.display = 'none';
-            document.getElementById('appHeader').style.display = 'flex';
-            document.getElementById('zoneTabs').style.display = 'flex';
-            animateProgressBar();
-        }, 600);
     }
 
     // Пропускаем экраны авторизации если пользователь уже входил
@@ -3326,6 +3399,15 @@
                     if (header) header.style.display = 'flex';
                     if (zones) zones.style.display = 'flex';
                     animateProgressBar && animateProgressBar();
+                    // Подтягиваем актуальные данные пользователя
+                    try {
+                        const cached = localStorage.getItem('viktoria_user');
+                        if (cached) {
+                            window.currentUser = JSON.parse(cached);
+                            updateBonusBadge(window.currentUser);
+                        }
+                    } catch(e) {}
+                    refreshCurrentUser && refreshCurrentUser();
                 });
             }
         } catch(e) {}
