@@ -2463,59 +2463,7 @@
 
     <!-- ========== PAGE: LOYALTY ========== -->
     <div class="page" id="page-loyalty">
-        <div class="loyalty-card">
-            <div class="loyalty-level">Уровень 2 — 7% кешбэк</div>
-            <div class="loyalty-balance">1 850 <span>бонусов</span></div>
-            <div class="loyalty-cashback">Можно списать до 20% от счёта</div>
-            <div class="loyalty-progress">
-                <div class="progress-text">
-                    <span>32 400 &#8381; потрачено</span>
-                    <span>50 000 &#8381; до Уровня 3 (10%)</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title">История бонусов</div>
-
-        <div class="booking-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div class="booking-date">28 марта</div>
-                    <div class="booking-details">Кешбэк за визит</div>
-                </div>
-                <div style="color: var(--accent-light); font-weight: 700; font-size: 15px;">+546 &#8381;</div>
-            </div>
-        </div>
-        <div class="booking-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div class="booking-date">22 марта</div>
-                    <div class="booking-details">Списание бонусов</div>
-                </div>
-                <div style="color: var(--red-light); font-weight: 700; font-size: 15px;">&#8722;400 &#8381;</div>
-            </div>
-        </div>
-        <div class="booking-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div class="booking-date">22 марта</div>
-                    <div class="booking-details">Кешбэк за визит</div>
-                </div>
-                <div style="color: var(--accent-light); font-weight: 700; font-size: 15px;">+462 &#8381;</div>
-            </div>
-        </div>
-        <div class="booking-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div class="booking-date">1 марта</div>
-                    <div class="booking-details">Стартовый бонус</div>
-                </div>
-                <div style="color: var(--gold); font-weight: 700; font-size: 15px;">+500 &#8381;</div>
-            </div>
-        </div>
+        <div id="loyaltyContent"></div>
     </div>
 
     <!-- ========== PAGE: CERTIFICATES ========== -->
@@ -3333,17 +3281,32 @@
     }
 
     async function dismissWelcome() {
-        const cs = document.getElementById('confirmScreen');
         const nameInput = document.getElementById('confirmName');
         const name = nameInput ? nameInput.value : '';
 
-        // Запрашиваем телефон через Telegram
         const tg = window.Telegram && window.Telegram.WebApp;
-        if (tg && tg.requestContact) {
+
+        // Показываем понятное объяснение и спрашиваем через showConfirm
+        if (tg && tg.showConfirm) {
+            tg.showConfirm(
+                'Подключите бонусную карту Luna, чтобы видеть свои баллы и получать кешбэк с покупок. Поделиться номером телефона?',
+                (confirmed) => {
+                    if (confirmed && tg.requestContact) {
+                        tg.requestContact(async (ok, ev) => {
+                            if (ok && ev.responseUnsafe && ev.responseUnsafe.contact) {
+                                await registerUser(ev.responseUnsafe.contact.phone_number, name);
+                            }
+                            finishDismiss();
+                        });
+                    } else {
+                        finishDismiss();
+                    }
+                }
+            );
+        } else if (tg && tg.requestContact) {
             tg.requestContact(async (ok, ev) => {
                 if (ok && ev.responseUnsafe && ev.responseUnsafe.contact) {
-                    const phone = ev.responseUnsafe.contact.phone_number;
-                    await registerUser(phone, name);
+                    await registerUser(ev.responseUnsafe.contact.phone_number, name);
                 }
                 finishDismiss();
             });
@@ -3352,6 +3315,7 @@
         }
 
         function finishDismiss() {
+            const cs = document.getElementById('confirmScreen');
             cs.classList.add('hidden');
             try {
                 const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
@@ -3364,6 +3328,107 @@
                 animateProgressBar();
             }, 600);
         }
+    }
+
+    // Уровни Luna (настроены клиентом)
+    const LUNA_LEVELS = [
+        { index: 1, low: 0, high: 10000, percentage: 5 },
+        { index: 2, low: 10000, high: 50000, percentage: 7 },
+        { index: 3, low: 50000, high: 100000, percentage: 10 },
+        { index: 4, low: 100000, high: null, percentage: 15 },
+    ];
+
+    function renderLoyaltyScreen() {
+        const container = document.getElementById('loyaltyContent');
+        if (!container) return;
+        const u = window.currentUser;
+
+        // Не подключена карта
+        if (!u || !u.luna_card_id) {
+            container.innerHTML = `
+                <div class="loyalty-card" style="text-align:center; padding:30px 20px;">
+                    <div style="font-size:48px; margin-bottom:12px;">⭐</div>
+                    <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Бонусная карта Luna</div>
+                    <div style="font-size:13px; color:var(--text-sec); line-height:1.6; margin-bottom:20px;">
+                        Получайте кешбэк с каждой покупки.<br>
+                        До <strong>15% бонусов</strong> возвращается на баланс.<br>
+                        Списывайте бонусы до 20% от счёта.
+                    </div>
+                    <button onclick="connectLunaCard()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer;">
+                        Подключить карту
+                    </button>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:12px;">
+                        Нужно будет поделиться номером телефона
+                    </div>
+                </div>
+                <div style="margin-top:20px; padding:16px; background:var(--bg-card); border-radius:14px; border:1px solid rgba(234,229,220,0.08);">
+                    <div style="font-size:13px; font-weight:600; margin-bottom:10px;">Уровни лояльности</div>
+                    ${LUNA_LEVELS.map(l => `
+                        <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(234,229,220,0.05); font-size:12px;">
+                            <span style="color:var(--text-sec);">Уровень ${l.index}</span>
+                            <span style="color:var(--accent-light); font-weight:600;">${l.percentage}% кешбэк</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            return;
+        }
+
+        // Подключена — показываем данные
+        const balance = parseFloat(u.luna_balance || 0);
+        const spent = parseFloat(u.luna_total_spent || 0);
+        const level = LUNA_LEVELS.find(l => l.index === u.luna_level) || LUNA_LEVELS[0];
+        const nextLevel = LUNA_LEVELS.find(l => l.index === (u.luna_level || 1) + 1);
+
+        let progressPct = 100;
+        let progressText = 'Максимальный уровень';
+        if (nextLevel) {
+            const needed = nextLevel.low - spent;
+            progressPct = Math.min(100, Math.max(0, (spent - level.low) / (nextLevel.low - level.low) * 100));
+            progressText = `${Math.max(0, needed).toLocaleString('ru-RU')} ₽ до Уровня ${nextLevel.index} (${nextLevel.percentage}%)`;
+        }
+
+        container.innerHTML = `
+            <div class="loyalty-card">
+                <div class="loyalty-level">Уровень ${level.index} — ${level.percentage}% кешбэк</div>
+                <div class="loyalty-balance">${Math.round(balance).toLocaleString('ru-RU')} <span>бонусов</span></div>
+                <div class="loyalty-cashback">Можно списать до 20% от счёта</div>
+                <div class="loyalty-progress">
+                    <div class="progress-text">
+                        <span>${Math.round(spent).toLocaleString('ru-RU')} ₽ потрачено</span>
+                        <span>${progressText}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:${progressPct}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:20px;">История бонусов</div>
+            <div id="lunaHistory">
+                <div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
+                    История транзакций скоро появится
+                </div>
+            </div>
+        `;
+    }
+
+    // Подключение карты из раздела Бонусы (для тех кто отказался изначально)
+    async function connectLunaCard() {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if (!tg || !tg.requestContact) {
+            showToast('Функция доступна только в Telegram');
+            return;
+        }
+        tg.requestContact(async (ok, ev) => {
+            if (ok && ev.responseUnsafe && ev.responseUnsafe.contact) {
+                const name = (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || '';
+                const success = await registerUser(ev.responseUnsafe.contact.phone_number, name);
+                if (success) {
+                    renderLoyaltyScreen();
+                }
+            }
+        });
     }
 
     // При возврате в приложение — подтягиваем свежие данные
@@ -3664,6 +3729,11 @@
         if (page !== 'tables') {
             const bf = document.getElementById('bookingForm');
             if (bf) bf.classList.remove('visible');
+        }
+        // Обновляем Бонусы при открытии
+        if (page === 'loyalty') {
+            refreshCurrentUser().then(() => renderLoyaltyScreen());
+            renderLoyaltyScreen();
         }
 
         // Animate progress bar when switching to loyalty
