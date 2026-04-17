@@ -3540,6 +3540,16 @@
 
         // Подтягиваем занятость столов
         refreshOccupancy && refreshOccupancy();
+
+        // Автообновление занятости каждую минуту
+        setInterval(() => {
+            if (!document.hidden) refreshOccupancy && refreshOccupancy();
+        }, 60000);
+
+        // При возврате из фона — обновляем сразу
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) refreshOccupancy && refreshOccupancy();
+        });
     });
 
     // Пропускаем экраны авторизации если пользователь уже входил
@@ -3717,6 +3727,7 @@
         const labels = ['\u0447\u0430\u0441', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432'];
         el.parentElement.querySelector('.duration-label').textContent = labels[duration - 1];
         updatePrice();
+        refreshOccupancy && refreshOccupancy();
     }
 
     function changeGuests(delta) {
