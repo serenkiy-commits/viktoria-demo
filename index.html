@@ -3280,14 +3280,41 @@
     function dismissWelcome() {
         const cs = document.getElementById('confirmScreen');
         cs.classList.add('hidden');
+        // Запоминаем что пользователь уже прошёл авторизацию
+        try {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+            localStorage.setItem('viktoria_auth_' + (uid || 'browser'), '1');
+        } catch(e) {}
         setTimeout(() => {
             cs.style.display = 'none';
             document.getElementById('appHeader').style.display = 'flex';
             document.getElementById('zoneTabs').style.display = 'flex';
-            // bottomNav is always visible, welcome/confirm screens overlay it
             animateProgressBar();
         }, 600);
     }
+
+    // Пропускаем экраны авторизации если пользователь уже входил
+    (function skipAuthIfReturning() {
+        try {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+            const key = 'viktoria_auth_' + (uid || 'browser');
+            if (localStorage.getItem(key) === '1') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    const ws = document.getElementById('welcomeScreen');
+                    const cs = document.getElementById('confirmScreen');
+                    if (ws) ws.style.display = 'none';
+                    if (cs) cs.style.display = 'none';
+                    const header = document.getElementById('appHeader');
+                    const zones = document.getElementById('zoneTabs');
+                    if (header) header.style.display = 'flex';
+                    if (zones) zones.style.display = 'flex';
+                    animateProgressBar && animateProgressBar();
+                });
+            }
+        } catch(e) {}
+    })();
 
     function animateProgressBar() {
         setTimeout(() => {
@@ -3712,12 +3739,13 @@
             isAdmin = true;
         }
 
-        if (isAdmin) {
+        if (isAdmin && !window._adminApplied) {
+            window._adminApplied = true;
             const adminBadge = document.getElementById('adminBadge');
             const guestBadge = document.getElementById('guestBadge');
             if (adminBadge) adminBadge.style.display = 'flex';
             if (guestBadge) guestBadge.style.display = 'none';
-            setTimeout(() => { toggleAdminMode(); }, 300);
+            setTimeout(() => { if (!isAdminMode) toggleAdminMode(); }, 300);
         }
     }
 
@@ -3998,11 +4026,16 @@
         }).join('');
     }
 
-    // Вызвать при загрузке
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', checkAdminAccess);
-    } else {
+    // Вызвать при загрузке — повторяем на случай если Telegram WebApp ещё не готов
+    function runAdminCheck() {
         checkAdminAccess();
+        setTimeout(checkAdminAccess, 200);
+        setTimeout(checkAdminAccess, 800);
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runAdminCheck);
+    } else {
+        runAdminCheck();
     }
 
     function setRating(n) {
