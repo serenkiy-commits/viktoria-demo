@@ -1723,17 +1723,25 @@
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-      if (window.Telegram && window.Telegram.WebApp) {
+      (function initTG() {
+        if (!window.Telegram || !window.Telegram.WebApp) return;
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        if (tg.requestFullscreen) {
-          try { tg.requestFullscreen(); } catch(e) {}
-        }
-        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
-        tg.setHeaderColor('#0a1a1c');
-        tg.setBackgroundColor('#0a1a1c');
-      }
+        try { tg.setHeaderColor('#0a1a1c'); } catch(e) {}
+        try { tg.setBackgroundColor('#0a1a1c'); } catch(e) {}
+        if (tg.disableVerticalSwipes) { try { tg.disableVerticalSwipes(); } catch(e) {} }
+        const tryFullscreen = () => {
+          if (tg.requestFullscreen && !tg.isFullscreen) {
+            try { tg.requestFullscreen(); } catch(e) {}
+          }
+        };
+        tryFullscreen();
+        // повторяем на случай если SDK не готов сразу
+        setTimeout(() => { tg.expand(); tryFullscreen(); }, 100);
+        setTimeout(() => { tg.expand(); tryFullscreen(); }, 500);
+        document.addEventListener('DOMContentLoaded', () => { tg.expand(); tryFullscreen(); });
+      })();
     </script>
 </head>
 <body>
