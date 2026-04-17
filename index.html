@@ -3919,6 +3919,22 @@
     };
 
     function renderBookingCard(b) {
+        // Карточка сводки (месяц)
+        if (b.status === 'info') {
+            return `<div class="glass" style="padding:20px; margin-bottom:10px; border:1px solid rgba(16,185,129,0.2); background:linear-gradient(135deg, rgba(16,185,129,0.08), rgba(245,158,11,0.04));">
+                <div style="font-size:15px; font-weight:700; color:var(--accent-light); margin-bottom:12px;">${b.name}</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div>
+                        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Гостей</div>
+                        <div style="font-size:24px; font-weight:800; color:var(--text-pri); margin-top:4px;">${b.phone.replace(/\\D/g,'')}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Период</div>
+                        <div style="font-size:14px; font-weight:600; color:var(--text-pri); margin-top:4px;">${b.table.replace('С ','').replace(' по ', ' — ')}</div>
+                    </div>
+                </div>
+            </div>`;
+        }
         const statusBadge = b.status === 'paid'
             ? '<span style="font-size:10px; padding:4px 10px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light); font-weight:700;">ОПЛАЧЕН</span>'
             : b.status === 'pending'
