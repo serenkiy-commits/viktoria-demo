@@ -326,7 +326,7 @@
 
         /* ============ HEADER ============ */
         .header {
-            padding: 16px 20px 14px;
+            padding: calc(16px + var(--tg-safe-top, env(safe-area-inset-top, 0px))) 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -1736,11 +1736,19 @@
             try { tg.requestFullscreen(); } catch(e) {}
           }
         };
+        // Применяем safe-area из Telegram — учитывает верхнюю панель с кнопками
+        const applyInsets = () => {
+          try {
+            const top = (tg.safeAreaInset && tg.safeAreaInset.top) || tg.contentSafeAreaInset?.top || 0;
+            if (top > 0) document.documentElement.style.setProperty('--tg-safe-top', top + 'px');
+          } catch(e) {}
+        };
         tryFullscreen();
-        // повторяем на случай если SDK не готов сразу
-        setTimeout(() => { tg.expand(); tryFullscreen(); }, 100);
-        setTimeout(() => { tg.expand(); tryFullscreen(); }, 500);
-        document.addEventListener('DOMContentLoaded', () => { tg.expand(); tryFullscreen(); });
+        applyInsets();
+        setTimeout(() => { tg.expand(); tryFullscreen(); applyInsets(); }, 100);
+        setTimeout(() => { tg.expand(); tryFullscreen(); applyInsets(); }, 500);
+        document.addEventListener('DOMContentLoaded', () => { tg.expand(); tryFullscreen(); applyInsets(); });
+        if (tg.onEvent) tg.onEvent('safeAreaChanged', applyInsets);
       })();
     </script>
 </head>
@@ -2616,7 +2624,7 @@
             <div style="display:flex; align-items:center; gap:10px;">
                 <div style="font-size:28px;">👑</div>
                 <div>
-                    <div style="font-size:16px; font-weight:700;">Добрый вечер, Надежда!</div>
+                    <div style="font-size:16px; font-weight:700;" id="adminGreeting">Добрый вечер!</div>
                     <div style="font-size:11px; color:var(--text-sec);">Сегодня, 14 апреля · Понедельник</div>
                 </div>
             </div>
@@ -3745,6 +3753,15 @@
             const guestBadge = document.getElementById('guestBadge');
             if (adminBadge) adminBadge.style.display = 'flex';
             if (guestBadge) guestBadge.style.display = 'none';
+
+            // Персональное приветствие
+            const adminNames = {77408468: 'Надежда', 5923429546: 'Юрий', 440919047: 'Сергей'};
+            const name = adminNames[userId] || 'админ';
+            const hour = new Date().getHours();
+            const greet = hour < 6 ? 'Доброй ночи' : hour < 12 ? 'Доброе утро' : hour < 18 ? 'Добрый день' : 'Добрый вечер';
+            const greetEl = document.getElementById('adminGreeting');
+            if (greetEl) greetEl.textContent = `${greet}, ${name}!`;
+
             setTimeout(() => { if (!isAdminMode) toggleAdminMode(); }, 300);
         }
     }
