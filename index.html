@@ -327,6 +327,9 @@
         /* ============ HEADER ============ */
         .header {
             padding: calc(16px + var(--tg-safe-top, env(safe-area-inset-top, 0px))) 20px 14px;
+        }
+        body.in-telegram .header {
+            padding-top: calc(70px + var(--tg-safe-top, 0px));
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -1726,6 +1729,10 @@
       (function initTG() {
         if (!window.Telegram || !window.Telegram.WebApp) return;
         const tg = window.Telegram.WebApp;
+        if (tg.initData && tg.initData.length > 0) {
+          document.addEventListener('DOMContentLoaded', () => document.body.classList.add('in-telegram'));
+          if (document.body) document.body.classList.add('in-telegram');
+        }
         tg.ready();
         tg.expand();
         try { tg.setHeaderColor('#0a1a1c'); } catch(e) {}
@@ -2625,7 +2632,7 @@
                 <div style="font-size:28px;">👑</div>
                 <div>
                     <div style="font-size:16px; font-weight:700;" id="adminGreeting">Добрый вечер!</div>
-                    <div style="font-size:11px; color:var(--text-sec);">Сегодня, 14 апреля · Понедельник</div>
+                    <div style="font-size:11px; color:var(--text-sec);" id="adminDateLine">Сегодня</div>
                 </div>
             </div>
         </div>
@@ -3757,10 +3764,17 @@
             // Персональное приветствие
             const adminNames = {77408468: 'Надежда', 5923429546: 'Юрий', 440919047: 'Сергей'};
             const name = adminNames[userId] || 'админ';
-            const hour = new Date().getHours();
+            const now = new Date();
+            const hour = now.getHours();
             const greet = hour < 6 ? 'Доброй ночи' : hour < 12 ? 'Доброе утро' : hour < 18 ? 'Добрый день' : 'Добрый вечер';
             const greetEl = document.getElementById('adminGreeting');
             if (greetEl) greetEl.textContent = `${greet}, ${name}!`;
+
+            // Реальная дата
+            const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+            const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+            const dateEl = document.getElementById('adminDateLine');
+            if (dateEl) dateEl.textContent = `Сегодня, ${now.getDate()} ${months[now.getMonth()]} · ${days[now.getDay()]}`;
 
             setTimeout(() => { if (!isAdminMode) toggleAdminMode(); }, 300);
         }
