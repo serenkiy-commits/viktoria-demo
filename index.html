@@ -3469,26 +3469,44 @@
             await loadTablesMapping();
         }
         const dateStr = document.getElementById('bookingDate') ? document.getElementById('bookingDate').value : new Date().toISOString().slice(0,10);
-        const hour = getSelectedTime ? getSelectedTime() : 18;
+        const bookingFormOpen = document.getElementById('bookingForm') && document.getElementById('bookingForm').classList.contains('visible');
+        const hour = bookingFormOpen && getSelectedTime ? getSelectedTime() : null;
         const durationVal = (typeof duration !== 'undefined') ? duration : 2;
+
         try {
             const res = await fetch(`/api/admin/occupancy/${dateStr}`);
             const data = await res.json();
             const occ = data.occupancy || {};
+            window._lastOccupancy = { data: occ, date: dateStr };
 
             document.querySelectorAll('.fp-table').forEach(fp => {
                 const tNum = fp.dataset.table;
                 const itemId = window.tableNumToItemId[tNum];
-                if (!itemId) return;
-                const busy = isTableBusy(occ, itemId, dateStr, hour, durationVal);
+                const reserves = itemId ? (occ[itemId] || []) : [];
+
+                // Если форма открыта и выбрано время — проверяем пересечение
+                // Иначе: занят = есть хоть одна бронь сегодня
+                let busy;
+                if (hour !== null) {
+                    busy = isTableBusy(occ, itemId, dateStr, hour, durationVal);
+                } else {
+                    busy = reserves.length > 0;
+                }
+
                 if (busy) {
                     fp.classList.add('occupied');
                     const bg = fp.querySelector('.fp-table-bg');
                     if (bg) bg.setAttribute('fill', '#5c1a2a');
+                    // Подсказка с диапазонами
+                    if (reserves.length > 0) {
+                        const hours = reserves.map(r => `${r.from.slice(11,16)}–${r.to.slice(11,16)}`).join(', ');
+                        fp.setAttribute('data-busy-hours', hours);
+                    }
                 } else {
                     fp.classList.remove('occupied');
                     const bg = fp.querySelector('.fp-table-bg');
                     if (bg) bg.setAttribute('fill', '#145c38');
+                    fp.removeAttribute('data-busy-hours');
                 }
             });
         } catch(e) { console.warn('occupancy fetch failed:', e); }
