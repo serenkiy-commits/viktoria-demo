@@ -2420,10 +2420,10 @@
                 <div id="certCodeStatus" style="font-size:11px; margin-top:6px; display:none;"></div>
             </div>
 
-            <button class="btn-primary" onclick="showToast('Бронирование подтверждено!')" style="margin-top:14px;">
+            <button class="btn-primary" onclick="createBooking(true)" style="margin-top:14px;">
                 Оплатить и забронировать
             </button>
-            <button class="btn-secondary" onclick="showToast('Позвоним вам для подтверждения')">
+            <button class="btn-secondary" onclick="createBooking(false)">
                 Забронировать без предоплаты
             </button>
         </div>
@@ -3393,6 +3393,114 @@
             container.innerHTML = html;
         } catch(e) {
             container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки: ${e.message}</div>`;
+        }
+    }
+
+    function formatDT(dateStr, hour) {
+        return `${dateStr} ${String(hour).padStart(2, '0')}:00:00`;
+    }
+
+    async function createBooking(withPayment) {
+        // 1. Проверки
+        const u = window.currentUser;
+        if (!u || !u.phone) {
+            showToast('Сначала подключите карту лояльности с номером телефона');
+            setTimeout(() => {
+                const loyaltyNav = document.querySelector('[onclick*="loyalty"]');
+                if (loyaltyNav) loyaltyNav.click();
+            }, 1500);
+            return;
+        }
+        if (!selectedTableNum) {
+            showToast('Выберите стол на плане зала');
+            return;
+        }
+        const itemId = window.tableNumToItemId && window.tableNumToItemId[selectedTableNum];
+        if (!itemId) {
+            showToast('Ошибка: не найден идентификатор стола');
+            return;
+        }
+
+        // 2. Собираем дату и время
+        const dateInput = document.getElementById('bookingDate');
+        const dateStr = dateInput ? dateInput.value : new Date().toISOString().slice(0, 10);
+        const startHour = getSelectedTime();
+        const endHour = startHour + duration;
+
+        const fromStr = formatDT(dateStr, startHour);
+        // Если превысили 24 часа — переносим на следующий день
+        let toDateStr = dateStr;
+        let toHour = endHour;
+        if (toHour >= 24) {
+            const d = new Date(dateStr + 'T00:00:00');
+            d.setDate(d.getDate() + 1);
+            toDateStr = d.toISOString().slice(0, 10);
+            toHour = endHour - 24;
+        }
+        const toStr = formatDT(toDateStr, toHour);
+
+        // 3. Отправляем запрос
+        const btns = document.querySelectorAll('.btn-primary, .btn-secondary');
+        btns.forEach(b => b.disabled = true);
+        showToast('Создаём бронь...');
+
+        try {
+            const res = await fetch('/api/bookings/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone: u.phone,
+                    name: u.name || 'Гость',
+                    item_ids: [itemId],
+                    from: fromStr,
+                    to: toStr,
+                    guests: guests,
+                    comment: withPayment ? 'Бронь Mini App (с депозитом)' : 'Бронь Mini App (без предоплаты)'
+                })
+            });
+            const data = await res.json();
+            const rd = data.responseData || {};
+            const bookingNumber = rd.number || rd.id || '';
+            const paymentLink = rd.paymentLink;
+
+            if (data.error || !rd.id) {
+                showToast('Ошибка: ' + (data.error && data.error.error ? data.error.error : 'не удалось создать бронь'));
+                btns.forEach(b => b.disabled = false);
+                return;
+            }
+
+            showToast(`✓ Бронь №${bookingNumber} создана`);
+
+            // 4. Открываем оплату если выбрано + есть paymentLink
+            if (withPayment && paymentLink) {
+                setTimeout(() => {
+                    const tg = window.Telegram && window.Telegram.WebApp;
+                    if (tg && tg.openLink) tg.openLink(paymentLink);
+                    else window.open(paymentLink, '_blank');
+                }, 800);
+            }
+
+            // 5. Сбрасываем форму и переходим на Мои брони
+            setTimeout(() => {
+                const bf = document.getElementById('bookingForm');
+                if (bf) bf.classList.remove('visible');
+                document.querySelectorAll('.fp-table.selected, .table-card.selected').forEach(e => e.classList.remove('selected'));
+                selectedTableNum = null;
+                selectedFloorEl = null;
+
+                // Переключаемся на Мои брони
+                const bookingsNav = document.querySelector('#bottomNav [onclick*="bookings"]');
+                if (bookingsNav) bookingsNav.click();
+
+                // Обновляем занятость плана зала
+                refreshOccupancy && refreshOccupancy();
+            }, 1200);
+
+            btns.forEach(b => b.disabled = false);
+        } catch (e) {
+            console.error('createBooking error:', e);
+            showToast('Ошибка связи с сервером');
+            btns.forEach(b => b.disabled = false);
         }
     }
 
