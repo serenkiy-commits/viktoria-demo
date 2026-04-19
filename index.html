@@ -2583,7 +2583,15 @@
         </div>
 
         <div class="section-title" style="margin-top:20px;">⚡ Требует внимания</div>
-        <div id="adminAttentionBlock"></div>
+        <div class="glass" style="padding:14px; border-left:3px solid #ef4444;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:700;">НЕГАТИВ</span>
+                <div style="font-size:11px; color:var(--text-muted);">Новый отзыв 2 минуты назад</div>
+            </div>
+            <div style="font-size:13px; font-weight:600;">Мария К. · ★★☆☆☆</div>
+            <div style="font-size:12px; color:var(--text-sec); margin-top:4px; line-height:1.5;">Долго ждали официанта, минут 15...</div>
+            <button onclick="navigateAdmin('admin-reviews', document.querySelectorAll('#adminNav .nav-item')[2])" style="margin-top:10px; width:100%; padding:8px; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.06); color:#ef4444; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">Посмотреть →</button>
+        </div>
 
         <div class="glass" style="padding:14px; margin-top:10px; border-left:3px solid var(--gold);">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
@@ -2868,12 +2876,12 @@
         </div>
 
         <!-- Пример ответа AI -->
-        <div class="section-title" style="margin-top:20px;">👀 Пример работы AI</div>
+        <div class="section-title" style="margin-top:20px;">👀 Пример ответа AI</div>
         <div class="glass" style="padding:14px; border-left:3px solid var(--gold);">
-            <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Гость напишет:</div>
-            <div style="font-size:12px; color:var(--text-sec); font-style:italic; margin-bottom:12px;">«хорошая кухня но кальян долго делали»</div>
-            <div style="font-size:11px; color:var(--accent-light); margin-bottom:6px;">🤖 AI улучшит текст и ответит:</div>
-            <div style="font-size:12px; color:var(--text-pri); line-height:1.5;">Теги: <em>кухня, кальян</em> · Тональность: <em>нейтральная</em><br><br>«Спасибо за отзыв! Рады, что понравилась кухня. Извините за ожидание кальяна — передадим кальянщику. Ждём вас снова!»</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">Отзыв гостя (негатив 2★):</div>
+            <div style="font-size:12px; color:var(--text-sec); font-style:italic; margin-bottom:12px;">«Долго ждали официанта, минут 15...»</div>
+            <div style="font-size:11px; color:var(--accent-light); margin-bottom:6px;">🤖 AI ответит (Средняя строгость, Дружелюбный):</div>
+            <div style="font-size:12px; color:var(--text-pri); line-height:1.5;">«Мария, искренне извините за такое ожидание! Это правда долго и недопустимо. Разобрались с командой, чтобы больше такого не было. В следующий визит угощаем бесплатным кальяном — ждём вас!<br><br><em style="color:var(--text-muted);">— Надежда, управляющая «Виктория»</em>»</div>
         </div>
 
         <!-- Кнопка сохранить -->
@@ -3029,7 +3037,36 @@
         <!-- My reviews history -->
         <div id="my-reviews-section">
             <div class="section-title" style="margin-top:28px;">Мои отзывы</div>
-            <div id="myReviewsList"></div>
+
+            <div class="glass-card" style="margin-bottom:10px; border-left:3px solid var(--accent); padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="font-size:12px; color:var(--text-muted);">22 марта, стол &#8470;9</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Императорский стол великолепен. Играли с друзьями 3 часа, всё на высшем уровне. Кухня тоже порадовала, особенно стейк.</div>
+                <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--accent);">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+                        <div style="width:22px;height:auto;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:auto;"></div>
+                        <span style="font-size:10px; color:var(--accent-light); font-weight:600;">Виктория</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Спасибо за высокую оценку! Императорский стол ждёт вас снова. Передадим комплимент шеф-повару за стейк!</div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-bottom:10px; border-left:3px solid var(--gold); padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="font-size:12px; color:var(--text-muted);">8 марта, стол &#8470;5</div>
+                    <div style="display:flex; gap:2px; font-size:12px;">&#11088;&#11088;&#11088;&#11088;</div>
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">Хорошее место, но в праздничный вечер было шумновато. Кальян отличный, Артём мастер своего дела.</div>
+                <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid var(--gold); margin-top:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+                        <div style="width:22px;height:auto;"><img src="https://viktorybar.ru/wp-content/uploads/2021/04/logo_green.png" alt="V" style="width:100%;height:auto;"></div>
+                        <span style="font-size:10px; color:var(--gold); font-weight:600;">Виктория</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Понимаем, праздничные вечера бывают громкими. Передадим Артёму похвалу! В будни у нас значительно спокойнее.</div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -4187,11 +4224,6 @@
             refreshCurrentUser().then(() => renderMyBookings());
             renderMyBookings();
         }
-        // Обновляем Мои отзывы при открытии
-        if (page === 'review') {
-            refreshCurrentUser().then(() => renderMyReviews());
-            renderMyReviews();
-        }
 
         // Animate progress bar when switching to loyalty
         if (page === 'loyalty') {
@@ -4479,9 +4511,7 @@
         if (zoneTabs) zoneTabs.style.display = 'none';
 
         // Инициализация данных на вкладках
-        if (page === 'admin') {
-            renderAdminAttention && renderAdminAttention();
-        } else if (page === 'admin-bookings') {
+        if (page === 'admin-bookings') {
             const firstBtn = document.querySelector('#page-admin-bookings button');
             if (firstBtn) filterBookings('today', firstBtn);
         } else if (page === 'admin-reviews') {
@@ -4604,6 +4634,27 @@
     }
 
     // Отзывы
+    const MOCK_REVIEWS = {
+        all: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта, минут 15. Бильярд ок, но сервис подвёл', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения! Разберёмся с сервисом. Приглашаем на бесплатный кальян'},
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер, стол №8 идеальный. Коктейли супер', tags:['Бильярд','Бар']},
+            {type:'positive', name:'Алексей М.', rating:5, time:'Вчера, 19:20', text:'Шикарные стейки, атмосфера супер. Вернёмся!', tags:['Кухня']},
+            {type:'negative', name:'Ольга Н.', rating:2, time:'Вчера, 14:10', text:'Столы плохо убраны, шары грязные', tags:['НЕГАТИВ','Чистота'], aiResponse:'Ольга, спасибо за обратную связь, уже работаем над этим'},
+        ],
+        negative: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта, минут 15', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения!'},
+            {type:'negative', name:'Ольга Н.', rating:2, time:'Вчера, 14:10', text:'Столы плохо убраны', tags:['НЕГАТИВ','Чистота'], aiResponse:'Ольга, уже работаем'},
+        ],
+        positive: [
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер, коктейли супер', tags:['Бильярд','Бар']},
+            {type:'positive', name:'Алексей М.', rating:5, time:'Вчера, 19:20', text:'Шикарные стейки, атмосфера супер', tags:['Кухня']},
+        ],
+        new: [
+            {type:'negative', name:'Мария К.', rating:2, time:'Сегодня, 22:15', text:'Долго ждали официанта', tags:['НЕГАТИВ','Сервис'], aiResponse:'Мария, приносим извинения!'},
+            {type:'positive', name:'Иван П.', rating:5, time:'Сегодня, 21:30', text:'Отличный вечер', tags:['Бильярд']},
+        ],
+    };
+
     async function filterReviews(type, el) {
         el.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = 'var(--bg-card)';
@@ -4616,67 +4667,54 @@
         el.style.border = 'none';
         el.style.fontWeight = '600';
 
+        const filterMap = { all: 'all', negative: 'negative', positive: 'positive', new: 'new' };
+        const filter = filterMap[type] || 'all';
+
         const list = document.getElementById('adminReviewsList');
         list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Загрузка...</div>';
 
         try {
-            const res = await fetch('/api/reviews?filter=' + encodeURIComponent(type));
+            const res = await fetch('/api/reviews?filter=' + filter);
             const data = await res.json();
             const reviews = data.reviews || [];
 
             if (reviews.length === 0) {
-                const labels = { all: 'отзывов пока нет', negative: 'негативных нет', positive: 'позитивных нет', new: 'новых за сутки нет' };
                 list.innerHTML = `<div style="padding:30px 16px; text-align:center; background:var(--bg-card); border-radius:14px; border:1px dashed rgba(234,229,220,0.15);">
-                    <div style="font-size:32px; margin-bottom:10px;">💬</div>
-                    <div style="font-size:14px; font-weight:600;">Отзывов ${labels[type] || 'не найдено'}</div>
+                    <div style="font-size:32px; margin-bottom:8px;">💬</div>
+                    <div style="font-size:14px; font-weight:600;">Отзывов нет</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">В этой категории пока пусто</div>
                 </div>`;
                 return;
             }
 
-            const formatTime = (iso) => {
-                const d = new Date(iso);
-                const now = new Date();
-                const diffMs = now - d;
-                const diffH = Math.floor(diffMs / 3600000);
-                if (diffH < 24) return `Сегодня, ${d.toTimeString().slice(0,5)}`;
-                if (diffH < 48) return `Вчера, ${d.toTimeString().slice(0,5)}`;
-                const months = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
-                return `${d.getDate()} ${months[d.getMonth()]}, ${d.toTimeString().slice(0,5)}`;
-            };
-
             list.innerHTML = reviews.map(r => {
-                const stars = '★'.repeat(r.rating || 0) + '☆'.repeat(5 - (r.rating || 0));
+                const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
                 const isNeg = r.sentiment === 'negative';
                 const starColor = isNeg ? '#ef4444' : 'var(--gold)';
-                const borderColor = isNeg ? '#ef4444' : (r.sentiment === 'neutral' ? 'var(--gold)' : 'transparent');
-
-                const tagsArr = r.categories || [];
-                const sentLabel = isNeg ? 'НЕГАТИВ' : (r.sentiment === 'positive' ? 'ПОЗИТИВ' : 'НЕЙТРАЛ');
-                const sentBg = isNeg ? 'rgba(239,68,68,0.15)' : (r.sentiment === 'positive' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)');
-                const sentColor = isNeg ? '#ef4444' : (r.sentiment === 'positive' ? 'var(--accent-light)' : 'var(--gold)');
-                const allTags = [
-                    `<span style="font-size:10px; padding:3px 8px; border-radius:6px; background:${sentBg}; color:${sentColor}; font-weight:600;">${sentLabel}</span>`,
-                    ...tagsArr.map(t => `<span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.15); color:var(--accent-light);">${t}</span>`)
-                ].join('');
-
-                const aiBlock = r.ai_response
-                    ? `<div style="margin-top:10px; padding:10px; background:${isNeg ? 'rgba(239,68,68,0.06)' : 'rgba(16,185,129,0.06)'}; border-radius:10px; font-size:11px; color:var(--text-sec);"><strong style="color:${sentColor};">🤖 AI-ответ:</strong> «${r.ai_response}»</div>`
-                    : '';
-
-                const tableLabel = r.table_number ? ` · Стол №${r.table_number}` : '';
+                const borderColor = isNeg ? '#ef4444' : 'transparent';
+                const cats = (r.categories || []);
+                const tagsHtml = cats.map(t => {
+                    const tagIsNeg = isNeg || t === 'Сервис' || t === 'Чистота';
+                    const bg = tagIsNeg ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)';
+                    const color = tagIsNeg ? '#ef4444' : 'var(--accent-light)';
+                    return `<span style="font-size:10px; padding:3px 8px; border-radius:6px; background:${bg}; color:${color};">${t}</span>`;
+                }).join('');
+                const aiBlock = r.ai_response ? `<div style="margin-top:10px; padding:10px; background:${isNeg ? 'rgba(239,68,68,0.06)' : 'rgba(16,185,129,0.06)'}; border-radius:10px; font-size:11px; color:var(--text-sec);"><strong style="color:${isNeg ? '#ef4444' : 'var(--accent-light)'};">🤖 AI-ответ:</strong> «${r.ai_response}»</div>` : '';
+                const date = new Date(r.created_at);
+                const timeStr = date.toLocaleString('ru-RU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
                 return `<div class="glass" style="padding:14px; margin-bottom:10px; border-left:3px solid ${borderColor};">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div style="font-weight:600; font-size:13px;">${r.name || 'Гость'}</div>
                         <div style="color:${starColor};">${stars}</div>
                     </div>
-                    <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${formatTime(r.created_at)}${tableLabel}</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${timeStr}</div>
                     <div style="font-size:12px; color:var(--text-sec); margin-top:8px; line-height:1.5;">${r.text_published}</div>
-                    <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">${allTags}</div>
+                    ${tagsHtml ? `<div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">${tagsHtml}</div>` : ''}
                     ${aiBlock}
                 </div>`;
             }).join('');
         } catch(e) {
-            list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки отзывов</div>`;
+            list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки: ${e.message}</div>`;
         }
     }
 
@@ -4730,6 +4768,17 @@
         runAdminCheck();
     }
 
+    function setRating(n) {
+        document.querySelectorAll('.star').forEach((s, i) => {
+            s.classList.toggle('filled', i < n);
+            s.classList.toggle('empty', i >= n);
+            if (i < n) {
+                s.style.transform = 'scale(1.2)';
+                setTimeout(() => { s.style.transform = 'scale(1)'; }, 200);
+            }
+        });
+    }
+
     function selectStaff(el) {
         document.querySelectorAll('.staff-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
@@ -4741,8 +4790,6 @@
     }
 
     // Demo AI review scenarios
-    // Отзывы через OpenAI — старые моки удалены
-    /* LEGACY_MOCK_START
     const reviewScenarios = {
         fallback: {
             improved: '\u0425\u043E\u0440\u043E\u0448\u0435\u0435 \u0437\u0430\u0432\u0435\u0434\u0435\u043D\u0438\u0435. \u041F\u0440\u0438\u044F\u0442\u043D\u0430\u044F \u0430\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430 \u0438 \u0434\u0440\u0443\u0436\u0435\u043B\u044E\u0431\u043D\u044B\u0439 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B. \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u044E \u0434\u043B\u044F \u043E\u0442\u0434\u044B\u0445\u0430 \u0441 \u0434\u0440\u0443\u0437\u044C\u044F\u043C\u0438.',
@@ -4812,185 +4859,8 @@
         if (/\+?[78]\d{10}/.test(text.replace(/[\s\-()]/g, ''))) return true;
         return false;
     }
-    LEGACY_MOCK_END */
 
-    let currentRating = 4;
-    function setRating(n) {
-        currentRating = n;
-        document.querySelectorAll('.star').forEach((s, i) => {
-            s.classList.toggle('filled', i < n);
-            s.classList.toggle('empty', i >= n);
-            if (i < n) {
-                s.style.transform = 'scale(1.2)';
-                setTimeout(() => { s.style.transform = 'scale(1)'; }, 200);
-            }
-        });
-    }
-
-    window._pendingReview = null;
-
-    async function analyzeReview() {
-        const text = (document.getElementById('reviewText').value || '').trim();
-        if (!text) { showToast('Напишите отзыв'); return; }
-        if (text.length < 10) { showToast('Слишком короткий отзыв'); return; }
-
-        document.getElementById('review-step1').style.display = 'none';
-        document.getElementById('review-step2').style.display = 'block';
-        const tips = document.getElementById('tips-section');
-        if (tips) tips.style.display = 'none';
-
-        const stepText = document.getElementById('aiStepText');
-        const steps = ['Проверка модерации...', 'Анализ тональности...', 'Категоризация...', 'Улучшение текста...'];
-        let i = 0;
-        if (stepText) stepText.textContent = steps[0];
-        const interval = setInterval(() => {
-            i++;
-            if (i < steps.length && stepText) stepText.textContent = steps[i];
-        }, 800);
-
-        try {
-            const res = await fetch('/api/reviews/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text, rating: currentRating })
-            });
-            const result = await res.json();
-            clearInterval(interval);
-            document.getElementById('review-step2').style.display = 'none';
-            document.getElementById('review-step3').style.display = 'block';
-            if (tips) tips.style.display = 'block';
-
-            const mod = document.getElementById('moderation-result');
-
-            if (!result.allowed) {
-                mod.style.background = 'rgba(239,68,68,0.08)';
-                mod.style.borderColor = 'rgba(239,68,68,0.2)';
-                mod.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                        <span style="font-size:18px;">🚫</span>
-                        <span style="font-size:13px; font-weight:700; color:var(--red-light);">Модерация не пройдена</span>
-                    </div>
-                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">${result.blocked_reason || 'Текст не прошёл проверку'}. Пожалуйста, отредактируйте отзыв.</div>
-                    <button class="btn-secondary" onclick="resetReview()" style="margin-top:12px; padding:10px;">Редактировать отзыв</button>`;
-                document.getElementById('reviewTags').innerHTML = '';
-                document.getElementById('sentimentBlock').style.display = 'none';
-                document.getElementById('aiSuggestionBlock').style.display = 'none';
-                const actions = document.querySelector('#review-step3 > div:nth-child(4)');
-                if (actions) actions.style.display = 'none';
-                return;
-            }
-
-            // Модерация пройдена
-            mod.style.background = 'rgba(16,185,129,0.06)';
-            mod.style.borderColor = 'rgba(16,185,129,0.15)';
-            mod.innerHTML = `
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                    <span style="font-size:18px;">✅</span>
-                    <span style="font-size:13px; font-weight:700; color:var(--accent-light);">Модерация пройдена</span>
-                </div>
-                <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">Отзыв готов к публикации. Выберите версию ниже.</div>`;
-
-            document.getElementById('sentimentBlock').style.display = 'block';
-            document.getElementById('aiSuggestionBlock').style.display = 'block';
-            const actions = document.querySelector('#review-step3 > div:nth-child(4)');
-            if (actions) actions.style.display = '';
-
-            // Оригинал
-            document.getElementById('originalText').textContent = text;
-
-            // Теги
-            const sentimentColor = result.sentiment === 'negative' ? 'var(--red-light)' : (result.sentiment === 'neutral' ? 'var(--gold)' : 'var(--accent-light)');
-            const sentimentBg = result.sentiment === 'negative' ? 'rgba(239,68,68,0.1)' : (result.sentiment === 'neutral' ? 'rgba(245,158,11,0.1)' : 'rgba(45,212,160,0.1)');
-            const tagsHtml = (result.categories || []).map(t =>
-                `<span style="font-size:10px; padding:5px 12px; background:${sentimentBg}; color:${sentimentColor}; border-radius:10px; font-weight:600;">${t}</span>`
-            ).join('');
-            document.getElementById('reviewTags').innerHTML = tagsHtml;
-
-            const badge = document.getElementById('sentimentBadge');
-            const labels = { positive: 'Позитивный', neutral: 'Смешанный', negative: 'Негативный' };
-            badge.textContent = labels[result.sentiment] || 'Нейтральный';
-            badge.style.background = sentimentBg;
-            badge.style.color = sentimentColor;
-
-            // Улучшенная версия
-            document.getElementById('aiImprovedText').textContent = result.improved || text;
-
-            // Сохраняем для публикации
-            window._pendingReview = {
-                text_original: text,
-                text_improved: result.improved,
-                rating: currentRating,
-                sentiment: result.sentiment,
-                categories: result.categories,
-                ai_response: result.ai_response
-            };
-        } catch (e) {
-            clearInterval(interval);
-            console.error('analyze error:', e);
-            showToast('Ошибка AI-анализа. Попробуйте позже.');
-            resetReview();
-        }
-    }
-
-    async function publishReview(chosenText) {
-        const p = window._pendingReview;
-        if (!p) { showToast('Отзыв не готов'); return; }
-
-        const u = window.currentUser || {};
-        try {
-            const res = await fetch('/api/reviews/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    phone: u.phone || null,
-                    name: u.name || 'Гость',
-                    rating: p.rating,
-                    text_original: p.text_original,
-                    text_improved: p.text_improved,
-                    text_published: chosenText,
-                    sentiment: p.sentiment,
-                    categories: p.categories,
-                    ai_response: p.ai_response
-                })
-            });
-            const data = await res.json();
-            if (!data.ok) { showToast('Не удалось опубликовать: ' + (data.error || 'ошибка')); return; }
-
-            document.getElementById('review-step3').style.display = 'none';
-            document.getElementById('review-step4').style.display = 'block';
-            document.getElementById('publishedText').textContent = chosenText;
-
-            setTimeout(() => {
-                const venueEl = document.getElementById('venueResponse');
-                const respText = document.getElementById('venueResponseText');
-                if (respText) respText.textContent = p.ai_response || 'Спасибо за отзыв!';
-                if (venueEl) {
-                    venueEl.style.display = 'block';
-                    venueEl.style.animation = 'slideUp 0.4s ease';
-                }
-            }, 1500);
-
-            // Обновляем "Мои отзывы" через 2 сек
-            setTimeout(() => {
-                renderMyReviews && renderMyReviews();
-            }, 2500);
-        } catch (e) {
-            console.error('publish error:', e);
-            showToast('Ошибка связи с сервером');
-        }
-    }
-
-    function acceptAI() {
-        const text = window._pendingReview ? window._pendingReview.text_improved : document.getElementById('aiImprovedText').textContent;
-        publishReview(text);
-    }
-
-    function rejectAI() {
-        const text = window._pendingReview ? window._pendingReview.text_original : document.getElementById('reviewText').value;
-        publishReview(text);
-    }
-
-    function analyzeReviewOLD() {
+    function analyzeReview() {
         const text = document.getElementById('reviewText').value.trim();
         if (!text) { showToast('\u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043E\u0442\u0437\u044B\u0432'); return; }
 
@@ -5095,77 +4965,50 @@
         }, 2200);
     }
 
-    async function renderAdminAttention() {
-        const block = document.getElementById('adminAttentionBlock');
-        if (!block) return;
-        try {
-            const res = await fetch('/api/reviews?filter=negative&limit=3');
-            const data = await res.json();
-            const reviews = data.reviews || [];
-            if (reviews.length === 0) {
-                block.innerHTML = `<div class="glass" style="padding:14px; text-align:center; color:var(--text-muted); font-size:12px;">✓ Негативных отзывов нет</div>`;
-                return;
-            }
-            block.innerHTML = reviews.slice(0, 2).map(r => {
-                const stars = '★'.repeat(r.rating || 0) + '☆'.repeat(5 - (r.rating || 0));
-                const d = new Date(r.created_at);
-                const ago = Math.floor((Date.now() - d.getTime()) / 60000);
-                const agoStr = ago < 60 ? `${ago} мин назад` : ago < 1440 ? `${Math.floor(ago/60)} ч назад` : `${Math.floor(ago/1440)} дн назад`;
-                return `<div class="glass" style="padding:14px; border-left:3px solid #ef4444; margin-bottom:8px;">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:700;">НЕГАТИВ</span>
-                        <div style="font-size:11px; color:var(--text-muted);">${agoStr}</div>
-                    </div>
-                    <div style="font-size:13px; font-weight:600;">${r.name || 'Гость'} · ${stars}</div>
-                    <div style="font-size:12px; color:var(--text-sec); margin-top:4px; line-height:1.5;">${(r.text_published || '').slice(0, 80)}${r.text_published && r.text_published.length > 80 ? '...' : ''}</div>
-                    <button onclick="navigateAdmin('admin-reviews', document.querySelectorAll('#adminNav .nav-item')[2])" style="margin-top:10px; width:100%; padding:8px; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.06); color:#ef4444; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">Посмотреть →</button>
-                </div>`;
-            }).join('');
-        } catch(e) { block.innerHTML = ''; }
+    function acceptAI() {
+        publishReview(document.getElementById('review-step3').dataset.improved);
     }
 
-    async function renderMyReviews() {
-        const list = document.getElementById('myReviewsList');
-        if (!list) return;
-        const u = window.currentUser;
-        if (!u || !u.phone) {
-            list.innerHTML = `<div style="padding:20px; text-align:center; background:var(--bg-card); border-radius:12px; color:var(--text-muted); font-size:12px;">Подключите карту лояльности чтобы видеть свои отзывы</div>`;
-            return;
-        }
-        list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Загрузка...</div>';
+    function rejectAI() {
+        publishReview(document.getElementById('reviewText').value);
+    }
+
+    async function publishReview(text) {
+        document.getElementById('review-step3').style.display = 'none';
+        document.getElementById('review-step4').style.display = 'block';
+        document.getElementById('publishedText').textContent = text;
+
+        // Реальная отправка на сервер
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const u = window.currentUser || {};
+        const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+        const ratingActive = document.querySelectorAll('.star.filled').length || 5;
+
         try {
-            const res = await fetch('/api/reviews/my?phone=' + encodeURIComponent(u.phone));
+            const res = await fetch('/api/reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: tgUser ? tgUser.id : u.telegram_id,
+                    phone: u.phone || null,
+                    name: u.name || (tgUser ? tgUser.first_name : 'Гость'),
+                    rating: ratingActive,
+                    text: text
+                })
+            });
             const data = await res.json();
-            const reviews = data.reviews || [];
-            if (reviews.length === 0) {
-                list.innerHTML = `<div style="padding:20px; text-align:center; background:var(--bg-card); border-radius:12px; color:var(--text-muted); font-size:12px;">Вы ещё не оставляли отзывов</div>`;
-                return;
+            if (data.ok) {
+                setTimeout(() => {
+                    document.getElementById('venueResponseText').textContent = data.review.ai_response || 'Спасибо за отзыв!';
+                    const venueEl = document.getElementById('venueResponse');
+                    venueEl.style.display = 'block';
+                    venueEl.style.animation = 'slideUp 0.4s ease';
+                }, 1500);
+            } else {
+                showToast(data.message || 'Ошибка при отправке отзыва');
             }
-            const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-            list.innerHTML = reviews.map(r => {
-                const d = new Date(r.created_at);
-                const dateStr = `${d.getDate()} ${months[d.getMonth()]}`;
-                const stars = '⭐'.repeat(r.rating);
-                const borderColor = r.sentiment === 'negative' ? 'var(--red-light)' : (r.sentiment === 'neutral' ? 'var(--gold)' : 'var(--accent)');
-                const aiRespBlock = r.ai_response ? `
-                    <div style="background:rgba(10,26,28,0.6); border-radius:10px; padding:12px; border-left:2px solid ${borderColor}; margin-top:10px;">
-                        <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                            <span style="font-size:10px; color:${borderColor}; font-weight:600;">🤖 Виктория</span>
-                        </div>
-                        <div style="font-size:11px; color:var(--text-secondary); line-height:1.6;">${r.ai_response}</div>
-                    </div>` : '';
-                const tableLabel = r.table_number ? `, стол №${r.table_number}` : '';
-                return `<div class="glass-card" style="margin-bottom:10px; border-left:3px solid ${borderColor}; padding:16px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <div style="font-size:12px; color:var(--text-muted);">${dateStr}${tableLabel}</div>
-                        <div style="font-size:12px;">${stars}</div>
-                    </div>
-                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">${r.text_published}</div>
-                    ${aiRespBlock}
-                </div>`;
-            }).join('');
         } catch(e) {
-            list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки</div>`;
+            showToast('Ошибка связи с сервером');
         }
     }
 
