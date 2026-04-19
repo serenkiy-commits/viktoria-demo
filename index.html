@@ -2431,41 +2431,7 @@
 
     <!-- ========== PAGE: MY BOOKINGS ========== -->
     <div class="page" id="page-bookings">
-        <div class="section-title">Активные брони</div>
-
-        <div class="booking-card">
-            <div class="booking-date">Суббота, 5 апреля — 20:00</div>
-            <div class="booking-details">
-                Стол &#8470;8, Русская пирамида<br>
-                2 часа, 3 гостя<br>
-                Депозит: 4 500 &#8381; (оплачен)
-            </div>
-            <div class="booking-actions">
-                <button class="booking-action" onclick="showToast('Выберите новое время')">Перенести</button>
-                <button class="booking-action" onclick="showToast('Продлено на 1 час')">Продлить</button>
-                <button class="booking-action cancel" onclick="showToast('Бронь отменена. Депозит невозвратный (менее 24ч)')">Отменить</button>
-            </div>
-        </div>
-
-        <div class="section-title" style="margin-top: 28px;">История</div>
-
-        <div class="booking-card past">
-            <div class="booking-date">Пятница, 28 марта — 19:00</div>
-            <div class="booking-details">
-                Стол &#8470;3, Русская пирамида<br>
-                3 часа, 4 гостя<br>
-                Итого: 7 800 &#8381;
-            </div>
-        </div>
-
-        <div class="booking-card past">
-            <div class="booking-date">Суббота, 22 марта — 18:00</div>
-            <div class="booking-details">
-                Стол &#8470;9, Императорский<br>
-                2 часа, 2 гостя<br>
-                Итого: 6 600 &#8381;
-            </div>
-        </div>
+        <div id="myBookingsContent"></div>
     </div>
 
     <!-- ========== PAGE: LOYALTY ========== -->
@@ -3350,6 +3316,90 @@
         { index: 4, low: 100000, high: null, percentage: 15 },
     ];
 
+    async function renderMyBookings() {
+        const container = document.getElementById('myBookingsContent');
+        if (!container) return;
+
+        const u = window.currentUser;
+        if (!u || !u.phone) {
+            container.innerHTML = `
+                <div style="padding:30px 20px; text-align:center; border-radius:14px; background:var(--bg-card); border:1px dashed rgba(234,229,220,0.15); margin-top:16px;">
+                    <div style="font-size:40px; margin-bottom:10px;">📋</div>
+                    <div style="font-size:15px; font-weight:700; margin-bottom:6px;">Подключите карту лояльности</div>
+                    <div style="font-size:12px; color:var(--text-muted); line-height:1.5; margin-bottom:16px;">Чтобы видеть свои брони, нужно указать номер телефона</div>
+                    <button onclick="connectLunaCard()" style="padding:12px 20px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Поделиться номером</button>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Загрузка...</div>';
+
+        try {
+            const res = await fetch('/api/bookings/my?phone=' + encodeURIComponent(u.phone));
+            const data = await res.json();
+            const active = data.active || [];
+            const past = data.past || [];
+
+            const fmtDate = (d) => {
+                const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+                const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+                const dt = new Date(d.replace(' ','T'));
+                return `${days[dt.getDay()]}, ${dt.getDate()} ${months[dt.getMonth()]}`;
+            };
+
+            const renderActive = (b) => {
+                const depositLine = b.deposit > 0
+                    ? `<br>Депозит: ${b.deposit.toLocaleString('ru-RU')} ₽ ${b.deposit_paid > 0 ? '(оплачен)' : '(ждёт оплаты)'}`
+                    : '';
+                return `<div class="booking-card">
+                    <div class="booking-date">${fmtDate(b.date_from)} — ${b.from_time}</div>
+                    <div class="booking-details">
+                        ${b.icon} Стол ${b.tables}${b.type ? ', ' + b.type : ''}<br>
+                        ${b.duration} ${plural(b.duration,'час','часа','часов')}, ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}${depositLine}
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action" onclick="showToast('Скоро: перенос брони')">Перенести</button>
+                        <button class="booking-action" onclick="showToast('Скоро: продление')">Продлить</button>
+                        <button class="booking-action cancel" onclick="cancelBooking(${b.id})">Отменить</button>
+                    </div>
+                </div>`;
+            };
+
+            const renderPast = (b) => `<div class="booking-card past">
+                <div class="booking-date">${fmtDate(b.date_from)} — ${b.from_time}</div>
+                <div class="booking-details">
+                    ${b.icon} Стол ${b.tables}${b.type ? ', ' + b.type : ''}<br>
+                    ${b.duration} ${plural(b.duration,'час','часа','часов')}, ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}
+                </div>
+            </div>`;
+
+            let html = '';
+            if (active.length > 0) {
+                html += '<div class="section-title">Активные брони</div>';
+                html += active.map(renderActive).join('');
+            } else {
+                html += `<div style="padding:30px 16px; text-align:center; background:var(--bg-card); border-radius:14px; border:1px dashed rgba(234,229,220,0.15);">
+                    <div style="font-size:32px; margin-bottom:8px;">📅</div>
+                    <div style="font-size:14px; font-weight:600;">Нет активных броней</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Забронируйте стол во вкладке «Столы»</div>
+                </div>`;
+            }
+
+            if (past.length > 0) {
+                html += '<div class="section-title" style="margin-top:28px;">История</div>';
+                html += past.map(renderPast).join('');
+            }
+
+            container.innerHTML = html;
+        } catch(e) {
+            container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--gold); font-size:12px;">Ошибка загрузки: ${e.message}</div>`;
+        }
+    }
+
+    function cancelBooking(id) {
+        showToast('Скоро: отмена брони через приложение');
+    }
+
     function renderLoyaltyScreen() {
         const container = document.getElementById('loyaltyContent');
         if (!container) return;
@@ -3945,6 +3995,11 @@
         if (page === 'loyalty') {
             refreshCurrentUser().then(() => renderLoyaltyScreen());
             renderLoyaltyScreen();
+        }
+        // Обновляем Мои брони при открытии
+        if (page === 'bookings') {
+            refreshCurrentUser().then(() => renderMyBookings());
+            renderMyBookings();
         }
 
         // Animate progress bar when switching to loyalty
