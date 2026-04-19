@@ -3435,16 +3435,30 @@
                     <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Бонусная карта Luna</div>
                     <div style="font-size:13px; color:var(--text-sec); line-height:1.6; margin-bottom:20px;">
                         Получайте кешбэк с каждой покупки.<br>
-                        До <strong>15% бонусов</strong> возвращается на баланс.<br>
-                        Списывайте бонусы до 20% от счёта.
+                        <strong>500 ₽ бонусов</strong> при регистрации.<br>
+                        До <strong>15% кешбэка</strong> и списание до 20% от счёта.
                     </div>
+
+                    <button onclick="openLunaRegistration()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer; margin-bottom:10px;">
+                        🎁 Получить новую карту (+500 ₽)
+                    </button>
+                    <div style="font-size:11px; color:var(--text-muted); margin-bottom:20px;">
+                        Откроется форма регистрации Luna
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; margin:20px 0;">
+                        <div style="flex:1; height:1px; background:rgba(234,229,220,0.08);"></div>
+                        <div style="font-size:11px; color:var(--text-muted);">или</div>
+                        <div style="flex:1; height:1px; background:rgba(234,229,220,0.08);"></div>
+                    </div>
+
                     <div style="margin-bottom:10px; font-size:12px; color:var(--text-sec);">Уже есть карта Luna? Введите номер:</div>
                     <input type="text" id="lunaCardInput" placeholder="Номер карты (напр. 2566024)" style="width:100%; padding:12px; background:var(--bg-input); border:1px solid var(--border-light); color:var(--text-pri); border-radius:10px; font-size:14px; margin-bottom:10px;" />
-                    <button onclick="linkLunaCardManually()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer;">
-                        Привязать карту
+                    <button onclick="linkLunaCardManually()" style="width:100%; padding:12px; background:transparent; color:var(--accent-light); border:1px solid var(--accent); border-radius:12px; font-weight:600; font-size:13px; cursor:pointer;">
+                        Привязать существующую карту
                     </button>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:12px;">
-                        Номер карты можно узнать у администратора или в своём Luna-аккаунте
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:10px;">
+                        Номер карты в Apple Wallet / Luna-приложении
                     </div>
                 </div>
                 <div style="margin-top:20px; padding:16px; background:var(--bg-card); border-radius:14px; border:1px solid rgba(234,229,220,0.08);">
@@ -3497,6 +3511,20 @@
                 </div>
             </div>
         `;
+    }
+
+    function openLunaRegistration() {
+        const url = 'https://app.loona.ai/4519/create';
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if (tg && tg.openLink) {
+            tg.openLink(url);
+        } else {
+            window.open(url, '_blank');
+        }
+        // Показываем инструкцию что делать после регистрации
+        setTimeout(() => {
+            showToast('После регистрации вернитесь сюда и введите номер карты');
+        }, 1500);
     }
 
     async function linkLunaCardManually() {
