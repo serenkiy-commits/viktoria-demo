@@ -3396,8 +3396,30 @@
         }
     }
 
-    function cancelBooking(id) {
-        showToast('Скоро: отмена брони через приложение');
+    async function cancelBooking(id) {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const confirm = (msg, cb) => tg && tg.showConfirm ? tg.showConfirm(msg, cb) : cb(window.confirm(msg));
+
+        confirm('Отменить бронь? Депозит невозвратный при отмене менее чем за 24 часа.', async (yes) => {
+            if (!yes) return;
+            showToast('Отменяем...');
+            try {
+                const res = await fetch('/api/bookings/cancel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    showToast('✓ Бронь отменена');
+                    setTimeout(() => renderMyBookings(), 500);
+                } else {
+                    showToast('Ошибка: ' + (data.error || 'не удалось отменить'));
+                }
+            } catch(e) {
+                showToast('Ошибка связи с сервером');
+            }
+        });
     }
 
     function renderLoyaltyScreen() {
@@ -3416,11 +3438,13 @@
                         До <strong>15% бонусов</strong> возвращается на баланс.<br>
                         Списывайте бонусы до 20% от счёта.
                     </div>
-                    <button onclick="connectLunaCard()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer;">
-                        Подключить карту
+                    <div style="margin-bottom:10px; font-size:12px; color:var(--text-sec);">Уже есть карта Luna? Введите номер:</div>
+                    <input type="text" id="lunaCardInput" placeholder="Номер карты (напр. 2566024)" style="width:100%; padding:12px; background:var(--bg-input); border:1px solid var(--border-light); color:var(--text-pri); border-radius:10px; font-size:14px; margin-bottom:10px;" />
+                    <button onclick="linkLunaCardManually()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#0a1a1c; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer;">
+                        Привязать карту
                     </button>
                     <div style="font-size:11px; color:var(--text-muted); margin-top:12px;">
-                        Нужно будет поделиться номером телефона
+                        Номер карты можно узнать у администратора или в своём Luna-аккаунте
                     </div>
                 </div>
                 <div style="margin-top:20px; padding:16px; background:var(--bg-card); border-radius:14px; border:1px solid rgba(234,229,220,0.08);">
@@ -3473,6 +3497,38 @@
                 </div>
             </div>
         `;
+    }
+
+    async function linkLunaCardManually() {
+        const input = document.getElementById('lunaCardInput');
+        if (!input) return;
+        const cardId = input.value.trim();
+        if (!cardId || !/^\d{5,10}$/.test(cardId)) {
+            showToast('Введите корректный номер карты (цифры)');
+            return;
+        }
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+        if (!uid) { showToast('Сначала войдите через Telegram'); return; }
+        try {
+            const res = await fetch('/api/user/link-luna', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ telegram_id: uid, card_id: cardId })
+            });
+            const data = await res.json();
+            if (data.ok && data.user) {
+                window.currentUser = data.user;
+                localStorage.setItem('viktoria_user', JSON.stringify(data.user));
+                updateBonusBadge(data.user);
+                showToast(`✓ Карта привязана. Баланс: ${Math.round(data.user.luna_balance || 0)} ₽`);
+                renderLoyaltyScreen();
+            } else {
+                showToast(data.error || 'Не удалось привязать карту');
+            }
+        } catch(e) {
+            showToast('Ошибка связи');
+        }
     }
 
     // Подключение карты из раздела Бонусы (для тех кто отказался изначально)
