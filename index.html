@@ -2559,62 +2559,18 @@
         </div>
 
         <div class="section-title" style="margin-top:18px;">📊 Сегодня</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div id="overviewStatsGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div class="glass" style="padding:14px;">
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Броней</div>
-                <div style="font-size:28px; font-weight:700; margin-top:4px; color:var(--accent-light);">18</div>
-                <div style="font-size:11px; color:var(--text-sec);">+3 к вчера</div>
-            </div>
-            <div class="glass" style="padding:14px;">
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Гостей</div>
-                <div style="font-size:28px; font-weight:700; margin-top:4px;">47</div>
-                <div style="font-size:11px; color:var(--text-sec);">Ожидается</div>
-            </div>
-            <div class="glass" style="padding:14px;">
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Депозиты</div>
-                <div style="font-size:24px; font-weight:700; margin-top:4px; color:var(--gold);">34 500 ₽</div>
-                <div style="font-size:11px; color:var(--text-sec);">Оплачено</div>
-            </div>
-            <div class="glass" style="padding:14px;">
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Загрузка</div>
-                <div style="font-size:28px; font-weight:700; margin-top:4px;">72%</div>
-                <div style="font-size:11px; color:var(--text-sec);">Вечер</div>
+                <div style="font-size:10px; color:var(--text-muted);">Загрузка...</div>
             </div>
         </div>
 
         <div class="section-title" style="margin-top:20px;">⚡ Требует внимания</div>
-        <div class="glass" style="padding:14px; border-left:3px solid #ef4444;">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:700;">НЕГАТИВ</span>
-                <div style="font-size:11px; color:var(--text-muted);">Новый отзыв 2 минуты назад</div>
-            </div>
-            <div style="font-size:13px; font-weight:600;">Мария К. · ★★☆☆☆</div>
-            <div style="font-size:12px; color:var(--text-sec); margin-top:4px; line-height:1.5;">Долго ждали официанта, минут 15...</div>
-            <button onclick="navigateAdmin('admin-reviews', document.querySelectorAll('#adminNav .nav-item')[2])" style="margin-top:10px; width:100%; padding:8px; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.06); color:#ef4444; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">Посмотреть →</button>
-        </div>
-
-        <div class="glass" style="padding:14px; margin-top:10px; border-left:3px solid var(--gold);">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">AI-СОВЕТ</span>
-                <div style="font-size:11px; color:var(--text-muted);">Новое</div>
-            </div>
-            <div style="font-size:12px; color:var(--text-sec); line-height:1.6;">За эту неделю 4 жалобы на долгое ожидание в пт-сб. Рекомендуем проверить расписание официантов или добавить ещё одного в prime-time</div>
-        </div>
+        <div id="overviewAttention"></div>
 
         <div class="section-title" style="margin-top:20px;">🔥 Темы недели</div>
-        <div class="glass" style="padding:14px;">
-            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
-                <span>Хвалят кухню</span><span style="color:var(--accent-light); font-weight:600;">+12</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
-                <span>Коктейли</span><span style="color:var(--accent-light); font-weight:600;">+8</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
-                <span>Долгое ожидание</span><span style="color:#ef4444; font-weight:600;">−4</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
-                <span>Чистота столов</span><span style="color:#ef4444; font-weight:600;">−2</span>
-            </div>
+        <div id="overviewThemes" class="glass" style="padding:14px;">
+            <div style="font-size:11px; color:var(--text-muted);">Загрузка...</div>
         </div>
     </div>
 
@@ -4417,6 +4373,7 @@
             document.getElementById('page-admin').classList.add('active');
             document.querySelectorAll('#adminNav .nav-item').forEach(n => n.classList.remove('active'));
             adminNav.querySelector('.nav-item').classList.add('active');
+            renderAdminOverview && renderAdminOverview();
         } else {
             guestNav.style.display = 'flex';
             adminNav.style.display = 'none';
@@ -4488,7 +4445,9 @@
         if (zoneTabs) zoneTabs.style.display = 'none';
 
         // Инициализация данных на вкладках
-        if (page === 'admin-bookings') {
+        if (page === 'admin') {
+            renderAdminOverview();
+        } else if (page === 'admin-bookings') {
             const firstBtn = document.querySelector('#page-admin-bookings button');
             if (firstBtn) filterBookings('today', firstBtn);
         } else if (page === 'admin-reviews') {
@@ -4497,6 +4456,102 @@
         } else if (page === 'admin-stats') {
             const firstBtn = document.querySelector('#page-admin-stats button');
             if (firstBtn) filterAnalytics('week', firstBtn);
+        }
+    }
+
+    async function renderAdminOverview() {
+        const statsGrid = document.getElementById('overviewStatsGrid');
+        const attention = document.getElementById('overviewAttention');
+        const themesEl = document.getElementById('overviewThemes');
+        if (!statsGrid) return;
+
+        try {
+            const res = await fetch('/api/admin/overview');
+            const d = await res.json();
+            const t = d.today || {};
+
+            const trendStr = t.bookings_trend > 0 ? `+${t.bookings_trend} к вчера` :
+                             t.bookings_trend < 0 ? `${t.bookings_trend} к вчера` :
+                             'как вчера';
+            const depositStr = t.deposit_total > 0 ? `${t.deposit_total.toLocaleString('ru-RU')} ₽` : '0 ₽';
+            const depositSub = t.deposit_paid_count > 0 ? `${t.deposit_paid_count} оплачено` : 'Нет оплат';
+
+            statsGrid.innerHTML = `
+                <div class="glass" style="padding:14px;">
+                    <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Броней</div>
+                    <div style="font-size:28px; font-weight:700; margin-top:4px; color:var(--accent-light);">${t.bookings || 0}</div>
+                    <div style="font-size:11px; color:var(--text-sec);">${trendStr}</div>
+                </div>
+                <div class="glass" style="padding:14px;">
+                    <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Гостей</div>
+                    <div style="font-size:28px; font-weight:700; margin-top:4px;">${t.guests || 0}</div>
+                    <div style="font-size:11px; color:var(--text-sec);">Ожидается</div>
+                </div>
+                <div class="glass" style="padding:14px;">
+                    <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Депозиты</div>
+                    <div style="font-size:24px; font-weight:700; margin-top:4px; color:var(--gold);">${depositStr}</div>
+                    <div style="font-size:11px; color:var(--text-sec);">${depositSub}</div>
+                </div>
+                <div class="glass" style="padding:14px;">
+                    <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px;">Загрузка</div>
+                    <div style="font-size:28px; font-weight:700; margin-top:4px;">${t.occupancy_pct || 0}%</div>
+                    <div style="font-size:11px; color:var(--text-sec);">${t.day_part || ''}</div>
+                </div>
+            `;
+
+            // Требует внимания
+            let attentionHtml = '';
+            if (d.latest_negative_review) {
+                const r = d.latest_negative_review;
+                const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                const date = new Date(r.created_at);
+                const ago = Math.round((Date.now() - date.getTime()) / 60000);
+                const agoStr = ago < 60 ? `${ago} мин назад` : ago < 1440 ? `${Math.round(ago/60)} ч назад` : `${Math.round(ago/1440)} дн назад`;
+                attentionHtml += `
+                    <div class="glass" style="padding:14px; border-left:3px solid #ef4444;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                            <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(239,68,68,0.15); color:#ef4444; font-weight:700;">НЕГАТИВ</span>
+                            <div style="font-size:11px; color:var(--text-muted);">${agoStr}</div>
+                        </div>
+                        <div style="font-size:13px; font-weight:600;">${r.name || 'Гость'} · <span style="color:#ef4444;">${stars}</span></div>
+                        <div style="font-size:12px; color:var(--text-sec); margin-top:4px; line-height:1.5;">${r.text}</div>
+                        <button onclick="navigateAdmin('admin-reviews', document.querySelectorAll('#adminNav .nav-item')[2])" style="margin-top:10px; width:100%; padding:8px; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.06); color:#ef4444; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">Посмотреть →</button>
+                    </div>
+                `;
+            }
+            if (d.ai_advice) {
+                attentionHtml += `
+                    <div class="glass" style="padding:14px; ${attentionHtml ? 'margin-top:10px;' : ''} border-left:3px solid var(--gold);">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                            <span style="font-size:10px; padding:3px 8px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--gold); font-weight:700;">AI-СОВЕТ</span>
+                            <div style="font-size:11px; color:var(--text-muted);">Сегодня</div>
+                        </div>
+                        <div style="font-size:12px; color:var(--text-sec); line-height:1.6;">${d.ai_advice}</div>
+                    </div>
+                `;
+            }
+            if (!attentionHtml) {
+                attentionHtml = `<div class="glass" style="padding:14px; text-align:center;">
+                    <div style="font-size:12px; color:var(--text-muted);">Всё спокойно — ничего не требует внимания</div>
+                </div>`;
+            }
+            attention.innerHTML = attentionHtml;
+
+            // Темы недели
+            if (d.themes && d.themes.length > 0) {
+                themesEl.innerHTML = d.themes.map(th => {
+                    const score = th.positive - th.negative;
+                    const color = score > 0 ? 'var(--accent-light)' : score < 0 ? '#ef4444' : 'var(--text-muted)';
+                    const sign = score > 0 ? '+' : '';
+                    return `<div style="display:flex; justify-content:space-between; font-size:12px; padding:4px 0;">
+                        <span>${th.tag}</span><span style="color:${color}; font-weight:600;">${sign}${score}</span>
+                    </div>`;
+                }).join('');
+            } else {
+                themesEl.innerHTML = `<div style="font-size:12px; color:var(--text-muted); text-align:center;">Пока нет данных по темам.<br>Появятся когда гости оставят отзывы.</div>`;
+            }
+        } catch(e) {
+            statsGrid.innerHTML = `<div class="glass" style="padding:14px; grid-column:1/-1;"><div style="color:var(--gold); font-size:12px;">Ошибка: ${e.message}</div></div>`;
         }
     }
 
