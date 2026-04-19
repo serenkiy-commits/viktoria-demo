@@ -833,8 +833,12 @@
         }
 
         .time-slot.disabled {
-            opacity: 0.25;
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.25);
+            color: rgba(239, 68, 68, 0.55);
+            cursor: not-allowed;
             pointer-events: none;
+            text-decoration: line-through;
         }
 
         .duration-selector {
@@ -3666,7 +3670,11 @@
 
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        generateTimeSlots();
+        if (typeof refreshOccupancy === 'function') {
+            refreshOccupancy().then(() => generateTimeSlots());
+        } else {
+            generateTimeSlots();
+        }
     }
 
     function selectFloorTable(el) {
@@ -3692,7 +3700,11 @@
 
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        generateTimeSlots();
+        if (typeof refreshOccupancy === 'function') {
+            refreshOccupancy().then(() => generateTimeSlots());
+        } else {
+            generateTimeSlots();
+        }
     }
 
     function selectTable(el, num) {
@@ -3707,7 +3719,11 @@
         document.getElementById('selectedTableTitle').textContent = '\u0421\u0442\u043E\u043B \u21169' + num + ' \u2014 ' + type;
         document.getElementById('bookingForm').classList.add('visible');
         document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        generateTimeSlots();
+        if (typeof refreshOccupancy === 'function') {
+            refreshOccupancy().then(() => generateTimeSlots());
+        } else {
+            generateTimeSlots();
+        }
     }
 
     function selectTime(el) {
@@ -3724,30 +3740,70 @@
         if (!container) return;
         const dateStr = document.getElementById('bookingDate').value;
         if (!dateStr) return;
-        // Parse date parts manually to avoid timezone issues
         const parts = dateStr.split('-');
         const year = parseInt(parts[0]);
         const month = parseInt(parts[1]) - 1;
         const day = parseInt(parts[2]);
         const date = new Date(year, month, day);
-        const dow = date.getDay(); // 0=Вс, 1=Пн...6=Сб
+        const dow = date.getDay();
 
         let startHour;
-        if (dow === 6 || dow === 0) { // Сб, Вс
+        if (dow === 6 || dow === 0) {
             startHour = 12;
-        } else { // Пн-Пт
+        } else {
             startHour = 15;
         }
 
+        // Получаем занятые часы для выбранного стола
+        const busyRanges = getSelectedTableBusyRanges(dateStr);
+        const today = new Date().toISOString().slice(0,10);
+        const isToday = dateStr === today;
+        const nowHour = new Date().getHours();
+        const durationVal = (typeof duration !== 'undefined') ? duration : 2;
+
         let html = '';
+        let firstFreeHour = null;
         for (let h = startHour; h <= 23; h++) {
             const timeStr = String(h).padStart(2, '0') + ':00';
-            const isDefault = (h === startHour);
-            html += '<div class="time-slot' + (isDefault ? ' active' : '') + '" onclick="selectTime(this)">' + timeStr + '</div>';
+
+            // Слот в прошлом на сегодня
+            const inPast = isToday && h <= nowHour;
+            // Проверяем пересечение интервала [h, h+duration] с занятыми
+            const slotStart = h;
+            const slotEnd = h + durationVal;
+            const conflicts = busyRanges.some(r => slotStart < r.toH && slotEnd > r.fromH);
+
+            const disabled = inPast || conflicts;
+            const classes = ['time-slot'];
+            if (disabled) classes.push('disabled');
+            if (!disabled && firstFreeHour === null) { classes.push('active'); firstFreeHour = h; }
+
+            const title = inPast ? 'Прошедшее время' : conflicts ? 'Стол занят в этот слот' : '';
+            const onclick = disabled ? '' : ' onclick="selectTime(this)"';
+            html += `<div class="${classes.join(' ')}"${onclick} title="${title}">${timeStr}</div>`;
         }
 
         container.innerHTML = html;
         updatePrice();
+    }
+
+    function getSelectedTableBusyRanges(dateStr) {
+        // Возвращает массив {fromH, toH} занятых часов для выбранного стола на дату
+        if (!selectedTableNum) return [];
+        const itemId = window.tableNumToItemId && window.tableNumToItemId[selectedTableNum];
+        if (!itemId) return [];
+        const cache = window._lastOccupancy;
+        if (!cache || cache.date !== dateStr) return [];
+        const reserves = cache.data[String(itemId)] || cache.data[itemId] || [];
+        return reserves.map(r => {
+            const f = new Date(r.from.replace(' ','T'));
+            const t = new Date(r.to.replace(' ','T'));
+            // если бронь через полночь — отрезаем до 23:59 текущей даты
+            const fromH = f.getHours() + f.getMinutes() / 60;
+            let toH = t.getHours() + t.getMinutes() / 60;
+            if (t.getDate() !== f.getDate()) toH = 24;
+            return { fromH, toH };
+        });
     }
 
     function changeDuration(delta) {
