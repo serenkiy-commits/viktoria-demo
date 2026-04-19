@@ -3473,6 +3473,11 @@
         const hour = bookingFormOpen && getSelectedTime ? getSelectedTime() : null;
         const durationVal = (typeof duration !== 'undefined') ? duration : 2;
 
+        // Проверяем смотрит ли пользователь на сегодня
+        const today = new Date().toISOString().slice(0,10);
+        const isToday = dateStr === today;
+        const nowMs = Date.now();
+
         try {
             const res = await fetch(`/api/admin/occupancy/${dateStr}`);
             const data = await res.json();
@@ -3482,30 +3487,37 @@
             document.querySelectorAll('.fp-table').forEach(fp => {
                 const tNum = fp.dataset.table;
                 const itemId = window.tableNumToItemId[tNum];
-                const reserves = itemId ? (occ[itemId] || []) : [];
+                const reserves = itemId ? (occ[String(itemId)] || occ[itemId] || []) : [];
 
-                // Если форма открыта и выбрано время — проверяем пересечение
-                // Иначе: занят = есть хоть одна бронь сегодня
                 let busy;
                 if (hour !== null) {
+                    // Форма открыта, время выбрано — пересечение со слотом
                     busy = isTableBusy(occ, itemId, dateStr, hour, durationVal);
+                } else if (isToday) {
+                    // Сегодня — показываем "занят СЕЙЧАС"
+                    busy = reserves.some(r => {
+                        const f = new Date(r.from.replace(' ','T')).getTime();
+                        const t = new Date(r.to.replace(' ','T')).getTime();
+                        return nowMs >= f && nowMs <= t;
+                    });
                 } else {
+                    // Другой день — занят = есть хоть одна бронь
                     busy = reserves.length > 0;
                 }
 
+                const bg = fp.querySelector('.fp-table-bg');
                 if (busy) {
                     fp.classList.add('occupied');
-                    const bg = fp.querySelector('.fp-table-bg');
                     if (bg) bg.setAttribute('fill', '#5c1a2a');
-                    // Подсказка с диапазонами
-                    if (reserves.length > 0) {
-                        const hours = reserves.map(r => `${r.from.slice(11,16)}–${r.to.slice(11,16)}`).join(', ');
-                        fp.setAttribute('data-busy-hours', hours);
-                    }
                 } else {
                     fp.classList.remove('occupied');
-                    const bg = fp.querySelector('.fp-table-bg');
                     if (bg) bg.setAttribute('fill', '#145c38');
+                }
+
+                if (reserves.length > 0) {
+                    const hrs = reserves.map(r => `${r.from.slice(11,16)}–${r.to.slice(11,16)}`).join(', ');
+                    fp.setAttribute('data-busy-hours', hrs);
+                } else {
                     fp.removeAttribute('data-busy-hours');
                 }
             });
