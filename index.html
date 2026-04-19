@@ -3439,11 +3439,31 @@
         }
         const toStr = formatDT(toDateStr, toHour);
 
-        // 3. Отправляем запрос
+        // 3. Предпроверка: свободен ли слот
         const btns = document.querySelectorAll('.btn-primary, .btn-secondary');
         btns.forEach(b => b.disabled = true);
-        showToast('Создаём бронь...');
+        showToast('Проверяем доступность...');
 
+        try {
+            const checkUrl = `/api/bookings/check?item_id=${itemId}&from=${encodeURIComponent(fromStr)}&to=${encodeURIComponent(toStr)}`;
+            const checkRes = await fetch(checkUrl);
+            const checkData = await checkRes.json();
+            if (!checkData.free) {
+                const c = checkData.conflict || {};
+                const conflictTime = c.time_from && c.time_to ? ` (${c.time_from.slice(11,16)}—${c.time_to.slice(11,16)})` : '';
+                showToast(`Стол только что заняли${conflictTime}. Выберите другое время или стол.`);
+                btns.forEach(b => b.disabled = false);
+                // Обновляем слоты и план зала чтобы показать актуальное состояние
+                refreshOccupancy && await refreshOccupancy();
+                generateTimeSlots && generateTimeSlots();
+                return;
+            }
+        } catch(e) {
+            console.warn('check failed, continue:', e);
+        }
+
+        // 4. Создание
+        showToast('Создаём бронь...');
         try {
             const res = await fetch('/api/bookings/create', {
                 method: 'POST',
@@ -3459,19 +3479,32 @@
                 })
             });
             const data = await res.json();
-            const rd = data.responseData || {};
-            const bookingNumber = rd.number || rd.id || '';
-            const paymentLink = rd.paymentLink;
 
-            if (data.error || !rd.id) {
-                showToast('Ошибка: ' + (data.error && data.error.error ? data.error.error : 'не удалось создать бронь'));
+            // Обработка ошибок с человечными сообщениями
+            if (res.status === 409) {
+                if (data.error === 'slot_taken') {
+                    showToast(data.message || 'Стол только что заняли. Выберите другое время.');
+                } else {
+                    showToast(data.message || 'Не удалось создать бронь');
+                }
+                btns.forEach(b => b.disabled = false);
+                refreshOccupancy && await refreshOccupancy();
+                generateTimeSlots && generateTimeSlots();
+                return;
+            }
+            if (!res.ok || data.error) {
+                showToast('Ошибка: ' + (data.message || data.error || 'не удалось создать бронь'));
                 btns.forEach(b => b.disabled = false);
                 return;
             }
 
+            const rd = data.responseData || {};
+            const bookingNumber = rd.number || rd.id || '';
+            const paymentLink = rd.paymentLink;
+
             showToast(`✓ Бронь №${bookingNumber} создана`);
 
-            // 4. Открываем оплату если выбрано + есть paymentLink
+            // 5. Открываем оплату если выбрано + есть paymentLink
             if (withPayment && paymentLink) {
                 setTimeout(() => {
                     const tg = window.Telegram && window.Telegram.WebApp;
@@ -3480,7 +3513,7 @@
                 }, 800);
             }
 
-            // 5. Сбрасываем форму и переходим на Мои брони
+            // 6. Сбрасываем форму и переходим на Мои брони
             setTimeout(() => {
                 const bf = document.getElementById('bookingForm');
                 if (bf) bf.classList.remove('visible');
@@ -3488,11 +3521,9 @@
                 selectedTableNum = null;
                 selectedFloorEl = null;
 
-                // Переключаемся на Мои брони
                 const bookingsNav = document.querySelector('#bottomNav [onclick*="bookings"]');
                 if (bookingsNav) bookingsNav.click();
 
-                // Обновляем занятость плана зала
                 refreshOccupancy && refreshOccupancy();
             }, 1200);
 
@@ -3820,10 +3851,10 @@
         // Подтягиваем занятость столов
         refreshOccupancy && refreshOccupancy();
 
-        // Автообновление занятости каждую минуту
+        // Автообновление занятости каждые 30 секунд (бэкенд кеширует на 20 сек)
         setInterval(() => {
             if (!document.hidden) refreshOccupancy && refreshOccupancy();
-        }, 60000);
+        }, 30000);
 
         // При возврате из фона — обновляем сразу
         document.addEventListener('visibilitychange', () => {
