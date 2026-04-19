@@ -2558,8 +2558,14 @@
             </div>
         </div>
 
-        <div class="section-title" style="margin-top:18px;">📊 Сегодня</div>
-        <div id="overviewStatsGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:18px;">
+            <div class="section-title" style="margin:0;" id="overviewSectionTitle">📊 Сегодня</div>
+            <div style="display:flex; gap:6px;">
+                <button id="overviewBtnToday" onclick="switchOverviewDate('today')" style="padding:6px 12px; background:var(--accent); color:#0a1a1c; border:none; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Сегодня</button>
+                <button id="overviewBtnTomorrow" onclick="switchOverviewDate('tomorrow')" style="padding:6px 12px; background:var(--bg-card); color:var(--text-pri); border:1px solid rgba(234,229,220,0.08); border-radius:8px; font-size:11px; cursor:pointer;">Завтра</button>
+            </div>
+        </div>
+        <div id="overviewStatsGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
             <div class="glass" style="padding:14px;">
                 <div style="font-size:10px; color:var(--text-muted);">Загрузка...</div>
             </div>
@@ -4459,14 +4465,52 @@
         }
     }
 
+    let overviewDateMode = 'today';
+
+    function switchOverviewDate(mode) {
+        overviewDateMode = mode;
+        const btnToday = document.getElementById('overviewBtnToday');
+        const btnTomorrow = document.getElementById('overviewBtnTomorrow');
+        const title = document.getElementById('overviewSectionTitle');
+        if (mode === 'today') {
+            btnToday.style.background = 'var(--accent)';
+            btnToday.style.color = '#0a1a1c';
+            btnToday.style.border = 'none';
+            btnToday.style.fontWeight = '600';
+            btnTomorrow.style.background = 'var(--bg-card)';
+            btnTomorrow.style.color = 'var(--text-pri)';
+            btnTomorrow.style.border = '1px solid rgba(234,229,220,0.08)';
+            btnTomorrow.style.fontWeight = '400';
+            title.textContent = '📊 Сегодня';
+        } else {
+            btnTomorrow.style.background = 'var(--accent)';
+            btnTomorrow.style.color = '#0a1a1c';
+            btnTomorrow.style.border = 'none';
+            btnTomorrow.style.fontWeight = '600';
+            btnToday.style.background = 'var(--bg-card)';
+            btnToday.style.color = 'var(--text-pri)';
+            btnToday.style.border = '1px solid rgba(234,229,220,0.08)';
+            btnToday.style.fontWeight = '400';
+            title.textContent = '📊 Завтра';
+        }
+        renderAdminOverview();
+    }
+
     async function renderAdminOverview() {
         const statsGrid = document.getElementById('overviewStatsGrid');
         const attention = document.getElementById('overviewAttention');
         const themesEl = document.getElementById('overviewThemes');
         if (!statsGrid) return;
 
+        let dateParam = '';
+        if (overviewDateMode === 'tomorrow') {
+            const t = new Date();
+            t.setDate(t.getDate() + 1);
+            dateParam = '?date=' + t.toISOString().slice(0, 10);
+        }
+
         try {
-            const res = await fetch('/api/admin/overview');
+            const res = await fetch('/api/admin/overview' + dateParam);
             const d = await res.json();
             const t = d.today || {};
 
@@ -4751,13 +4795,7 @@
     }
 
     // Аналитика
-    const MOCK_ANALYTICS = {
-        week: {title:'Всего броней за неделю', total:'127', trend:'▲ +14% к прошлой неделе', days:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'], values:[40,55,48,62,85,95,78], peak:'суббота (24 брони)', revenue:'248 500 ₽', avgCheck:'1 956 ₽', rating:'4.7 ★', cancellations:'8'},
-        month: {title:'Всего броней за месяц', total:'512', trend:'▲ +8% к прошлому месяцу', days:['1-7','8-14','15-21','22-28','29-30'], values:[65,72,80,88,45], peak:'22-28 число (148 броней)', revenue:'1 124 000 ₽', avgCheck:'2 014 ₽', rating:'4.6 ★', cancellations:'34'},
-        year: {title:'Всего броней за год', total:'6 248', trend:'▲ +22% к прошлому году', days:['Q1','Q2','Q3','Q4'], values:[55,70,85,92], peak:'Q4 (2 120 броней)', revenue:'12 890 000 ₽', avgCheck:'2 088 ₽', rating:'4.7 ★', cancellations:'412'},
-    };
-
-    function filterAnalytics(period, el) {
+    async function filterAnalytics(period, el) {
         el.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = 'var(--bg-card)';
             b.style.border = '1px solid rgba(234,229,220,0.08)';
@@ -4769,23 +4807,87 @@
         el.style.border = 'none';
         el.style.fontWeight = '600';
 
-        const data = MOCK_ANALYTICS[period];
-        document.getElementById('analyticsTitle').textContent = data.title;
-        document.getElementById('analyticsTotal').textContent = data.total;
-        document.getElementById('analyticsTrend').textContent = data.trend;
-        document.getElementById('analyticsRevenue').textContent = data.revenue;
-        document.getElementById('analyticsAvgCheck').textContent = data.avgCheck;
-        document.getElementById('analyticsRating').textContent = data.rating;
-        document.getElementById('analyticsCancellations').textContent = data.cancellations;
-        document.getElementById('analyticsPeak').textContent = 'Пик: ' + data.peak;
+        const titleEl = document.getElementById('analyticsTitle');
+        const totalEl = document.getElementById('analyticsTotal');
+        if (titleEl) titleEl.textContent = 'Загрузка...';
+        if (totalEl) totalEl.textContent = '—';
 
-        const chart = document.getElementById('analyticsChart');
-        chart.innerHTML = data.days.map((d,i) => {
-            const h = data.values[i];
-            const isGold = h >= 75;
-            const bg = isGold ? 'linear-gradient(to top, var(--gold), #fbbf24)' : 'linear-gradient(to top, var(--accent), var(--accent-light))';
-            return `<div style="width:${90/data.days.length}%; background:${bg}; height:${h}%; border-radius:4px 4px 0 0; position:relative;"><div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">${d}</div></div>`;
-        }).join('');
+        try {
+            const res = await fetch('/api/admin/analytics?period=' + period);
+            const d = await res.json();
+
+            const titles = { week: 'Всего броней за неделю', month: 'Всего броней за месяц', year: 'Всего броней за год' };
+            const trendArrow = d.trend_pct > 0 ? '▲' : d.trend_pct < 0 ? '▼' : '●';
+            const trendColor = d.trend_pct > 0 ? 'var(--accent-light)' : d.trend_pct < 0 ? '#ef4444' : 'var(--text-muted)';
+            const trendStr = `${trendArrow} ${d.trend_pct > 0 ? '+' : ''}${d.trend_pct}% к прошлому периоду`;
+
+            titleEl.textContent = titles[period] || titles.week;
+            totalEl.textContent = (d.total_bookings || 0).toLocaleString('ru-RU');
+            const trendEl = document.getElementById('analyticsTrend');
+            if (trendEl) {
+                trendEl.textContent = trendStr;
+                trendEl.style.color = trendColor;
+            }
+
+            // Депозит — может быть 0 пока ЮKassa не подключена
+            const revEl = document.getElementById('analyticsRevenue');
+            if (revEl) revEl.textContent = (d.total_deposit_paid || 0).toLocaleString('ru-RU') + ' ₽';
+            const avgEl = document.getElementById('analyticsAvgCheck');
+            if (avgEl) avgEl.textContent = (d.avg_check || 0).toLocaleString('ru-RU') + ' ₽';
+            const ratEl = document.getElementById('analyticsRating');
+            if (ratEl) ratEl.textContent = d.avg_rating ? d.avg_rating + ' ★' : '—';
+            const canEl = document.getElementById('analyticsCancellations');
+            if (canEl) canEl.textContent = d.cancellations || 0;
+            const peakEl = document.getElementById('analyticsPeak');
+            if (peakEl) peakEl.textContent = 'Пик: ' + (d.peak || '—');
+
+            // График
+            const chart = document.getElementById('analyticsChart');
+            const stats = d.daily_stats || [];
+            if (stats.length === 0) {
+                chart.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:11px; width:100%;">Нет данных</div>';
+                return;
+            }
+            const maxBookings = Math.max(...stats.map(s => s.bookings), 1);
+            // Для месяца группируем по неделям, для года — по месяцам
+            let groupedStats = stats;
+            if (period === 'month') {
+                // 30 дней → 5 столбцов по 6 дней
+                groupedStats = [];
+                for (let i = 0; i < stats.length; i += 6) {
+                    const chunk = stats.slice(i, i + 6);
+                    const sum = chunk.reduce((s, c) => s + c.bookings, 0);
+                    const start = chunk[0].date.slice(8, 10);
+                    const end = chunk[chunk.length-1].date.slice(8, 10);
+                    groupedStats.push({ label: `${start}-${end}`, value: sum });
+                }
+            } else if (period === 'week') {
+                const dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+                groupedStats = stats.map(s => ({
+                    label: dayNames[new Date(s.date).getDay()],
+                    value: s.bookings
+                }));
+            } else {
+                // year - оставляем как есть, но коротко метки
+                groupedStats = stats.map(s => ({
+                    label: s.date.slice(5, 7),
+                    value: s.bookings
+                }));
+            }
+
+            const maxVal = Math.max(...groupedStats.map(g => g.value), 1);
+            chart.innerHTML = groupedStats.map(g => {
+                const pct = (g.value / maxVal) * 100;
+                const isGold = pct >= 75;
+                const bg = isGold ? 'linear-gradient(to top, var(--gold), #fbbf24)' : 'linear-gradient(to top, var(--accent), var(--accent-light))';
+                return `<div style="width:${90/groupedStats.length}%; background:${bg}; height:${Math.max(pct,5)}%; border-radius:4px 4px 0 0; position:relative;" title="${g.value} броней">
+                    <div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">${g.label}</div>
+                </div>`;
+            }).join('');
+        } catch(e) {
+            titleEl.textContent = 'Ошибка загрузки';
+            totalEl.textContent = '—';
+        }
     }
 
     // Вызвать при загрузке — повторяем на случай если Telegram WebApp ещё не готов
