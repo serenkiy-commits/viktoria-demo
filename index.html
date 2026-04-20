@@ -3397,7 +3397,6 @@
         }
 
         // 2. Собираем дату и время
-        const dateInput = document.getElementById('bookingDate');
         const dateStr = dateInput ? dateInput.value : new Date().toISOString().slice(0, 10);
         const startHour = getSelectedTime();
         const endHour = startHour + duration;
