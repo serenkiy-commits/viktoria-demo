@@ -4795,6 +4795,60 @@
     }
 
     // Аналитика
+    function showChartTooltip(barEl, label, value) {
+        // Удаляем старый тултип
+        const existing = document.querySelector('.chart-tooltip');
+        if (existing) existing.remove();
+
+        // Создаём новый тултип
+        const tooltip = document.createElement('div');
+        tooltip.className = 'chart-tooltip';
+        tooltip.innerHTML = `<div style="font-size:10px; color:var(--text-muted); margin-bottom:2px;">${label}</div><div style="font-size:14px; font-weight:700; color:var(--accent-light);">${value} ${plural(value,'бронь','брони','броней')}</div>`;
+        tooltip.style.cssText = `
+            position:absolute;
+            bottom:calc(100% + 8px);
+            left:50%;
+            transform:translateX(-50%);
+            background:rgba(10,26,28,0.95);
+            border:1px solid rgba(45,212,160,0.3);
+            border-radius:8px;
+            padding:8px 12px;
+            white-space:nowrap;
+            z-index:100;
+            box-shadow:0 4px 12px rgba(0,0,0,0.5);
+            backdrop-filter:blur(10px);
+            pointer-events:none;
+            animation:fadeIn 0.2s ease;
+        `;
+
+        // Стрелка под тултипом
+        const arrow = document.createElement('div');
+        arrow.style.cssText = `
+            position:absolute;
+            bottom:-5px;
+            left:50%;
+            transform:translateX(-50%) rotate(45deg);
+            width:8px;
+            height:8px;
+            background:rgba(10,26,28,0.95);
+            border-right:1px solid rgba(45,212,160,0.3);
+            border-bottom:1px solid rgba(45,212,160,0.3);
+        `;
+        tooltip.appendChild(arrow);
+
+        barEl.appendChild(tooltip);
+
+        // Подсветка выбранного столбца
+        document.querySelectorAll('#analyticsChart > div').forEach(b => b.style.opacity = '0.5');
+        barEl.style.opacity = '1';
+
+        // Скрыть через 3 сек
+        setTimeout(() => {
+            tooltip.remove();
+            document.querySelectorAll('#analyticsChart > div').forEach(b => b.style.opacity = '1');
+        }, 3000);
+    }
+
     async function filterAnalytics(period, el) {
         el.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = 'var(--bg-card)';
@@ -4876,11 +4930,11 @@
             }
 
             const maxVal = Math.max(...groupedStats.map(g => g.value), 1);
-            chart.innerHTML = groupedStats.map(g => {
+            chart.innerHTML = groupedStats.map((g, idx) => {
                 const pct = (g.value / maxVal) * 100;
                 const isGold = pct >= 75;
                 const bg = isGold ? 'linear-gradient(to top, var(--gold), #fbbf24)' : 'linear-gradient(to top, var(--accent), var(--accent-light))';
-                return `<div style="width:${90/groupedStats.length}%; background:${bg}; height:${Math.max(pct,5)}%; border-radius:4px 4px 0 0; position:relative;" title="${g.value} броней">
+                return `<div onclick="showChartTooltip(this, '${g.label}', ${g.value})" style="width:${90/groupedStats.length}%; background:${bg}; height:${Math.max(pct,5)}%; border-radius:4px 4px 0 0; position:relative; cursor:pointer; transition:opacity 0.2s;" data-bar-idx="${idx}">
                     <div style="position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px;">${g.label}</div>
                 </div>`;
             }).join('');
