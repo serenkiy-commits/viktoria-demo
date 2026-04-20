@@ -2346,7 +2346,7 @@
             <div class="booking-form">
                 <div class="form-row">
                     <label class="form-label">Дата</label>
-                    <input type="date" class="form-input" id="bookingDate" onchange="generateTimeSlots(); refreshOccupancy && refreshOccupancy();">
+                    <input type="date" class="form-input" id="bookingDate" onchange="generateTimeSlots(); refreshOccupancy && refreshOccupancy(); updateBookingButtons();">
                 </div>
 
                 <div class="form-row">
@@ -2420,10 +2420,15 @@
                 <div id="certCodeStatus" style="font-size:11px; margin-top:6px; display:none;"></div>
             </div>
 
-            <button class="btn-primary" onclick="createBooking(true)" style="margin-top:14px;">
+            <div id="prepayNoticeBlock" style="display:none; margin-top:14px; padding:12px 14px; border-radius:12px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.3); font-size:12px; line-height:1.5; color:var(--gold);">
+                <strong>⚠ 100% предоплата</strong><br>
+                <span style="color:var(--text-sec);">На выходные дни при бронировании 2+ часа требуется полная оплата стоимости стола. Бронь без предоплаты недоступна.</span>
+            </div>
+
+            <button class="btn-primary" id="bookingBtnPrimary" onclick="createBooking(true)" style="margin-top:14px;">
                 Оплатить и забронировать
             </button>
-            <button class="btn-secondary" onclick="createBooking(false)">
+            <button class="btn-secondary" id="bookingBtnSecondary" onclick="createBooking(false)">
                 Забронировать без предоплаты
             </button>
         </div>
@@ -3079,6 +3084,35 @@
     let currentZone = 'billiard';
 
     // Tariff calculation
+    function requiresFullPrepay(dateStr, durationVal) {
+        if (!dateStr) return false;
+        const date = new Date(dateStr + 'T12:00:00');
+        const dow = date.getDay();
+        const isWeekend = (dow === 0 || dow === 5 || dow === 6);
+        return isWeekend && durationVal >= 2;
+    }
+
+    function updateBookingButtons() {
+        const dateInput = document.getElementById('bookingDate');
+        const dateStr = dateInput ? dateInput.value : null;
+        const dur = (typeof duration !== 'undefined') ? duration : 2;
+        const needsPrepay = requiresFullPrepay(dateStr, dur);
+
+        const noticeBlock = document.getElementById('prepayNoticeBlock');
+        const btnSecondary = document.getElementById('bookingBtnSecondary');
+        const btnPrimary = document.getElementById('bookingBtnPrimary');
+
+        if (needsPrepay) {
+            if (noticeBlock) noticeBlock.style.display = 'block';
+            if (btnSecondary) btnSecondary.style.display = 'none';
+            if (btnPrimary) btnPrimary.textContent = 'Оплатить 100% и забронировать';
+        } else {
+            if (noticeBlock) noticeBlock.style.display = 'none';
+            if (btnSecondary) btnSecondary.style.display = '';
+            if (btnPrimary) btnPrimary.textContent = 'Оплатить и забронировать';
+        }
+    }
+
     function getTablePrice(tableNum, dateStr, timeStr) {
         const num = parseInt(tableNum);
         const date = new Date(dateStr + 'T12:00:00');
@@ -3348,6 +3382,12 @@
         }
         if (!selectedTableNum) {
             showToast('Выберите стол на плане зала');
+            return;
+        }
+        // Защита: на выходные при 2+ часа — только с предоплатой
+        const dateInput = document.getElementById('bookingDate');
+        if (requiresFullPrepay(dateInput ? dateInput.value : null, duration) && !withPayment) {
+            showToast('На выходные при 2+ часа доступна только бронь с 100% предоплатой');
             return;
         }
         const itemId = window.tableNumToItemId && window.tableNumToItemId[selectedTableNum];
@@ -3883,6 +3923,7 @@
         } else {
             generateTimeSlots();
         }
+        updateBookingButtons();
     }
 
     function selectFloorTable(el) {
@@ -3913,6 +3954,7 @@
         } else {
             generateTimeSlots();
         }
+        updateBookingButtons();
     }
 
     function selectTable(el, num) {
@@ -3932,6 +3974,7 @@
         } else {
             generateTimeSlots();
         }
+        updateBookingButtons();
     }
 
     function selectTime(el) {
@@ -4025,6 +4068,7 @@
         el.parentElement.querySelector('.duration-label').textContent = labels[duration - 1];
         updatePrice();
         refreshOccupancy && refreshOccupancy();
+        updateBookingButtons();
     }
 
     function changeGuests(delta) {
