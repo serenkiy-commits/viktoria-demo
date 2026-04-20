@@ -4922,11 +4922,16 @@
                     value: s.bookings
                 }));
             } else {
-                // year - оставляем как есть, но коротко метки
-                groupedStats = stats.map(s => ({
-                    label: s.date.slice(5, 7),
-                    value: s.bookings
-                }));
+                // year — группируем по месяцам с короткими названиями
+                const monthNames = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+                const byMonth = {};
+                stats.forEach(s => {
+                    const dt = new Date(s.date);
+                    const key = `${dt.getFullYear()}-${dt.getMonth()}`;
+                    if (!byMonth[key]) byMonth[key] = { label: monthNames[dt.getMonth()], value: 0, sortKey: dt.getFullYear() * 12 + dt.getMonth() };
+                    byMonth[key].value += s.bookings;
+                });
+                groupedStats = Object.values(byMonth).sort((a, b) => a.sortKey - b.sortKey);
             }
 
             const maxVal = Math.max(...groupedStats.map(g => g.value), 1);
