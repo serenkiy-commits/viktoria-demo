@@ -3327,8 +3327,8 @@
                         ${b.duration} ${plural(b.duration,'час','часа','часов')}, ${b.guests} ${plural(b.guests,'гость','гостя','гостей')}${depositLine}
                     </div>
                     <div class="booking-actions">
-                        <button class="booking-action" onclick="showToast('Скоро: перенос брони')">Перенести</button>
-                        <button class="booking-action" onclick="showToast('Скоро: продление')">Продлить</button>
+                        <button class="booking-action" onclick='rescheduleBooking(${b.id}, "${b.date_from}", "${b.date_to}")'>Перенести</button>
+                        <button class="booking-action" onclick="extendBooking(${b.id})">Продлить</button>
                         <button class="booking-action cancel" onclick="cancelBooking(${b.id})">Отменить</button>
                     </div>
                 </div>`;
@@ -3506,6 +3506,89 @@
             console.error('createBooking error:', e);
             showToast('Ошибка связи с сервером');
             btns.forEach(b => b.disabled = false);
+        }
+    }
+
+    async function extendBooking(id) {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const confirm = (msg, cb) => tg && tg.showConfirm ? tg.showConfirm(msg, cb) : cb(window.confirm(msg));
+
+        confirm('Продлить бронь на 1 час?', async (yes) => {
+            if (!yes) return;
+            showToast('Продлеваем...');
+            try {
+                const res = await fetch('/api/bookings/extend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, hours: 1 })
+                });
+                const data = await res.json();
+                if (res.status === 409) {
+                    showToast(data.message || 'Не получится продлить');
+                    return;
+                }
+                if (data.ok) {
+                    showToast(`✓ Продлено до ${data.new_time_to.slice(11,16)}`);
+                    setTimeout(() => renderMyBookings(), 500);
+                } else {
+                    showToast('Ошибка: ' + (data.message || 'не удалось продлить'));
+                }
+            } catch(e) {
+                showToast('Ошибка связи с сервером');
+            }
+        });
+    }
+
+    async function rescheduleBooking(id, oldFrom, oldTo) {
+        const tg = window.Telegram && window.Telegram.WebApp;
+
+        // Вычисляем текущую длительность
+        const fromD = new Date(oldFrom.replace(' ', 'T'));
+        const toD = new Date(oldTo.replace(' ', 'T'));
+        const durationMs = toD - fromD;
+
+        // Простой prompt — Telegram.WebApp не имеет input dialog нативно
+        // Используем цепочку двух prompt: дата + время
+        const today = new Date().toISOString().slice(0, 10);
+        const defaultDate = oldFrom.slice(0, 10);
+        const defaultTime = oldFrom.slice(11, 16);
+
+        const newDate = prompt('Новая дата (ГГГГ-ММ-ДД):', defaultDate);
+        if (!newDate) return;
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(newDate)) { showToast('Неверный формат даты'); return; }
+        if (newDate < today) { showToast('Дата не может быть в прошлом'); return; }
+
+        const newTime = prompt('Новое время (ЧЧ:ММ, например 19:00):', defaultTime);
+        if (!newTime) return;
+        if (!/^\d{2}:\d{2}$/.test(newTime)) { showToast('Неверный формат времени'); return; }
+
+        const newFromStr = `${newDate} ${newTime}:00`;
+        const newFromMs = new Date(newFromStr.replace(' ', 'T')).getTime();
+        const newToMs = newFromMs + durationMs;
+        const newToD = new Date(newToMs);
+        const pad = n => String(n).padStart(2, '0');
+        const newToStr = `${newToD.getFullYear()}-${pad(newToD.getMonth()+1)}-${pad(newToD.getDate())} ${pad(newToD.getHours())}:${pad(newToD.getMinutes())}:00`;
+
+        showToast('Переносим...');
+        try {
+            const res = await fetch('/api/bookings/reschedule', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, from: newFromStr, to: newToStr })
+            });
+            const data = await res.json();
+            if (res.status === 409) {
+                showToast(data.message || 'Время занято, выберите другое');
+                return;
+            }
+            if (data.ok) {
+                showToast(`✓ Перенесено на ${newDate} ${newTime}`);
+                setTimeout(() => renderMyBookings(), 500);
+            } else {
+                showToast('Ошибка: ' + (data.message || 'не удалось перенести'));
+            }
+        } catch(e) {
+            showToast('Ошибка связи с сервером');
         }
     }
 
