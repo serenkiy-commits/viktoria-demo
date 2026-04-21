@@ -4328,46 +4328,52 @@
     }
 
     function openCertificateWidget() {
-        let modal = document.getElementById('certIframeModal');
+        // Показываем красивую инструкцию перед открытием
+        let modal = document.getElementById('certInstructionModal');
         if (!modal) {
             modal = document.createElement('div');
-            modal.id = 'certIframeModal';
-            modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:#0a1a1c;display:flex;flex-direction:column;';
+            modal.id = 'certInstructionModal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);';
             modal.innerHTML = `
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0d2a1a;border-bottom:1px solid rgba(234,229,220,0.1);">
-                    <div style="font-size:14px;font-weight:600;color:var(--text-pri);">🎁 Подарочные сертификаты</div>
-                    <button onclick="closeCertIframe()" style="background:transparent;border:none;color:var(--text-pri);font-size:22px;cursor:pointer;padding:4px 12px;line-height:1;">×</button>
+                <div style="background:linear-gradient(135deg,#0d2a1a,#0a1a1c);border-radius:20px;padding:24px;max-width:340px;width:100%;border:1px solid rgba(245,158,11,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+                    <div style="text-align:center;font-size:40px;margin-bottom:12px;">🎁</div>
+                    <div style="font-size:18px;font-weight:700;text-align:center;margin-bottom:14px;color:var(--text-pri);">Покупка сертификата</div>
+                    <div style="font-size:13px;color:var(--text-sec);line-height:1.6;margin-bottom:18px;">
+                        Откроется сайт оплаты «Виктории». Важно:
+                    </div>
+                    <div style="background:rgba(245,158,11,0.1);border-left:3px solid var(--gold);padding:12px 14px;border-radius:8px;font-size:12px;color:var(--text-pri);line-height:1.7;margin-bottom:16px;">
+                        1. Внизу экрана нажмите <strong style="color:var(--gold);">«Сертификаты»</strong><br>
+                        2. Выберите номинал (3/5/10/15 тыс ₽)<br>
+                        3. Введите email — на него придёт сертификат<br>
+                        4. Оплатите картой или СберPay
+                    </div>
+                    <button onclick="continueToWidget()" style="width:100%;padding:14px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#0a1a1c;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px;">
+                        Понятно, открыть сайт оплаты
+                    </button>
+                    <button onclick="closeCertInstruction()" style="width:100%;padding:12px;background:transparent;color:var(--text-muted);border:1px solid rgba(234,229,220,0.15);border-radius:12px;font-size:13px;cursor:pointer;">
+                        Отмена
+                    </button>
                 </div>
-                <div id="certIframeHint" style="padding:10px 14px;font-size:12px;background:rgba(245,158,11,0.15);color:var(--gold);border-bottom:1px solid rgba(245,158,11,0.25);text-align:center;">
-                    ↓ Нажмите «Сертификаты» внизу виджета чтобы купить
-                </div>
-                <iframe id="certIframe" src="about:blank" style="flex:1;width:100%;border:none;background:#fff;"></iframe>
             `;
             document.body.appendChild(modal);
-
-            // После загрузки iframe — пытаемся переключить вкладку
-            const iframe = modal.querySelector('#certIframe');
-            iframe.onload = function() {
-                try {
-                    // Пытаемся установить hash внутри iframe (может быть заблокировано cross-origin)
-                    setTimeout(() => {
-                        try {
-                            iframe.contentWindow.location.hash = 'sertifikaty';
-                        } catch(e) {}
-                    }, 500);
-                } catch(e) {}
-            };
         }
-        const iframe = document.getElementById('certIframe');
-        iframe.src = 'https://viktorybar.restoplace.ws/#sertifikaty';
         modal.style.display = 'flex';
     }
 
-    function closeCertIframe() {
-        const modal = document.getElementById('certIframeModal');
+    function closeCertInstruction() {
+        const modal = document.getElementById('certInstructionModal');
         if (modal) modal.style.display = 'none';
-        const iframe = document.getElementById('certIframe');
-        if (iframe) iframe.src = 'about:blank';
+    }
+
+    function continueToWidget() {
+        closeCertInstruction();
+        const url = 'https://viktorybar.restoplace.ws/#sertifikaty';
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if (tg && tg.openLink) {
+            tg.openLink(url);
+        } else {
+            window.open(url, '_blank');
+        }
     }
 
     // =========================
