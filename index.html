@@ -4328,13 +4328,31 @@
     }
 
     function openCertificateWidget() {
-        const url = 'https://viktorybar.restoplace.ws/#sertifikaty';
-        const tg = window.Telegram && window.Telegram.WebApp;
-        if (tg && tg.openLink) {
-            tg.openLink(url);
-        } else {
-            window.open(url, '_blank');
+        // Показываем modal с iframe виджета Restoplace, сразу на вкладке Сертификаты
+        let modal = document.getElementById('certIframeModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'certIframeModal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:#0a1a1c;display:flex;flex-direction:column;';
+            modal.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0d2a1a;border-bottom:1px solid rgba(234,229,220,0.1);">
+                    <div style="font-size:14px;font-weight:600;color:var(--text-pri);">🎁 Подарочные сертификаты</div>
+                    <button onclick="closeCertIframe()" style="background:transparent;border:none;color:var(--text-pri);font-size:22px;cursor:pointer;padding:4px 12px;">×</button>
+                </div>
+                <iframe id="certIframe" src="about:blank" style="flex:1;width:100%;border:none;background:#fff;"></iframe>
+            `;
+            document.body.appendChild(modal);
         }
+        const iframe = document.getElementById('certIframe');
+        iframe.src = 'https://viktorybar.restoplace.ws/#sertifikaty';
+        modal.style.display = 'flex';
+    }
+
+    function closeCertIframe() {
+        const modal = document.getElementById('certIframeModal');
+        if (modal) modal.style.display = 'none';
+        const iframe = document.getElementById('certIframe');
+        if (iframe) iframe.src = 'about:blank';
     }
 
     // =========================
