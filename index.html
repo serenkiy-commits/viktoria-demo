@@ -4015,7 +4015,19 @@
     function selectTime(el) {
         document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
-        updatePrice();
+        // Пересчитать максимальную длительность под новое время
+        const maxHours = getMaxDurationHours();
+        if (duration > maxHours) {
+            duration = maxHours;
+            const durEl = document.getElementById('durationValue');
+            if (durEl) {
+                durEl.textContent = duration;
+                const labels = ['час', 'часа', 'часа', 'часа', 'часов', 'часов', 'часов', 'часов'];
+                const lbl = durEl.parentElement.querySelector('.duration-label');
+                if (lbl) lbl.textContent = labels[duration - 1];
+            }
+        }
+        changeDuration(0); // триггерит обновление кнопки «+» и цены
         refreshOccupancy && refreshOccupancy();
     }
 
@@ -4092,15 +4104,46 @@
         });
     }
 
+    function getMaxDurationHours() {
+        // Работа: Вс-Чт закрытие в 02:00, Пт-Сб в 03:00 (следующих суток)
+        // Максимум часов брони = от выбранного времени до закрытия
+        const dateInput = document.getElementById('bookingDate');
+        const dateStr = dateInput ? dateInput.value : new Date().toISOString().slice(0, 10);
+        const startHour = getSelectedTime();
+        const date = new Date(dateStr + 'T12:00:00');
+        const dow = date.getDay(); // 0=Вс 1=Пн...6=Сб
+
+        // Закрытие: Пт(5) и Сб(6) в 03:00 следующих суток, иначе в 02:00
+        const closeHour = (dow === 5 || dow === 6) ? 27 : 26; // 26=02:00 следующего дня, 27=03:00
+        const maxHours = closeHour - startHour;
+        return Math.max(1, Math.min(8, maxHours));
+    }
+
     function changeDuration(delta) {
-        duration = Math.max(1, Math.min(8, duration + delta));
+        const maxHours = getMaxDurationHours();
+        duration = Math.max(1, Math.min(maxHours, duration + delta));
         const el = document.getElementById('durationValue');
         el.textContent = duration;
         el.classList.remove('bump');
         void el.offsetWidth;
         el.classList.add('bump');
-        const labels = ['\u0447\u0430\u0441', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u0430', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432', '\u0447\u0430\u0441\u043E\u0432'];
+        const labels = ['час', 'часа', 'часа', 'часа', 'часов', 'часов', 'часов', 'часов'];
         el.parentElement.querySelector('.duration-label').textContent = labels[duration - 1];
+
+        // Подсказка если достиг максимума
+        const plusBtn = document.querySelector('[onclick="changeDuration(1)"]');
+        if (plusBtn) {
+            if (duration >= maxHours) {
+                plusBtn.style.opacity = '0.35';
+                plusBtn.style.cursor = 'not-allowed';
+                plusBtn.title = 'Больше нельзя — заведение закроется';
+            } else {
+                plusBtn.style.opacity = '1';
+                plusBtn.style.cursor = 'pointer';
+                plusBtn.title = '';
+            }
+        }
+
         updatePrice();
         refreshOccupancy && refreshOccupancy();
         updateBookingButtons();
