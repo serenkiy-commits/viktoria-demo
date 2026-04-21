@@ -4328,13 +4328,10 @@
     }
 
     function openCertificateWidget() {
-        const url = 'https://viktorybar.restoplace.ws';
+        const url = 'https://viktorybar.restoplace.ws/#sertifikaty';
         const tg = window.Telegram && window.Telegram.WebApp;
         if (tg && tg.openLink) {
             tg.openLink(url);
-            setTimeout(() => {
-                showToast('В открывшемся виджете перейдите во вкладку «Сертификаты»');
-            }, 500);
         } else {
             window.open(url, '_blank');
         }
