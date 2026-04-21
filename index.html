@@ -4328,7 +4328,6 @@
     }
 
     function openCertificateWidget() {
-        // Показываем modal с iframe виджета Restoplace, сразу на вкладке Сертификаты
         let modal = document.getElementById('certIframeModal');
         if (!modal) {
             modal = document.createElement('div');
@@ -4337,11 +4336,27 @@
             modal.innerHTML = `
                 <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0d2a1a;border-bottom:1px solid rgba(234,229,220,0.1);">
                     <div style="font-size:14px;font-weight:600;color:var(--text-pri);">🎁 Подарочные сертификаты</div>
-                    <button onclick="closeCertIframe()" style="background:transparent;border:none;color:var(--text-pri);font-size:22px;cursor:pointer;padding:4px 12px;">×</button>
+                    <button onclick="closeCertIframe()" style="background:transparent;border:none;color:var(--text-pri);font-size:22px;cursor:pointer;padding:4px 12px;line-height:1;">×</button>
+                </div>
+                <div id="certIframeHint" style="padding:10px 14px;font-size:12px;background:rgba(245,158,11,0.15);color:var(--gold);border-bottom:1px solid rgba(245,158,11,0.25);text-align:center;">
+                    ↓ Нажмите «Сертификаты» внизу виджета чтобы купить
                 </div>
                 <iframe id="certIframe" src="about:blank" style="flex:1;width:100%;border:none;background:#fff;"></iframe>
             `;
             document.body.appendChild(modal);
+
+            // После загрузки iframe — пытаемся переключить вкладку
+            const iframe = modal.querySelector('#certIframe');
+            iframe.onload = function() {
+                try {
+                    // Пытаемся установить hash внутри iframe (может быть заблокировано cross-origin)
+                    setTimeout(() => {
+                        try {
+                            iframe.contentWindow.location.hash = 'sertifikaty';
+                        } catch(e) {}
+                    }, 500);
+                } catch(e) {}
+            };
         }
         const iframe = document.getElementById('certIframe');
         iframe.src = 'https://viktorybar.restoplace.ws/#sertifikaty';
